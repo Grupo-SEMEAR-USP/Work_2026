@@ -1,0 +1,5 @@
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/share/robot_navigation/cmake/robot_navigationConfig-version.cmake
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/share/robot_navigation/cmake/robot_navigationConfig.cmake
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/lib/robot_navigation/navigation.py
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/lib/robot_navigation/waypoint_saver.py
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/lib/pkgconfig/robot_navigation.pc

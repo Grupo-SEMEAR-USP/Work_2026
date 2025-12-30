@@ -1,0 +1,181 @@
+<launch>
+  <env name="ROSCONSOLE_CONFIG_FILE" value="$(find robot_utils)/config/rosconsole.config"/>
+
+  <!-- === Definição de Parâmetros === -->
+  <!-- Habilitação de Hardware -->
+  <arg name="enable_realsense"      default="true"/>
+  <arg name="enable_lidar"          default="true"/>
+  <arg name="enable_logitech"       default="true"/>
+
+  <!-- Habilitação de Pacotes Funcionais -->
+  <arg name="enable_communication"  default="true"/>
+  <arg name="enable_movement"       default="true"/>
+  <arg name="enable_urdf"           default="true"/>
+  <arg name="enable_vision"         default="true"/>
+
+  <!-- Habilitação de Comandos via scheduler -->
+  <arg name="sched_navigation"      default="true"/>
+  <arg name="sched_movement"        default="true"/>
+  <arg name="sched_manipulation"    default="true"/>
+
+  <!-- RealSense -->
+  <arg name="rs_initial_reset"             default="true"/>
+  <arg name="rs_reconnect_timeout"         default="5.0"/>
+
+  <arg name="rs_enable_sync"               default="false"/>
+  <arg name="rs_enable_accel"              default="true"/>
+  <arg name="rs_enable_gyro"               default="true"/>
+  <arg name="rs_enable_color"              default="true"/>
+  <arg name="rs_enable_depth"              default="true"/>
+
+  <arg name="rs_color_width"               default="1920"/>
+  <arg name="rs_color_height"              default="1080"/>
+  <arg name="rs_color_fps"                 default="15"/>
+  <arg name="rs_depth_width"               default="848"/>
+  <arg name="rs_depth_height"              default="480"/>
+  <arg name="rs_depth_fps"                 default="15"/>
+
+  <arg name="rs_gyro_fps"                  default="200"/>
+  <arg name="rs_accel_fps"                 default="100"/>
+  
+  <arg name="rs_color_format"              default="YUYV"/>
+  <arg name="rs_hold_back_imu_for_frames"  default="false"/>
+  <arg name="rs_unite_imu_method"          default="linear_interpolation"/>
+
+  <!-- Lidar -->
+  <arg name="ld_serial_baudrate"           default="256000"/>
+  <arg name="ld_frame_id"                  default="laser"/>
+  <arg name="ld_inverted"                  default="true"/>
+  <arg name="ld_angle_compensate"          default="true"/>
+  <arg name="ld_serial_port"               default="/dev/lidar"/>
+
+  <!-- Câmera Logitech -->
+  <arg name="lt_video_device"              default="/dev/cam_logitech"/>
+  <arg name="lt_autofocus"                 default="false"/>
+  <arg name="lt_pixel_format"              default="yuyv"/>
+  <arg name="lt_image_width"               default="640"/>
+  <arg name="lt_image_height"              default="480"/>
+  <arg name="lt_framerate"                 default="30"/>
+  <arg name="lt_camera_frame_id"           default="head_camera"/>
+
+
+  <!-- === Inicialização de Hardware === -->
+  <!-- Iniciando Real Sense -->
+  <group if="$(arg enable_realsense)">
+    <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+      <arg name="initial_reset"     value="$(arg rs_initial_reset)"/>
+      <arg name="reconnect_timeout" value="$(arg rs_reconnect_timeout)"/>
+      <arg name="enable_sync"       value="$(arg rs_enable_sync)"/>
+      <arg name="enable_accel"      value="$(arg rs_enable_accel)"/>
+      <arg name="enable_gyro"       value="$(arg rs_enable_gyro)"/>
+      <arg name="gyro_fps"          value="$(arg rs_gyro_fps)"/>
+      <arg name="accel_fps"         value="$(arg rs_accel_fps)"/>
+      <arg name="enable_color"      value="$(arg rs_enable_color)"/>
+      <arg name="enable_depth"      value="$(arg rs_enable_depth)"/>
+      <arg name="color_width"       value="$(arg rs_color_width)"/>
+      <arg name="color_height"      value="$(arg rs_color_height)"/>
+      <arg name="color_fps"         value="$(arg rs_color_fps)"/>
+      <arg name="depth_width"       value="$(arg rs_depth_width)"/>
+      <arg name="depth_height"      value="$(arg rs_depth_height)"/>
+      <arg name="depth_fps"         value="$(arg rs_depth_fps)"/>
+      <arg name="unite_imu_method"  value="$(arg rs_unite_imu_method)"/>
+    </include>
+
+    <param name="camera/color_format"              value="$(arg rs_color_format)"/>
+    <param name="camera/hold_back_imu_for_frames"  value="$(arg rs_hold_back_imu_for_frames)"/>
+
+    <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter_madgwick" output="log">
+        <param name="use_mag"             value="false"/>
+        <param name="publish_tf"          value="false"/> 
+        <param name="world_frame"         value="enu"/>
+        <param name="gain"                value="0.05"/>
+        <param name="orientation_stddev"  value="0.1"/>
+        
+        <remap from="/imu/data_raw" to="/camera/imu"/>
+        <remap from="/imu/data"     to="/imu/data_filtered"/>
+    </node>
+
+    <node name="imu_stable" pkg="robot_movement" type="imu_stable.py" output="screen">
+        <remap from="/imu/data_filtered" to="/imu/data_filtered"/>
+        <remap from="/imu/data_stable"   to="/imu/data_stable"/>
+    </node>
+  </group>
+
+  <!-- Iniciando o Lidar -->
+  <group if="$(arg enable_lidar)">
+    <node name="rplidarNode"          pkg="rplidar_ros"  type="rplidarNode" output="log" respawn="true">
+      <param name="serial_port"         type="string" value="$(arg ld_serial_port)"/>
+      <param name="serial_baudrate"     type="int"    value="$(arg ld_serial_baudrate)"/>
+      <param name="frame_id"            type="string" value="$(arg ld_frame_id)"/>
+      <param name="inverted"            type="bool"   value="$(arg ld_inverted)"/>
+      <param name="angle_compensate"    type="bool"   value="$(arg ld_angle_compensate)"/>
+      
+      <remap from="scan" to="scan_raw"/>
+    </node>
+
+    <node pkg="laser_filters" type="scan_to_scan_filter_chain" name="laser_filter">
+      <rosparam command="load" file="$(find robot_utils)/config/laser_filter.yaml" />
+      
+      <remap from="scan" to="scan_raw" />
+      <remap from="scan_filtered" to="scan" /> 
+    </node>
+  </group>
+
+  <!-- Iniciando a Câmera Logitech -->
+  <group if="$(arg enable_logitech)">
+    <node name="usb_cam_logitech" pkg="usb_cam" type="usb_cam_node" output="log">
+      <param name="video_device"    value="$(arg lt_video_device)"/>
+
+      <param name="autofocus"       value="$(arg lt_autofocus)"/>
+      <param name="pixel_format"    value="$(arg lt_pixel_format)"/> 
+      <param name="image_width"     value="$(arg lt_image_width)"/>
+      <param name="image_height"    value="$(arg lt_image_height)"/>
+      <param name="framerate"       value="$(arg lt_framerate)"/>
+      <param name="camera_frame_id" value="$(arg lt_camera_frame_id)"/>
+      <param name="camera_info_url" value="file://$(env HOME)/.ros/camera_info/head_camera.yaml"/>
+    </node>
+
+    <node name="logitech_compressor" pkg="image_transport" type="republish" output="log" args="raw in:=/usb_cam_logitech/image_raw compressed out:=/usb_cam_logitech/image_raw/compressed">
+    </node>
+  </group>
+  
+  <!-- === Inicialização de Pacotes Funcionais === -->
+  <!-- Comunicação -->
+  <group if="$(arg enable_communication)">
+    <include file="$(find robot_communication)/launch/communication.launch"/>
+  </group>
+
+  <!-- Movimentação -->
+  <group if="$(arg enable_movement)">
+    <include file="$(find robot_movement)/launch/movement.launch"/>
+  </group>
+
+  <!-- Descrição URDF do robô -->
+  <group if="$(arg enable_urdf)">
+    <include file="$(find robot_description)/launch/real_robot_description.launch"/>
+  </group>
+
+  <!-- Visão -->  
+  <group if="$(arg enable_vision)">
+      <include file="$(find robot_vision)/launch/apriltag_detector.launch" />
+  </group>
+
+  <!-- === Inicialização de Comandos via scheduler === -->
+  <!-- Navegação -->
+  <group if="$(arg sched_navigation)">
+      <node pkg="robot_utils" type="timed_roslaunch.sh" 
+            name="timed_navigation_launcher" output="screen" 
+            args="20 robot_navigation scheduler_nav.launch" />
+  </group>
+
+  <!-- Movimentação -->
+  <group if="$(arg sched_movement)">
+      <include file="$(find robot_movement)/launch/scheduler_mov.launch"/>
+  </group>
+
+  <!-- Manipulação -->
+  <group if="$(arg sched_manipulation)">
+      <include file="$(find robot_manipulation)/launch/scheduler_manip.launch"/>
+  </group>
+
+</launch>

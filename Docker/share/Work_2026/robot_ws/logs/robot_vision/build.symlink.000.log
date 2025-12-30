@@ -1,0 +1,4 @@
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/share/robot_vision/cmake/robot_visionConfig-version.cmake
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/share/robot_vision/cmake/robot_visionConfig.cmake
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/lib/pkgconfig/robot_vision.pc
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/lib/robot_vision/apriltag_detector.py

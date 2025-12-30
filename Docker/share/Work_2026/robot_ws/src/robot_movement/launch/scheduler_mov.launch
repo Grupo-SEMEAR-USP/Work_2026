@@ -1,0 +1,6 @@
+<launch>
+    <node name="align_block" pkg="robot_movement" type="align_block.py" output="screen"/>
+    <node name="align_table" pkg="robot_movement" type="align_table.py" output="screen"/>
+    <node name="border_detect" pkg="robot_movement" type="border_detect.py" output="screen"/>
+    <node name="move_time" pkg="robot_movement" type="move_time.py" output="screen"/>
+</launch>

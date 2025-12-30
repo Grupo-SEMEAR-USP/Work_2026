@@ -1,0 +1,11 @@
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/share/robot_movement/cmake/robot_movementConfig-version.cmake
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/share/robot_movement/cmake/robot_movementConfig.cmake
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/lib/pkgconfig/robot_movement.pc
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/lib/robot_movement/imu_stable.py
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/lib/robot_movement/align_block.py
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/lib/robot_movement/teste_linear.py
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/lib/robot_movement/move_time.py
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/lib/robot_movement/teste_angular.py
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/lib/robot_movement/border_detect.py
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/lib/robot_movement/hw_interface_node
+Symlinking /home/rmajetson/ProjectV/robot_ws/devel/lib/robot_movement/align_table.py

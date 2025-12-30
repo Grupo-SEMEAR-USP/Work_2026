@@ -1,0 +1,12 @@
+scan_filter_chain:
+  # Box Filter - Excluindo o Chassi do Robô
+  - name: box_filter
+    type: laser_filters/LaserScanBoxFilter
+    params:
+      box_frame: base_footprint # Define a caixa relativa ao centro do robô
+      max_x: 0.08  
+      min_x: -0.455
+      max_y: 0.155  
+      min_y: -0.155 
+      max_z: 0.115 
+      min_z: 0.0

@@ -1,0 +1,6 @@
+devel_space: /home/rmajetson/ProjectV/robot_ws/devel
+install: false
+install_space: /home/rmajetson/ProjectV/robot_ws/install
+profile: default
+source_space: /home/rmajetson/ProjectV/robot_ws/src
+workspace: /home/rmajetson/ProjectV/robot_ws

@@ -1,0 +1,39 @@
+DWAPlannerROS:
+# Configuração do Robô 
+  acc_lim_x: 1.0
+  acc_lim_y: 1.0      
+  acc_lim_theta: 2.0 
+
+  max_vel_x: 0.5
+  min_vel_x: -0.5
+  
+  max_vel_y: 0.3      
+  min_vel_y: -0.3
+
+  max_vel_trans: 0.8
+  min_vel_trans: 0.1
+
+  max_vel_theta: 1.0
+  min_vel_theta: 0.2
+
+# Tolerância para considerar que "Chegou"
+  yaw_goal_tolerance: 0.10  # ~5 graus
+  xy_goal_tolerance: 0.15   # 15 cm
+  latch_xy_goal_tolerance: true
+
+# Simulação de Trajetória
+  sim_time: 1.5
+  vx_samples: 15       # Mais amostras para suavidade
+  vy_samples: 15       # Se for 0 ou 1, o robô não anda de lado!
+  vth_samples: 20
+  controller_frequency: 5.0 # Taxa de tomada de decisão
+
+# Pesos de Decisão
+  path_distance_bias: 32.0  # Seguir o caminho global
+  goal_distance_bias: 24.0  # Ir para o alvo
+  occdist_scale: 0.05       # Evitar obstáculos
+  forward_point_distance: 0.325 
+
+# Outros
+  oscillation_reset_dist: 0.05
+  holonomic_robot: true     

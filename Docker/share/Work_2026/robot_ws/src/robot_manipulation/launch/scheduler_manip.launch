@@ -1,0 +1,5 @@
+<launch>
+
+  <node name="manipulation" pkg="robot_manipulation" type="manipulation.py"/> 
+
+</launch>

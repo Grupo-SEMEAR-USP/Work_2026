@@ -1,0 +1,6 @@
+robot_manipulation
+/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_manipulation/share/robot_manipulation/cmake/robot_manipulationConfig.cmake /home/rmajetson/ProjectV/robot_ws/devel/share/robot_manipulation/cmake/robot_manipulationConfig.cmake
+/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_manipulation/share/robot_manipulation/cmake/robot_manipulationConfig-version.cmake /home/rmajetson/ProjectV/robot_ws/devel/share/robot_manipulation/cmake/robot_manipulationConfig-version.cmake
+/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_manipulation/lib/pkgconfig/robot_manipulation.pc /home/rmajetson/ProjectV/robot_ws/devel/lib/pkgconfig/robot_manipulation.pc
+/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_manipulation/lib/robot_manipulation/gripper_adjust.py /home/rmajetson/ProjectV/robot_ws/devel/lib/robot_manipulation/gripper_adjust.py
+/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_manipulation/lib/robot_manipulation/manipulation.py /home/rmajetson/ProjectV/robot_ws/devel/lib/robot_manipulation/manipulation.py

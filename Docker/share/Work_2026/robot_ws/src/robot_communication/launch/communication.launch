@@ -1,0 +1,15 @@
+<launch>
+  <!-- MQTT ou UART -->
+  <arg name="comm_mode" default="UART" />
+
+  <param name="comm_mode" type="str" value="$(arg comm_mode)" />
+
+  <group if="$(eval arg('comm_mode') == 'MQTT')">
+    <node name="mqtt_comm" pkg="robot_communication" type="mqtt_comm.py" output="screen"/>
+  </group>
+
+  <group if="$(eval arg('comm_mode') == 'UART')">
+    <node name="uart_comm" pkg="robot_communication" type="uart_comm.py" output="screen"/>
+  </group>
+
+</launch>
