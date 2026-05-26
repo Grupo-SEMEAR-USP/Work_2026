@@ -60,6 +60,7 @@ def reset_usb_device(dev_path):
 
 def sequential_reset():
     print("--- 1. RESET DO HUB PRINCIPAL ---")
+    print("Verificar se o hub está na usb correta: inferior esquerda da Jetson")
     hubs = find_devices_by_id(HUB_VENDOR, HUB_PRODUCT)
     
     if not hubs:
