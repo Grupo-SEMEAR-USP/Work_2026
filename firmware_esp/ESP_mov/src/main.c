@@ -15,7 +15,7 @@
 static const char *TAG = "APP_MAIN";
 
 void app_main(void) {
-    COMM_MODE = MQTT;
+    COMM_MODE = UART;
     ESP_POSITION = FRONT;
 
     bool enable_tasks = true;
@@ -54,8 +54,8 @@ void app_main(void) {
         }
 
         if (debug_encoders) {
-            int left_pos = get_encoder_position(encoder_unit_r);
-            int right_pos = get_encoder_position(encoder_unit_l);
+            int left_pos = get_encoder_vel(encoder_unit_r);
+            int right_pos = get_encoder_vel(encoder_unit_l);
             ESP_LOGI(TAG, "Encoder L: %d | Encoder R: %d", left_pos, right_pos);
         }
 

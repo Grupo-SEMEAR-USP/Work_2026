@@ -32,11 +32,11 @@ typedef enum {
 /*--- Front ---*/
 /* Encoder */
 // Motor esquerdo (A)
-#define F_ENCODER_LA        GPIO_NUM_14
-#define F_ENCODER_LB        GPIO_NUM_15
+#define F_ENCODER_LA        GPIO_NUM_15
+#define F_ENCODER_LB        GPIO_NUM_14
 // Motor direito (B)
-#define F_ENCODER_RA        GPIO_NUM_18
-#define F_ENCODER_RB        GPIO_NUM_19
+#define F_ENCODER_RA        GPIO_NUM_19
+#define F_ENCODER_RB        GPIO_NUM_18
 
 /* Ponte H */
 #define F_STBY              GPIO_NUM_33
@@ -52,11 +52,11 @@ typedef enum {
 /*--- Rear ---*/
 /* Encoder */
 // Motor esquerdo (B)
-#define R_ENCODER_LA        GPIO_NUM_14
-#define R_ENCODER_LB        GPIO_NUM_15
+#define R_ENCODER_LA        GPIO_NUM_15
+#define R_ENCODER_LB        GPIO_NUM_14
 // Motor direito (A)
-#define R_ENCODER_RA        GPIO_NUM_18
-#define R_ENCODER_RB        GPIO_NUM_19
+#define R_ENCODER_RA        GPIO_NUM_19
+#define R_ENCODER_RB        GPIO_NUM_18
 
 /* Ponte H */
 #define R_STBY              GPIO_NUM_33
