@@ -189,7 +189,7 @@ graph TD
     %% Fase de Hardware
     Source --> CheckCables{Cabos Conectados?}
     class CheckCables check
-    CheckCables -- Não --> FixCables[Conectar Hub na ordem correta!]
+    CheckCables -- Não --> FixCables[Conectar Hub na ordem correta! **]
     class FixCables error
     FixCables --> CheckCables
     CheckCables -- Sim --> ResetUSB[rosrun robot_communication reset_usb.py]
@@ -249,5 +249,6 @@ graph TD
 * **Vermelho (Erro/Debug):** Ações corretivas quando algo dá errado.
 * **Verde (Sucesso/Progresso):** Estados onde o sistema está estável.
 * **Azul (Hardware):** Verificações físicas.
+* \** [Ordem correta](https://github.com/Grupo-SEMEAR-USP/Work_2026/blob/master/robot_ws/src/robot_communication/README.md#2-configura%C3%A7%C3%A3o-cr%C3%ADtica-de-hardware-usb-topology)
 
 Este diagrama resume visualmente todo o conhecimento "tribal" que inserimos nos READMEs (como a questão da topologia do Hub, o delay da navegação e o reset obrigatório das USBs).
