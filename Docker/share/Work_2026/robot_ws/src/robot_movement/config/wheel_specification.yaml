@@ -1,7 +1,0 @@
-wheel_specification:
-  wheel_separation_width: 0.15
-  wheel_separation_length: 0.1982
-  wheel_radius: 0.0536
-  deceleration_rate: 5
-  max_speed: 5.75
-  min_speed: -5.75

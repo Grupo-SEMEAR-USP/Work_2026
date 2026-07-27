@@ -1,4 +1,0 @@
-version: "1.0.0"
-description: SSD1306 OLED Driver
-dependencies:
-  idf: ">=4.4"

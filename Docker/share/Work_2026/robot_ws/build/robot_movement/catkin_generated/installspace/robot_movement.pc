@@ -1,8 +1,0 @@
-prefix=/home/rmajetson/ProjectV/robot_ws/install
-
-Name: robot_movement
-Description: Description of robot_movement
-Version: 0.0.0
-Cflags: -I${prefix}/include
-Libs: -L${prefix}/lib 
-Requires: roscpp std_msgs geometry_msgs nav_msgs tf tf2 tf2_ros tf2_geometry_msgs robot_communication

@@ -1,6 +1,0 @@
-<launch>
-  <!-- Inicialização base, com Hw Interface-->
-  <rosparam file="$(find robot_movement)/config/wheel_specification.yaml" command="load" />
-  <node name="hw_interface_node" pkg="robot_movement" type="hw_interface_node" output="screen"/>
-  
-</launch>

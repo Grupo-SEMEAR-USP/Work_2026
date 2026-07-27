@@ -1,4 +1,0 @@
-[35m[1mScanning dependencies of target hw_interface_node[0m
-[ 50%] [32mBuilding CXX object CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.o[0m
-[100%] [32m[1mLinking CXX executable /home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node[0m
-[100%] Built target hw_interface_node

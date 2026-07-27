@@ -35,6 +35,8 @@ Este diretório contém uma infraestrutura completa baseada em Docker para desen
 
 Para instruções de instalação e uso do container (VS Code integrado, GUI, etc), consulte o [README interno](Docker/README.md).
 
+**Observação:** Essa pasta foi zipada. Para consultá-la, descompacte o arquivo *Docker.zip*.
+
 ---
 ---
 

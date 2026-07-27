@@ -1,8 +1,0 @@
-prefix=/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_navigation
-
-Name: robot_navigation
-Description: Description of robot_navigation
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: actionlib actionlib_msgs base_local_planner costmap_2d geometry_msgs move_base move_base_msgs nav_core nav_msgs pluginlib roscpp rospy std_msgs tf robot_communication

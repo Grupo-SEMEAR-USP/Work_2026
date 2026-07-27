@@ -1,6 +1,0 @@
-robot_navigation
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_navigation/share/robot_navigation/cmake/robot_navigationConfig-version.cmake /home/rmajetson/ProjectV/robot_ws/devel/share/robot_navigation/cmake/robot_navigationConfig-version.cmake
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_navigation/share/robot_navigation/cmake/robot_navigationConfig.cmake /home/rmajetson/ProjectV/robot_ws/devel/share/robot_navigation/cmake/robot_navigationConfig.cmake
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_navigation/lib/robot_navigation/navigation.py /home/rmajetson/ProjectV/robot_ws/devel/lib/robot_navigation/navigation.py
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_navigation/lib/robot_navigation/waypoint_saver.py /home/rmajetson/ProjectV/robot_ws/devel/lib/robot_navigation/waypoint_saver.py
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_navigation/lib/pkgconfig/robot_navigation.pc /home/rmajetson/ProjectV/robot_ws/devel/lib/pkgconfig/robot_navigation.pc

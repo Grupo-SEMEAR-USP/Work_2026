@@ -1,4 +1,0 @@
-version: "1.0.0"
-description: Helper macros and compatibility headers for ESP-IDF
-dependencies:
-  idf: ">=4.4"
