@@ -15,6 +15,7 @@
 #include "freertos/task.h"
 #include "esp_log.h"
 #include <math.h>
+#include "switch.h"
 
 /* Tags de Log */
 static const char *COMM_TAG = "COMM_TASK";
@@ -102,8 +103,8 @@ static void actuators_task(void *pvParameters) {
 // Task dedicada aos sensores ultrassônicos
 static void sensors_task(void *pv) {
     while (1) {
-        update_ultrasonic_readings();
-        // O update já tem delay interno
+        update_ultrasonic_readings(); // O update já tem delay interno
+        update_switch_state();
     }
 }
 
@@ -118,7 +119,7 @@ esp_err_t init_tasks() {
     ESP_LOGI(TAG, "NVS inicializado.");
     
     // Inicia sensores (não falha critico, apenas loga)
-    if(init_ultrasonic_distance() != ESP_OK) {
+    if(init_ultrasonic_distance() && init_switch() != ESP_OK) {
         ESP_LOGW(TAG, "Sensores de distancia com falha na inicializacao");
     }
 

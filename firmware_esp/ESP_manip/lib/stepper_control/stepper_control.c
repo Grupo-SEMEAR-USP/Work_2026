@@ -39,6 +39,10 @@ static void pulse_blocking(_Atomic int *remain_ptr, int gpio_step, int gpio_dir)
 
     // Gera pulsos
     for (int i = 0; i < steps; ++i) {
+        if(G_SWITCH_PRESSED){
+            atomic_store(remain_ptr, 0);
+            return; // Interrompe movimento se switch pressionado
+        }
         gpio_set_level(gpio_step, 1);
         esp_rom_delay_us(pulse_us);
         gpio_set_level(gpio_step, 0);
@@ -89,6 +93,7 @@ void move_stepper_base(int steps) {
 }
 
 void stepper_loop_process(void) {
+    if()
     if (atomic_load(&s_remain_e) != 0) {
         pulse_blocking(&s_remain_e, PIN_STEP_ELEVATOR, PIN_DIR_ELEVATOR);
     }

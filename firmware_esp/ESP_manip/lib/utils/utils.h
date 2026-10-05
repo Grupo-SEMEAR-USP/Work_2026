@@ -50,6 +50,14 @@ typedef enum {
 #define PIN_US3_TRIG        GPIO_NUM_19
 #define PIN_US3_ECHO        GPIO_NUM_18
 
+// Pino do switch
+#define SWITCH_PIN GPIO_NUM_4  
+
+//Pino do encoder as5600
+#define AS5600_I2C_SDA_PIN GPIO_NUM_21
+#define AS5600_I2C_SCL_PIN GPIO_NUM_22
+
+
 /*=== Variáveis Globais ===*/
 
 // Modo de Comunicação
@@ -66,5 +74,7 @@ extern volatile float G_SERVO_GRIPPER;// Garra
 // [0]=Front_Left, [1]=Front_Right, [2]=Rear_Left
 extern volatile float    G_US_CM[3];
 extern volatile uint64_t G_US_TS_MS;
+
+extern volatile bool G_SWITCH_PRESSED; // Estado do Switch Limitador
 
 #endif // UTILS_H
