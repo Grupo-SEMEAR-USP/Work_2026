@@ -1,0 +1,4 @@
+version: "0.1.0"
+description: Ultrasonic HC-SR04 driver (Ported)
+dependencies:
+  idf: ">=4.4"
