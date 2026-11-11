@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import rospy
 from std_msgs.msg import Float32MultiArray
-from robot_communication.msg import SchedulerCommand
+from robot_communication.msg import SchedulerCommand, SchedulerResponse
+from robot_communication.msg import manipulation_comm
+
 
 TARGET_NAME = "manipulation"
 
@@ -17,37 +19,20 @@ ACTION_MAP = {
         "center": 80.0,
     },
     "rotatory_base": {
-        "front": -1.0,
-        "back": -1.0,
-        
-        "front_to_deposit1_left": 3700.0,
-        "front_to_deposit2_left": 4000.0,
-        "front_to_deposit3_left": 4300.0,
+        # valores de ângulo mockados por enquanto
 
-        "front_to_deposit1_right": -3700.0,
-        "front_to_deposit2_right": -4000.0,
-        "front_to_deposit3_right": -4300.0,
-
-        "deposit1_to_front_right": 3700.0,
-        "deposit2_to_front_right": 4000.0,
-        "deposit3_to_front_right": 4300.0,
-
-        "deposit1_to_front_left": -3700.0,
-        "deposit2_to_front_left": -4000.0,
-        "deposit3_to_front_left": -4300.0,
-
-        "deposit2_to_deposit1": -300.0,
-        "deposit1_to_deposit2": 300.0,
-        "deposit1_to_deposit3": 600.0,
-        "deposit3_to_deposit1": -600.0,
-        "deposit2_to_deposit3": 300.0,
-        "deposit3_to_deposit2": -300.0,
-
-        "deposit2_to_left": -2000.0,
+        "deposit_left": 15.0,
+        "deposit_middle": 0.0,  
+        "deposit_right": 345.0,
+        "front": 180.0,
+        "back": 0.0,
+        "left": 90.0,
+        "right": 270.0,
     },
     "arm": {
-        "top": 1.0,
+        "top": 40028922.0,  # playstation!
 
+        # Alterar esses valores para centímetros 
         "deposit_to_top": 10100.0,
         "top_to_deposit": -10100.0,
         
@@ -71,11 +56,15 @@ ACTION_MAP = {
 
 class ManipulationInterface:
     def __init__(self):
+        self.last_processed_uid = None
+
         rospy.init_node("manipulation")
 
         self.pub_arm = rospy.Publisher("/arm_control", Float32MultiArray, queue_size=10)
         self.pub_ee = rospy.Publisher("/end_effector_control", Float32MultiArray, queue_size=10)
+        self.pub_fb = rospy.Publisher("/scheduler/feedback", SchedulerResponse, queue_size=10)
 
+        rospy.Subscriber("/manipulator_state", manipulation_comm, self.cb_manipulator_state, queue_size=10)
         rospy.Subscriber("/scheduler/commands",
                          SchedulerCommand, self.cb_command, queue_size=10)
 
@@ -84,6 +73,12 @@ class ManipulationInterface:
     def cb_command(self, msg):
         if msg.target != TARGET_NAME:
             return
+
+        if self.last_processed_uid == msg.uid:
+            # rospy.logdebug(f"[manipulation] Ignorando comando duplicado UID: {msg.uid}")
+            return
+        
+        self.last_processed_uid = msg.uid
 
         rospy.loginfo(f"[manipulation] Recebido uid={msg.uid} payload='{msg.payload}'")
 
@@ -114,6 +109,22 @@ class ManipulationInterface:
             ee_vals[idx] = value
             self.pub_ee.publish(Float32MultiArray(data=ee_vals))
             rospy.loginfo(f"[manipulation] Publicado end_effector_control: {ee_vals}")
+
+    def cb_manipulator_state(self, msg):
+        # Aqui: recebe os valores de ângulo da base (deg e rad), booleano do fim de curso, 
+        # booleano de validade do encoder e booleano de ack do angulo da base (para o scheduler).
+
+        rospy.loginfo(f"[manipulation] Estado do manipulador recebido: base={msg.base_angle_deg:.2f}°, arm={msg.arm_angle:.2f}, upper_limit_active={msg.upper_limit_active}, encoder_ack={msg.encoder_ack}")
+
+        # Devolve o feedback para o scheduler (do angulo ou do fim de curso)
+        # Apenas um deles deve ser 1, senão um pode interferir no ack do outro.
+        if (msg.encoder_ack == 1 or msg.upper_limit_active == 1):
+            feedback_msg = SchedulerResponse()
+            feedback_msg.uid = self.last_processed_uid
+            feedback_msg.target = TARGET_NAME
+            feedback_msg.status = "OK"
+            self.pub_fb.publish(feedback_msg)
+
 
     def run(self):
         rospy.spin()
