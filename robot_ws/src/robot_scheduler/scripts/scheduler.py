@@ -26,23 +26,24 @@ class Scheduler:
         self.plan = [
             # Inicia no Start
             # Navegação para WS1
-            ("navigation", "WS1", True, 60), # Timeout longo para nav
-            ("move", "parar", False, 2),     # Pausa dramática na mesa
+            # ("navigation", "WS1", True, 60), # Timeout longo para nav
+            # ("move", "parar", False, 2),     # Pausa dramática na mesa
 
             # Navegação para WS2
-            ("navigation", "WS2", True, 60),
-            ("move", "parar", False, 2),
+            # ("navigation", "WS2", True, 60),
+            # ("move", "parar", False, 2),
 
             # Navegação para WS3
-            ("navigation", "WS3", True, 60),
-            ("move", "parar", False, 2),
+            # ("navigation", "WS3", True, 60),
+            # ("move", "parar", False, 2),
             
             # Volta para Start
-            ("navigation", "Start", True, 60),
-            ("move", "parar", False, 2)
+            # ("navigation", "Start", True, 60),
+            # ("move", "parar", False, 2)
             # Fim do plano
 
-            # ("manipulation",     "arm,deposit_to_top",   False,  10.0),
+            ("manipulation",     "arm,deposit_to_top",   False,  10.0),
+            ("manipulation",     "rotatory_base,front",   False,  10.0),
             # ("align_table", "10", True, 15),
             # ("search_block",      "4,direita", True, 30),
             # ("move", "parar", False, 1),

@@ -20,7 +20,7 @@ import time
 import rospy
 import serial
 from std_msgs.msg import Float32MultiArray, Int32MultiArray
-from robot_communication.msg import encoder_comm, velocity_comm, ultrasonic_comm
+from robot_communication.msg import encoder_comm, velocity_comm, ultrasonic_comm, manipulation_comm
 
 FRAME_SOF = 0xAA
 FRAME_EOF = 0xBB
@@ -186,9 +186,10 @@ class UARTBridge:
 
         self.pub_enc = rospy.Publisher("/encoder_data", encoder_comm, queue_size=10)
         self.pub_us = rospy.Publisher("/ultrasonic_distances", ultrasonic_comm, queue_size=10)
-        self.pub_us6 = rospy.Publisher("/ultrasonic_distances_6", Float32MultiArray, queue_size=10)
+        self.pub_us6 = rospy.Publisher("/ultrasonic_distances_6", Float32MultiArray, queue_size=10) # ?
         # Ticks nao estao no payload UART da esp_right; publicar somente MQTT.
-        self.pub_manip = rospy.Publisher("/manipulator_state", Float32MultiArray, queue_size=10)
+        # self.pub_manip = rospy.Publisher("/manipulator_state", Float32MultiArray, queue_size=10) 
+        self.pub_manip = rospy.Publisher("/manipulator_state", manipulation_comm, queue_size=10) 
 
         self.threads = [
             threading.Thread(target=self.read_loop,
@@ -322,7 +323,14 @@ class UARTBridge:
             self.pub_us.publish(m)
             self.pub_us6.publish(Float32MultiArray(data=list(us)))
         if manip is not None:
-            self.pub_manip.publish(Float32MultiArray(data=list(manip)))
+            # self.pub_manip.publish(Float32MultiArray(data=list(manip)))
+
+            # isso aqui tá certo? (bia)
+            m = manipulation_comm()
+            m.base_angle_deg, m.base_angle_rad, m.upper_limit_active, m.encoder_valid, m.encoder_ack = manip  # encoder_ack n ta no baixo ainda
+            # Nota pro vitão: implementar no baixo essa verificação de que o encoder chegou no angulo certo e mandar esse boleano na comunicação, que vai ser usado pra enviar o ack pro scheduler
+            self.pub_manip.publish(m)
+
 
     def shutdown(self):
         self.running = False

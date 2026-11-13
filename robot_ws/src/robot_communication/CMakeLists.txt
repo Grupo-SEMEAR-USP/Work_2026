@@ -24,6 +24,7 @@ add_message_files(
   SchedulerResponse.msg
   AprilTagDetection.msg
   AprilTagDetectionArray.msg
+  manipulation_comm.msg
 )
 
 ## Generate added messages and services with any dependencies listed here
