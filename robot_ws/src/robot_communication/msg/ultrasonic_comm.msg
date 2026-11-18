@@ -1,6 +1,7 @@
 # ultrasonic_comm.msg
-float32 front_left
-float32 front_right
-float32 rear_left
-float32 rear_right
-float32 back
+float32 us_esq_1
+float32 us_esq_2
+float32 us_dir_1
+float32 us_dir_2
+float32 us_esq_frt
+float32 us_dir_frt

@@ -28,6 +28,9 @@ void app_main(void) {
     bool debug_wrist = false;
     bool debug_gripper = false;
 
+    // Debug da comunicação
+    bool debug_uart = true;
+
     // Valores para teste dos motores
     float elevator_cm = 1.0f;
     float base_deg = 90.0f;
@@ -45,6 +48,12 @@ void app_main(void) {
             return;
         }
     }
+
+    ESP_LOGI(TAG, "UART comando: %u bytes",
+         (unsigned)sizeof(uart_command_t));
+
+    ESP_LOGI(TAG, "UART telemetria: %u bytes",
+            (unsigned)sizeof(uart_telemetry_t));
 
     bool debug_commands_sent = false;
 
@@ -85,6 +94,32 @@ void app_main(void) {
 
                 if (debug_gripper)
                     ESP_ERROR_CHECK(motors_apply(MOTOR_GRIPPER, gripper_deg));
+            }
+        }
+
+        if (enable_tasks && debug_uart && COMM_MODE == UART && !disable_logs) {
+
+            ESP_LOGI(TAG, "CMD READY: %d", G_MOTOR_CMD_READY);
+
+            ESP_LOGI(TAG, "=== Variaveis recebidas UART ===");
+
+            ESP_LOGI(TAG, "Motor Mask: %u", G_MOTOR_CMD.motor_mask);
+            ESP_LOGI(TAG, "Elevador: %.2f cm", G_MOTOR_CMD.elevator_cm);
+            ESP_LOGI(TAG, "Base: %.2f graus", G_MOTOR_CMD.base_angle_deg);
+            ESP_LOGI(TAG, "Pulso: %.2f graus", G_MOTOR_CMD.wrist_angle_deg);
+            ESP_LOGI(TAG, "Garra: %.2f graus", G_MOTOR_CMD.gripper_angle_deg);
+
+            ESP_LOGI(TAG, "=== Variaveis enviadas UART ===");
+
+            if (motors_get_status(&status) == ESP_OK) {
+                ESP_LOGI(TAG, "Base medida: %.2f graus",
+                        status.base_measured_deg);
+
+                ESP_LOGI(TAG, "Fim de curso superior: %d",
+                        status.elevator_upper_limit ? 1 : 0);
+
+                ESP_LOGI(TAG, "Encoder valido: %d",
+                        status.base_sensor_error == ESP_OK ? 1 : 0);
             }
         }
 
