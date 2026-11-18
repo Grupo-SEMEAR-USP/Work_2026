@@ -23,28 +23,35 @@ typedef enum {
 } communication_mode_t;
 
 /*=== GPIO Dir. (2026) ===*/
-#define PH_TE_PWM GPIO_NUM_15
-#define PH_TE_IN1 GPIO_NUM_16
-#define PH_TE_IN2 GPIO_NUM_4
-#define PH_TD_PWM GPIO_NUM_2
-#define PH_TD_IN1 GPIO_NUM_17
-#define PH_TD_IN2 GPIO_NUM_18
+// Motores
+#define PH_FE_PWM GPIO_NUM_14
+#define PH_FE_IN1 GPIO_NUM_26
+#define PH_FE_IN2 GPIO_NUM_33
 
-#define PH_FE_PWM GPIO_NUM_32
-#define PH_FE_IN1 GPIO_NUM_27
-#define PH_FE_IN2 GPIO_NUM_25
-#define PH_FD_PWM GPIO_NUM_14
-#define PH_FD_IN1 GPIO_NUM_26
-#define PH_FD_IN2 GPIO_NUM_33
+#define PH_FD_PWM GPIO_NUM_2
+#define PH_FD_IN1 GPIO_NUM_18
+#define PH_FD_IN2 GPIO_NUM_17
 
-#define ENC_FE_CHA GPIO_NUM_12
-#define ENC_FE_CHB GPIO_NUM_13
-#define ENC_FD_CHA GPIO_NUM_21
-#define ENC_FD_CHB GPIO_NUM_22
-#define ENC_TE_CHA GPIO_NUM_35
-#define ENC_TE_CHB GPIO_NUM_34
+#define PH_TE_PWM GPIO_NUM_25
+#define PH_TE_IN1 GPIO_NUM_27
+#define PH_TE_IN2 GPIO_NUM_32
+
+#define PH_TD_PWM GPIO_NUM_15
+#define PH_TD_IN1 GPIO_NUM_4
+#define PH_TD_IN2 GPIO_NUM_16
+
+// Encoders
+#define ENC_TE_CHA GPIO_NUM_22
+#define ENC_TE_CHB GPIO_NUM_21
+
+#define ENC_FD_CHA GPIO_NUM_35
+#define ENC_FD_CHB GPIO_NUM_34
+
 #define ENC_TD_CHA GPIO_NUM_19
 #define ENC_TD_CHB GPIO_NUM_23
+
+#define ENC_FE_CHA GPIO_NUM_13
+#define ENC_FE_CHB GPIO_NUM_12
 
 /*=== Variáveis Globais ===*/
 

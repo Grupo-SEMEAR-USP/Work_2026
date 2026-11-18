@@ -71,10 +71,6 @@ static void mqtt_task(void *pvParameters) {
 static void uart_task(void *pvParameters) {
     ESP_ERROR_CHECK(init_uart());
 
-    TickType_t last_valid_rx = xTaskGetTickCount();
-
-    const TickType_t timeout = pdMS_TO_TICKS(300);
-
     while (1) {
         uart_comm_t received_cmd = {0};
         uart_comm_t to_send = {0};
@@ -87,8 +83,6 @@ static void uart_task(void *pvParameters) {
             isfinite(received_cmd.left_rear_data) &&
             isfinite(received_cmd.right_rear_data);
 
-        TickType_t now = xTaskGetTickCount();
-
         if (xSemaphoreTake(xDataMutex, pdMS_TO_TICKS(10)) == pdTRUE) {
 
             if (valid) {
@@ -96,15 +90,6 @@ static void uart_task(void *pvParameters) {
                 G_TARGET_R_F = received_cmd.right_front_data;
                 G_TARGET_L_R = received_cmd.left_rear_data;
                 G_TARGET_R_R = received_cmd.right_rear_data;
-
-                last_valid_rx = now;
-            }
-            else if ((now - last_valid_rx) >= timeout) {
-                // Parada por perda de comunicação
-                G_TARGET_L_F = 0.0f;
-                G_TARGET_R_F = 0.0f;
-                G_TARGET_L_R = 0.0f;
-                G_TARGET_R_R = 0.0f;
             }
 
             // Feedback das quatro rodas
