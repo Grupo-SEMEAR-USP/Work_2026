@@ -6,7 +6,7 @@ from sensor_msgs.msg import Imu
 from tf.transformations import euler_from_quaternion
 from robot_communication.msg import SchedulerCommand, SchedulerResponse, ultrasonic_comm
 from collections import deque
-TARGET_NAME = "align_table"
+TARGET_NAME = "approach_table"
 BUFFER_SIZE = 5  # Número de leituras para média móvel
 IMU_TOPIC = "/imu/data_filtered"  # Mesmo tópico usado pelo hw_interface
 
@@ -19,7 +19,7 @@ STATE_FINISHED = 4      # Missão concluída
 
 class AlignTable:
     def __init__(self):
-        rospy.init_node('align_table', anonymous=True)
+        rospy.init_node('approach_table', anonymous=True)
         
         # --- Parâmetros de Controle ---
         self.diff_max = 0.5    # Tolerância de desalinhamento (cm)
@@ -78,7 +78,7 @@ class AlignTable:
         # Inicia o loop principal de controle com um Timer não bloqueante
         rospy.Timer(rospy.Duration(1.0/self.control_rate), self.run_control_loop)
 
-        rospy.loginfo("[align_table] Inicializado e aguardando comandos...")
+        rospy.loginfo("[approach_table] Inicializado e aguardando comandos...")
 
     def sched_cb(self, msg):
         if msg.target != TARGET_NAME or msg.uid == self.lastID:
@@ -101,7 +101,7 @@ class AlignTable:
             else:
                 self.current_state = STATE_ALIGNING
 
-            rospy.loginfo(f"[align_table] Comando recebido! Tipo: {self.align_type}, Distância Alvo: {self.table_dist} cm, Timeout: {self.timeout}s.")
+            rospy.loginfo(f"[approach_table] Comando recebido! Tipo: {self.align_type}, Distância Alvo: {self.table_dist} cm, Timeout: {self.timeout}s.")
         
         except ValueError:
             rospy.logerr(f"Payload inválido: '{msg.payload}'. Deve ser um valor numérico para a distância.")
@@ -159,9 +159,9 @@ class AlignTable:
             self.diff_right = self.dist_right_back - self.dist_right_front
             self.diff_left = self.dist_left_front - self.dist_left_back
 
-            rospy.loginfo_throttle(1, f"[align_table] Médias FRONT: Esq = {self.dist_front_left:.1f} cm, Dir = {self.dist_front_right:.1f} cm, Diff = {self.diff_front:.1f}")
-            rospy.loginfo_throttle(1, f"[align_table] Médias RIGHT: Front = {self.dist_right_front:.1f} cm, Back = {self.dist_right_back:.1f} cm, Diff = {self.diff_right:.1f}")
-            rospy.loginfo_throttle(1, f"[align_table] Médias LEFT: Front = {self.dist_left_front:.1f} cm, Back = {self.dist_left_back:.1f} cm, Diff = {self.diff_left:.1f}")
+            rospy.loginfo_throttle(1, f"[approach_table] Médias FRONT: Esq = {self.dist_front_left:.1f} cm, Dir = {self.dist_front_right:.1f} cm, Diff = {self.diff_front:.1f}")
+            rospy.loginfo_throttle(1, f"[approach_table] Médias RIGHT: Front = {self.dist_right_front:.1f} cm, Back = {self.dist_right_back:.1f} cm, Diff = {self.diff_right:.1f}")
+            rospy.loginfo_throttle(1, f"[approach_table] Médias LEFT: Front = {self.dist_left_front:.1f} cm, Back = {self.dist_left_back:.1f} cm, Diff = {self.diff_left:.1f}")
 
     def publish_feedback(self, status="OK"):
         if self.lastID is None:
@@ -170,7 +170,7 @@ class AlignTable:
         feedback = SchedulerResponse(uid=self.lastID, target=TARGET_NAME, status=status)
         self.pub_feedback.publish(feedback)
         
-        rospy.loginfo(f"[align_table] Missão concluída com status: {status}")
+        rospy.loginfo(f"[approach_table] Missão concluída com status: {status}")
 
         self.stop_robot()
         self.current_state = STATE_IDLE
@@ -217,13 +217,13 @@ class AlignTable:
         if dist_1 <= 0.0 or dist_2 <= 0.0 or len(buffer) < BUFFER_SIZE:
             # Gira lentamente se não houver leituras válidas (procurando a mesa)
             twist.angular.z = self.ang_vel * 0.5 
-            rospy.loginfo_throttle(1, "[align_table] Aguardando leituras válidas para alinhamento.")
+            rospy.loginfo_throttle(1, "[approach_table] Aguardando leituras válidas para alinhamento.")
             self.pub_vel.publish(twist)
             return
 
         # Condição de Transição (Pronto para Fix_Distance?)
         if abs(diff) <= self.diff_max:
-            rospy.loginfo("[align_table] Robô alinhado.")
+            rospy.loginfo("[approach_table] Robô alinhado.")
             self.stop_robot()
             self.current_state = STATE_FIX_DISTANCE
             return
@@ -253,7 +253,7 @@ class AlignTable:
 
         # Condição de Transição (Missão Concluída?)
         if dist_processada <= (self.table_dist + self.tolerance) and dist_processada >= (self.table_dist - self.tolerance):
-            rospy.loginfo("[align_table] Robô na distância alvo.")
+            rospy.loginfo("[approach_table] Robô na distância alvo.")
             self.stop_robot()
             self.current_state = STATE_FINISHED
             return
@@ -286,7 +286,7 @@ class AlignTable:
         imu_age = (rospy.Time.now() - self.last_imu_time).to_sec()
         if self.last_yaw is None or imu_age > self.imu_timeout:
             self.stop_robot()
-            rospy.logwarn_throttle(1, f"[align_table] Sem dados da IMU em {IMU_TOPIC}. Aguardando para o pré-alinhamento.")
+            rospy.logwarn_throttle(1, f"[approach_table] Sem dados da IMU em {IMU_TOPIC}. Aguardando para o pré-alinhamento.")
             return
 
         # Condição de Transição (girou 90 graus?)
@@ -294,7 +294,7 @@ class AlignTable:
         rotated = abs(self.accumulated_yaw)
         if rotated >= self.pre_align_target - self.pre_align_tolerance:
             self.stop_robot()
-            rospy.loginfo(f"[align_table] Pré-alinhamento concluído. Giro medido pela IMU: {math.degrees(self.accumulated_yaw):.1f} graus.")
+            rospy.loginfo(f"[approach_table] Pré-alinhamento concluído. Giro medido pela IMU: {math.degrees(self.accumulated_yaw):.1f} graus.")
             # Descarta leituras dos ultrassons feitas durante o giro
             self.clear_buffers()
             self.current_state = STATE_ALIGNING
@@ -307,7 +307,7 @@ class AlignTable:
             # Gira para a direita (angular.z negativo)
             twist.angular.z = -self.pre_align_vel
 
-        rospy.loginfo_throttle(1, f"[align_table] Pré-alinhando: {math.degrees(rotated):.1f} / {math.degrees(self.pre_align_target):.0f} graus.")
+        rospy.loginfo_throttle(1, f"[approach_table] Pré-alinhando: {math.degrees(rotated):.1f} / {math.degrees(self.pre_align_target):.0f} graus.")
         self.pub_vel.publish(twist)
 
     def run_control_loop(self, event):
@@ -316,7 +316,7 @@ class AlignTable:
 
         # Checagem de Timeout
         if self.timeout > 0 and (rospy.Time.now() - self.startTime).to_sec() > self.timeout:
-            rospy.logwarn("[align_table] Timeout excedido.")
+            rospy.logwarn("[approach_table] Timeout excedido.")
             self.publish_feedback(status="FAIL")
             return # Sai do loop, estado já foi resetado
 

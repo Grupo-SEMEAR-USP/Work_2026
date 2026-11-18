@@ -82,7 +82,7 @@ Cada passo da missão é definido por uma tupla:
 
 | Campo | Descrição |
 | :--- | :--- |
-| **Target** | Nome do nó executor (ex: `"navigation"`, `"manipulation"`, `"align_table"`). |
+| **Target** | Nome do nó executor (ex: `"navigation"`, `"manipulation"`, `"approach_table"`). |
 | **Payload** | Parâmetro da tarefa (ex: Nome do ponto, Distância em cm, ID do bloco). |
 | **Need Ack** | `True`: Espera resposta "OK/FAIL" para continuar. `False`: Apenas espera o tempo passar (Open Loop). |
 | **Timeout** | Tempo máximo (segundos) para esperar o Ack ou duração da pausa (se Ack=False). |
@@ -104,7 +104,7 @@ self.plan = [
     ("navigation", "WS1", True, 60),
     
     # 2. Alinhar com a mesa a 20cm (Espera alinhamento ultrassônico)
-    ("align_table", "20.0", True, 15),
+    ("approach_table", "20.0", True, 15),
     
     # 3. Baixar o braço (Comando Open-Loop, espera 5s para garantir)
     ("manipulation", "arm,top_to_bottom15", False, 5.0),

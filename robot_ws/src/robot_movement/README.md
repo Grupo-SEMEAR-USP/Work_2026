@@ -38,7 +38,7 @@ robot_movement/
 │   └── scheduler_mov.launch     # Inicia os nós de alinhamento para o Scheduler
 └── scripts/                    
     ├── align_block.py           # Alinhamento visual com AprilTag
-    ├── align_table.py           # Alinhamento paralelo com ultrassom
+    ├── approach_table.py           # Alinhamento paralelo com ultrassom
     ├── border_detect.py         # Detecção de bordas de mesa
     ├── move_time.py             # Movimentos simples por temporizador
     ├── imu_stable.py            # Filtro de estabilidade para IMU
@@ -66,7 +66,7 @@ Lê o feedback dos encoders e da IMU para estimar onde o robô está.
 
 ## <a id="scripts"></a>3. Scripts de Comportamento e Alinhamento
 
-Estes nós Python são "Executores" que respondem ao tópico `/scheduler/commands` (target: `align_block`, `align_table`, etc). Eles implementam lógicas de malha fechada para manobras de precisão onde o *Navigation Stack global* não seria adequado.
+Estes nós Python são "Executores" que respondem ao tópico `/scheduler/commands` (target: `align_block`, `approach_table`, etc). Eles implementam lógicas de malha fechada para manobras de precisão onde o *Navigation Stack global* não seria adequado.
 
 ### `align_block.py` (Alinhamento Visual Fino)
 Centraliza o robô na frente de um bloco específico para permitir a pega correta pela garra.
@@ -79,7 +79,7 @@ Centraliza o robô na frente de um bloco específico para permitir a pega corret
 * **Payload do Scheduler:** `"ID_DO_BLOCO"` (ex: `"3"`).
 * **Uso Típico:** Executado logo após chegar na área de manipulação para corrigir erros da varredura lateral.
 
-### `align_table.py` (Alinhamento Perpendicular)
+### `approach_table.py` (Alinhamento Perpendicular)
 Garante que o robô esteja perfeitamente paralelo a uma bancada ou parede e a uma distância fixa.
 * **Sensores:** Ultrassom Frontal Esquerdo e Direito (`/ultrasonic_distances`).
 * **Lógica de Controle (Máquina de Estados):**
