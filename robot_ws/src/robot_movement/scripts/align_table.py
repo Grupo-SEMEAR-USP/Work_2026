@@ -45,10 +45,10 @@ class AlignTable:
         # Leituras processadas
         self.dist_front_right = 0.0
         self.dist_front_left = 0.0
-        self.dist_right_front = 0.0
-        self.dist_right_back = 0.0
-        self.dist_left_front = 0.0
-        self.dist_left_back = 0.0
+        self.dist_right_1 = 0.0
+        self.dist_right_2 = 0.0
+        self.dist_left_1 = 0.0
+        self.dist_left_2 = 0.0
 
         self.diff_front = 0.0 # Diferença entre esquerdo e direito
         self.diff_right = 0.0 
@@ -57,10 +57,10 @@ class AlignTable:
         # Buffers de leitura
         self.buffer_front_left = deque(maxlen=BUFFER_SIZE)
         self.buffer_front_right = deque(maxlen=BUFFER_SIZE)
-        self.buffer_right_front = deque(maxlen=BUFFER_SIZE)
-        self.buffer_right_back = deque(maxlen=BUFFER_SIZE)
-        self.buffer_left_front = deque(maxlen=BUFFER_SIZE)
-        self.buffer_left_back = deque(maxlen=BUFFER_SIZE)
+        self.buffer_right_1 = deque(maxlen=BUFFER_SIZE)
+        self.buffer_right_2 = deque(maxlen=BUFFER_SIZE)
+        self.buffer_left_1 = deque(maxlen=BUFFER_SIZE)
+        self.buffer_left_2 = deque(maxlen=BUFFER_SIZE)
 
         # Leituras da IMU
         self.last_yaw = None                # Último yaw lido (rad), em [-pi, pi]
@@ -111,10 +111,10 @@ class AlignTable:
     def clear_buffers(self):
         self.buffer_front_left.clear()
         self.buffer_front_right.clear()
-        self.buffer_right_front.clear()
-        self.buffer_right_back.clear()
-        self.buffer_left_front.clear()
-        self.buffer_left_back.clear()
+        self.buffer_right_1.clear()
+        self.buffer_right_2.clear()
+        self.buffer_left_1.clear()
+        self.buffer_left_2.clear()
 
 
     def imu_callback(self, msg: Imu):
@@ -139,29 +139,29 @@ class AlignTable:
         if self.current_state == STATE_IDLE:
             return
             
-        self.buffer_front_left.append(msg.front_left)
-        self.buffer_front_right.append(msg.front_right)
-        self.buffer_right_front.append(msg.right_front)
-        self.buffer_right_back.append(msg.right_back)
-        self.buffer_left_front.append(msg.left_front)
-        self.buffer_left_back.append(msg.left_back)
+        self.buffer_front_left.append(msg.us_front_left)
+        self.buffer_front_right.append(msg.us_front_right)
+        self.buffer_right_1.append(msg.us_right_1)
+        self.buffer_right_2.append(msg.us_right_2)
+        self.buffer_left_1.append(msg.us_left_1)
+        self.buffer_left_2.append(msg.us_left_2)
 
         if len(self.buffer_front_left) == BUFFER_SIZE:
             self.dist_front_left = sum(self.buffer_front_left) / BUFFER_SIZE
             self.dist_front_right = sum(self.buffer_front_right) / BUFFER_SIZE
-            self.dist_right_front = sum(self.buffer_right_front) / BUFFER_SIZE
-            self.dist_right_back = sum(self.buffer_right_back) / BUFFER_SIZE
-            self.dist_left_front = sum(self.buffer_left_front) / BUFFER_SIZE
-            self.dist_left_back = sum(self.buffer_left_back) / BUFFER_SIZE
+            self.dist_right_1 = sum(self.buffer_right_1) / BUFFER_SIZE
+            self.dist_right_2 = sum(self.buffer_right_2) / BUFFER_SIZE
+            self.dist_left_1 = sum(self.buffer_left_1) / BUFFER_SIZE
+            self.dist_left_2 = sum(self.buffer_left_2) / BUFFER_SIZE
 
-            # diff > 0 => Girar para a direita
+            # diff > 0 ==> Girar para a direita
             self.diff_front = self.dist_front_left - self.dist_front_right
-            self.diff_right = self.dist_right_back - self.dist_right_front
-            self.diff_left = self.dist_left_front - self.dist_left_back
+            self.diff_right = self.dist_right_2 - self.dist_right_1
+            self.diff_left = self.dist_left_1 - self.dist_left_2
 
             rospy.loginfo_throttle(1, f"[approach_table] Médias FRONT: Esq = {self.dist_front_left:.1f} cm, Dir = {self.dist_front_right:.1f} cm, Diff = {self.diff_front:.1f}")
-            rospy.loginfo_throttle(1, f"[approach_table] Médias RIGHT: Front = {self.dist_right_front:.1f} cm, Back = {self.dist_right_back:.1f} cm, Diff = {self.diff_right:.1f}")
-            rospy.loginfo_throttle(1, f"[approach_table] Médias LEFT: Front = {self.dist_left_front:.1f} cm, Back = {self.dist_left_back:.1f} cm, Diff = {self.diff_left:.1f}")
+            rospy.loginfo_throttle(1, f"[approach_table] Médias RIGHT: Front = {self.dist_right_1:.1f} cm, Back = {self.dist_right_2:.1f} cm, Diff = {self.diff_right:.1f}")
+            rospy.loginfo_throttle(1, f"[approach_table] Médias LEFT: Front = {self.dist_left_1:.1f} cm, Back = {self.dist_left_2:.1f} cm, Diff = {self.diff_left:.1f}")
 
     def publish_feedback(self, status="OK"):
         if self.lastID is None:
@@ -203,14 +203,14 @@ class AlignTable:
             buffer = self.buffer_front_left   # um dos buffers para checar se há leituras válidas
             diff = self.diff_front
         if align_type == "right":
-            dist_1 = self.dist_right_front
-            dist_2 = self.dist_right_back
-            buffer = self.buffer_right_front   
+            dist_1 = self.dist_right_1
+            dist_2 = self.dist_right_2
+            buffer = self.buffer_right_1   
             diff = self.diff_right
         if align_type == "left":
-            dist_1 = self.dist_left_front
-            dist_2 = self.dist_left_back
-            buffer = self.buffer_left_front   
+            dist_1 = self.dist_left_1
+            dist_2 = self.dist_left_2
+            buffer = self.buffer_left_1   
             diff = self.diff_left
 
         # Checagem de Validade (Evita girar baseado em leituras -1 ou 0)
@@ -242,11 +242,11 @@ class AlignTable:
             dist_1 = self.dist_front_right
             dist_2 = self.dist_front_left
         elif align_type == "right":
-            dist_1 = self.dist_right_front
-            dist_2 = self.dist_right_back
+            dist_1 = self.dist_right_1
+            dist_2 = self.dist_right_2
         elif align_type == "left":  
-            dist_1 = self.dist_left_front
-            dist_2 = self.dist_left_back
+            dist_1 = self.dist_left_1
+            dist_2 = self.dist_left_2
         
         # Usa a menor distância (mais conservador)
         dist_processada = min(dist_1, dist_2) 
