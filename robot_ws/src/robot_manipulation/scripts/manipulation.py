@@ -57,6 +57,7 @@ ACTION_MAP = {
 class ManipulationInterface:
     def __init__(self):
         self.last_processed_uid = None
+        self.last_manip_feedback = 0
 
         rospy.init_node("manipulation")
 
@@ -112,18 +113,26 @@ class ManipulationInterface:
 
     def cb_manipulator_state(self, msg):
         # Aqui: recebe os valores de ângulo da base (deg e rad), booleano do fim de curso, 
-        # booleano de validade do encoder e booleano de ack do angulo da base (para o scheduler).
+        # booleano de validade do encoder e booleano de ack da manip.
 
         rospy.loginfo(f"[manipulation] Estado do manipulador recebido: base={msg.base_angle_deg:.2f}°, arm={msg.arm_angle:.2f}, upper_limit_active={msg.upper_limit_active}, encoder_ack={msg.encoder_ack}")
 
-        # Devolve o feedback para o scheduler (do angulo ou do fim de curso)
-        # Apenas um deles deve ser 1, senão um pode interferir no ack do outro.
-        if (msg.encoder_ack == 1 or msg.upper_limit_active == 1):
-            feedback_msg = SchedulerResponse()
-            feedback_msg.uid = self.last_processed_uid
-            feedback_msg.target = TARGET_NAME
-            feedback_msg.status = "OK"
-            self.pub_fb.publish(feedback_msg)
+        # Devolve o feedback para o scheduler só na borda, pra enviar mal entendido com atraso de comunicação
+        if (self.last_manip_feedback == 0 and msg.manip_feedback == 1):
+            self.publish_feedback()
+
+        self.last_manip_feedback = msg.manip_feedback
+
+    def publish_feedback(self, status="OK"):
+            if self.last_processed_uid is None:
+                return
+                
+            feedback = SchedulerResponse(uid=self.last_processed_uid, target=TARGET_NAME, status=status)
+            self.pub_feedback.publish(feedback)
+            
+            rospy.loginfo(f"[manipulation] Missão concluída com status: {status}")
+    
+            self.last_processed_uid = None
 
 
     def run(self):

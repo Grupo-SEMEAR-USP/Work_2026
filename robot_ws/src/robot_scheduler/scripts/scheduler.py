@@ -44,7 +44,7 @@ class Scheduler:
 
             ("manipulation",     "arm,deposit_to_top",   False,  10.0),
             ("manipulation",     "rotatory_base,front",   False,  10.0),
-            # ("align_table", "10", True, 15),
+            ("align_table", "10,front", True, 15),      # front, right ou left
             # ("search_block",      "4,direita", True, 30),
             # ("move", "parar", False, 1),
             # ("navigation",       "WS1",      True,  30)

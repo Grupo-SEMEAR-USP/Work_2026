@@ -327,7 +327,7 @@ class UARTBridge:
 
             # isso aqui tá certo? (bia)
             m = manipulation_comm()
-            m.base_angle_deg, m.base_angle_rad, m.upper_limit_active, m.encoder_valid, m.encoder_ack = manip  # encoder_ack n ta no baixo ainda
+            m.base_angle_deg, m.base_angle_rad, m.upper_limit_active, m.encoder_valid, m.manip_feedback = manip 
             # Nota pro vitão: implementar no baixo essa verificação de que o encoder chegou no angulo certo e mandar esse boleano na comunicação, que vai ser usado pra enviar o ack pro scheduler
             self.pub_manip.publish(m)
 
