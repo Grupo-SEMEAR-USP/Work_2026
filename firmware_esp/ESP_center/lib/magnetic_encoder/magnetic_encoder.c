@@ -12,6 +12,7 @@
 #define AS5600_ANGLE_REGISTER  0x0E
 #define AS5600_I2C_FREQ_HZ     100000
 #define AS5600_TIMEOUT_MS      50
+#define AS5600_ZERO_OFFSET_DEG 0.0f
 
 static const char *TAG = "AS5600";
 
@@ -129,11 +130,19 @@ esp_err_t as5600_update(void)
     uint16_t raw_angle =
         ((uint16_t)(bytes[0] & 0x0F) << 8) | bytes[1];
 
-    G_ENCMAG_ANGLE_DEG =
+    // Converte a leitura bruta para graus
+    float angle_deg =
         (float)raw_angle * (360.0f / 4096.0f);
 
-    G_ENCMAG_ANGLE_RAD =
-        (float)raw_angle * (6.28318530718f / 4096.0f);
+    // Desloca a origem para o zero mecanico
+    angle_deg -= AS5600_ZERO_OFFSET_DEG;
+
+    // Mantem o angulo entre 0 e 360 graus
+    if (angle_deg < 0.0f) angle_deg += 360.0f;
+    if (angle_deg >= 360.0f) angle_deg -= 360.0f;
+
+    G_ENCMAG_ANGLE_DEG = angle_deg;
+    G_ENCMAG_ANGLE_RAD = angle_deg * (PI / 180.0f);
 
     return ESP_OK;
 }

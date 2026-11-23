@@ -38,6 +38,28 @@ static const char *TAG = "TASKS";
 _Static_assert(sizeof(uart_command_t) == 17, "UART Center: comando deve ter 17 bytes (sem sequence)");
 _Static_assert(sizeof(uart_telemetry_t) == 11, "UART Center: telemetria deve ter 11 bytes (com mov_complete)");
 
+
+// Consulta das variaveis compartilhadas para debug
+void task_manager_debug_snapshot(
+    uart_command_t *cmd,
+    bool *ready,
+    bool *mov_complete
+) {
+    taskENTER_CRITICAL(&s_cmd_mux);
+
+    if (cmd != NULL)
+        *cmd = G_MOTOR_CMD;
+
+    if (ready != NULL)
+        *ready = G_MOTOR_CMD_READY;
+
+    if (mov_complete != NULL)
+        *mov_complete = s_mov_complete;
+
+    taskEXIT_CRITICAL(&s_cmd_mux);
+}
+
+
 static void mqtt_task(void *pvParameters) {
     (void)pvParameters;
 
@@ -122,9 +144,7 @@ static void uart_task(void *pvParameters) {
     while (1) {
         uart_command_t cmd;
 
-        // A recepcao UART nao depende da task de atuacao.
         // Mesmo sem AS5600/motores, cada frame valido atualiza G_MOTOR_CMD
-        // para que a main e o frame_test.py possam diagnosticar a comunicacao.
         if (uart_read(&cmd)) {
             const bool motors_ready = atomic_load(&s_motors_ready);
 
@@ -207,8 +227,8 @@ static void actuators_task(void *pvParameters) {
             .kp = 0.6f,
             .ki = 0.0f,
             .kd = 0.0f,
-            .max_output = 4.0f,
-            .min_output = -4.0f,
+            .max_output = 8.0f,
+            .min_output = -8.0f,
             .max_integral = 0.0f,
             .min_integral = 0.0f,
             .cal_type = PID_CAL_TYPE_POSITIONAL,

@@ -18,7 +18,7 @@
 
 // Permite inspecionar o fim de curso e o encoder entre transmissoes.
 #define MOTORS_ELEVATOR_BLOCK_STEPS 4
-#define MOTORS_BASE_BLOCK_STEPS     4
+#define MOTORS_BASE_BLOCK_STEPS     8
 #define MOTORS_POLL_MS              5
 #define MOTORS_TASK_STACK           4096
 #define MOTORS_TASK_PRIORITY        4

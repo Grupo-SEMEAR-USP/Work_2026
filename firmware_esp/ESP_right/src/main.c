@@ -1,94 +1,73 @@
+
 #include <stdio.h>
-#include <stdbool.h>
+#include <stdint.h>
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+
 #include "esp_log.h"
-#include "esp_system.h"      
 #include "esp_err.h"
+#include "driver/gpio.h"
 
-#include "utils.h"           
-#include "task_manager.h"
+#include "utils.h"
 
-#include "h_bridge.h"
-#include "encoder.h"
-
-static const char *TAG = "APP_MAIN";
+static const char *TAG = "ENC_DEBUG";
 
 void app_main(void) {
-    COMM_MODE = UART;
 
-    bool enable_tasks = true;
-    bool debug_motors = false;
-    bool debug_encoders = false;
-    bool debug_uart = true;
-    bool disable_logs = false;
+    // Teste isolado do encoder dianteiro direito
+    gpio_config_t io_config = {
+        .pin_bit_mask =
+            (1ULL << ENC_TD_CHA) |
+            (1ULL << ENC_TD_CHB),
 
-    pcnt_unit_handle_t encoder_unit_r_f = NULL;
-    pcnt_unit_handle_t encoder_unit_l_f = NULL;
-    pcnt_unit_handle_t encoder_unit_r_r = NULL;
-    pcnt_unit_handle_t encoder_unit_l_r = NULL;
-    
-    if (disable_logs) esp_log_level_set("*", ESP_LOG_NONE);
+        .mode = GPIO_MODE_INPUT,
+        .pull_up_en = GPIO_PULLUP_DISABLE,
+        .pull_down_en = GPIO_PULLDOWN_DISABLE,
+        .intr_type = GPIO_INTR_DISABLE,
+    };
 
-    if (enable_tasks) {
-        ESP_LOGI(TAG, "Iniciando tasks");
-        esp_err_t ret = init_tasks();
-        if (ret != ESP_OK) {
-            ESP_LOGE(TAG, "Falha na inicialização das Tasks.");
-            return;
-        }
-    }
+    ESP_ERROR_CHECK(gpio_config(&io_config));
 
-    if (debug_motors) {
-        init_h_bridge(FRONT,MOTOR_RIGHT);
-        init_h_bridge(FRONT,MOTOR_LEFT);
-        init_h_bridge(REAR,MOTOR_RIGHT);
-        init_h_bridge(REAR,MOTOR_LEFT);
-    }
+    int last_a = gpio_get_level(ENC_TD_CHA);
+    int last_b = gpio_get_level(ENC_TD_CHB);
 
-    if (debug_encoders) {
-        encoder_unit_r_f = init_encoder(FRONT,ENC_RIGHT);
-        encoder_unit_l_f = init_encoder(FRONT,ENC_LEFT);
-        encoder_unit_r_r = init_encoder(REAR,ENC_RIGHT);
-        encoder_unit_l_r = init_encoder(REAR,ENC_LEFT);
-    }
-    
-    while(1) {
-        if (debug_motors) {
-            update_motor(FRONT,MOTOR_LEFT, LEDC_MAX_DUTY);
-            update_motor(FRONT,MOTOR_RIGHT, LEDC_MAX_DUTY);
-            update_motor(REAR,MOTOR_LEFT, LEDC_MAX_DUTY);
-            update_motor(REAR,MOTOR_RIGHT, LEDC_MAX_DUTY);
+    uint32_t changes_a = 0;
+    uint32_t changes_b = 0;
+
+    TickType_t last_print = xTaskGetTickCount();
+
+    while (1) {
+
+        int a = gpio_get_level(ENC_TD_CHA);
+        int b = gpio_get_level(ENC_TD_CHB);
+
+        if (a != last_a) {
+            changes_a++;
+            last_a = a;
         }
 
-        if (debug_encoders) {
-            int left_pos_f = get_encoder_position(encoder_unit_l_f);
-            int right_pos_f = get_encoder_position(encoder_unit_r_f);
-            int right_pos_r = get_encoder_position(encoder_unit_r_r);
-            int left_pos_r = get_encoder_position(encoder_unit_l_r);
-            ESP_LOGI(TAG, "LF: %d | RF: %d | LR: %d | RR: %d", left_pos_f, right_pos_f, left_pos_r, right_pos_r);
+        if (b != last_b) {
+            changes_b++;
+            last_b = b;
         }
 
-        if (enable_tasks && debug_uart && COMM_MODE != NONE && !disable_logs) {
-            ESP_LOGI(TAG, "=== Variaveis recebidas ===");
-            ESP_LOGI(TAG, "Target LF: %.2f rad/s", G_TARGET_L_F);
-            ESP_LOGI(TAG, "Target RF: %.2f rad/s", G_TARGET_R_F);
-            ESP_LOGI(TAG, "Target LR: %.2f rad/s", G_TARGET_L_R);
-            ESP_LOGI(TAG, "Target RR: %.2f rad/s", G_TARGET_R_R);
+        TickType_t now = xTaskGetTickCount();
 
-            ESP_LOGI(TAG, "=== Variaveis enviadas ===");
-            ESP_LOGI(TAG, "Rads LF: %.2f rad/s", G_RADS_L_F);
-            ESP_LOGI(TAG, "Rads RF: %.2f rad/s", G_RADS_R_F);
-            ESP_LOGI(TAG, "Rads LR: %.2f rad/s", G_RADS_L_R);
-            ESP_LOGI(TAG, "Rads RR: %.2f rad/s", G_RADS_R_R);
+        if ((now - last_print) >= pdMS_TO_TICKS(1000)) {
 
-            ESP_LOGI(TAG, "=== Posicao dos encoders ===");
-            ESP_LOGI(TAG, "Encoder LF: %d", G_ENC_L_F);
-            ESP_LOGI(TAG, "Encoder RF: %d", G_ENC_R_F);
-            ESP_LOGI(TAG, "Encoder LR: %d", G_ENC_L_R);
-            ESP_LOGI(TAG, "Encoder RR: %d", G_ENC_R_R);
+            ESP_LOGI(TAG,
+                "A=%d | B=%d | Mudancas A=%lu | Mudancas B=%lu",
+                a, b,
+                (unsigned long)changes_a,
+                (unsigned long)changes_b
+            );
+
+            changes_a = 0;
+            changes_b = 0;
+            last_print = now;
         }
 
-        vTaskDelay(pdMS_TO_TICKS(1000));
+        vTaskDelay(1);
     }
 }

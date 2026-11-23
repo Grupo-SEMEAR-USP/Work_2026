@@ -220,7 +220,7 @@ void HwInterface::updateOdometry()
     geometry_msgs::TransformStamped odom_trans;
     odom_trans.header.stamp = current_time_;
     odom_trans.header.frame_id = "odom";
-    odom_trans.child_frame_id = "base_footprint";
+    odom_trans.child_frame_id = "base_link";
     odom_trans.transform.translation.x = odom_x_;
     odom_trans.transform.translation.y = odom_y_;
     odom_trans.transform.translation.z = 0.0;
@@ -231,7 +231,7 @@ void HwInterface::updateOdometry()
     nav_msgs::Odometry odom;
     odom.header.stamp = current_time_;
     odom.header.frame_id = "odom";
-    odom.child_frame_id = "base_footprint";
+    odom.child_frame_id = "base_link";
     
     // Pose
     odom.pose.pose.position.x = odom_x_;
