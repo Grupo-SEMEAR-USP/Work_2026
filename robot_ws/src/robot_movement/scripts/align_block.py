@@ -6,6 +6,10 @@ from robot_communication.msg import SchedulerCommand, SchedulerResponse, AprilTa
 # Nome do executor que responde ao Scheduler
 TARGET_NAME = "align_block"
 
+'''
+Script para alinhar o robô ao bloco pela AprilTag. Se perder o bloco, ele para.
+'''
+
 class AlignBlock:
     def __init__(self):
         rospy.init_node('align_block', anonymous=True)
