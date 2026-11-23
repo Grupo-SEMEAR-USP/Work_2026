@@ -1,6 +1,6 @@
 odom_model_type: "omni-corrected"
 odom_frame_id: "odom"
-base_frame_id: "base_footprint"
+base_frame_id: "base_link"
 global_frame_id: "map"
 
 # Configurações de Partículas

@@ -8,7 +8,7 @@ import time
 import rospy
 import serial
 from std_msgs.msg import Float32MultiArray
-from robot_communication.msg import encoder_comm, velocity_comm, ultrasonic_comm
+from robot_communication.msg import encoder_comm, velocity_comm, ultrasonic_comm, manipulation_comm
 
 BAUD_RATE = 115200
 FRAME_SOF = 0xAA
@@ -108,7 +108,6 @@ class SerialEndpoint:
             return False
         self.retry_after = time.monotonic() + self.reconnect_interval_s
         try:
-            # exclusive=True em Linux impede outra abertura PySerial exclusiva.
             port = serial.Serial(
                 port=self.path,
                 baudrate=BAUD_RATE,
@@ -117,7 +116,7 @@ class SerialEndpoint:
                 stopbits=serial.STOPBITS_ONE,
                 timeout=0.03,
                 write_timeout=0.2,
-                exclusive=True,
+                exclusive=True, # impede outra abertura pyserial
             )
             self.serial = port
             self.generation += 1
@@ -206,13 +205,13 @@ class UARTBridge:
         self.states = {"left": None, "right": None, "center": None}
         self.received_at = {}
 
-        # Publicacoes ROS.
+        # Publishers
         self.pub_encoder = rospy.Publisher(
             "/encoder_data", encoder_comm, queue_size=10)
         self.pub_ultrasonic = rospy.Publisher(
             "/ultrasonic_distances", ultrasonic_comm, queue_size=10)
         self.pub_manipulator = rospy.Publisher(
-            "/manipulator_state", Float32MultiArray, queue_size=10)
+            "/manipulator_state", manipulation_comm, queue_size=10)
 
         # Threads de leitura: um parser por ESP, sem compartilhar buffers.
         self.threads = [
@@ -226,7 +225,7 @@ class UARTBridge:
         for thread in self.threads:
             thread.start()
 
-        # Mapeamento ROS -> placas existentes.
+        # Subscribers
         self.sub_velocity = rospy.Subscriber(
             "/velocity_cmd", velocity_comm, self.cb_velocity, queue_size=1)
         self.sub_arm = rospy.Subscriber(
@@ -312,7 +311,7 @@ class UARTBridge:
             return False
 
         # Cada evento ROS cria somente o comando para os atuadores solicitados.
-        # NUNCA reenviar comandos antigos, especialmente elevator_cm (relativo).
+        # Assume tratamento de redundância no UID
         try:
             frame = pack_frame(FMT_CENTER_TX, mask, *values)
         except (struct.error, OverflowError) as exc:
@@ -372,8 +371,15 @@ class UARTBridge:
             self.pub_ultrasonic.publish(msg)
 
         if fresh["center"] is not None:
-            self.pub_manipulator.publish(
-                Float32MultiArray(data=list(fresh["center"])))
+            msg = manipulation_comm()
+
+            msg.base_angle_deg = fresh["center"][0]
+            msg.base_angle_rad = fresh["center"][1]
+            msg.upper_limit_active = fresh["center"][2]
+            msg.encoder_valid = fresh["center"][3]
+            msg.manip_feedback = fresh["center"][4]
+
+            self.pub_manipulator.publish(msg)
 
     def shutdown(self):
         self.running = False
