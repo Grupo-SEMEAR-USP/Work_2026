@@ -1,130 +1,114 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+import math
+import threading
 
+import actionlib
 import rospy
 from geometry_msgs.msg import Twist
-from robot_communication.msg import SchedulerCommand, SchedulerResponse
-from std_msgs.msg import String, Int32
-import time
+from robot_communication.msg import (
+    MoveSegmentAction, MoveSegmentResult, SchedulerCommand, SchedulerResponse,
+)
+from robot_movement.motion import BaseStop, velocity
 
-# Nome do executor que responde ao Scheduler
-TARGET_NAME = "move"
+
+DIRECTIONS = {
+    "frente": (1, 0, 0), "tras": (-1, 0, 0),
+    "esquerda": (0, 1, 0), "direita": (0, -1, 0),
+    "horario": (0, 0, -1), "antihorario": (0, 0, 1),
+    "parar": (0, 0, 0),
+}
+
 
 class MoveTime:
     def __init__(self):
-        rospy.init_node('move_time', anonymous=True)
-        self.last_uid = None
-        
-        # Publicadores
-        self.pub_cmd_vel = rospy.Publisher('/cmd_vel', Twist, queue_size=10)
-        self.pub_feedback = rospy.Publisher('/scheduler/feedback', SchedulerResponse, queue_size=10)
-        
-        # Subscribers
-        rospy.Subscriber('/scheduler/commands', SchedulerCommand, self._sched_cb)
-        
-        # Variáveis de Configuração de Velocidade
-        self.lin_vel_x = 0.2    
-        self.lin_vel_y = 0.2
-        self.ang_vel_z = 0.6
-        
-        rospy.loginfo(f"[{TARGET_NAME.upper()}] Executor iniciado. Aguardando comandos Scheduler.")
+        self.default_speeds = (
+            rospy.get_param("~linear_x", 0.2), rospy.get_param("~linear_y", 0.2),
+            rospy.get_param("~angular_z", 0.6),
+        )
+        self.output = rospy.Publisher("/cmd_vel", Twist, queue_size=1)
+        self.feedback = rospy.Publisher("/scheduler/feedback", SchedulerResponse, queue_size=10)
+        self.base_stop = BaseStop()
+        self.owner = threading.Lock()
+        self.command_lock = threading.Lock()
+        self.seen = set()
+        self.active = None
+        self.server = actionlib.SimpleActionServer(
+            "/move_segment", MoveSegmentAction, execute_cb=self.on_goal, auto_start=False,
+        )
+        self.command_sub = rospy.Subscriber("/scheduler/commands", SchedulerCommand, self.on_command)
+        self.cancel_sub = rospy.Subscriber("/scheduler/cancel", SchedulerCommand, self.on_cancel)
+        self.server.start()
 
-    def _send_feedback(self, uid, status):
-        fb_msg = SchedulerResponse(uid=uid, target=TARGET_NAME, status=status)
-        self.pub_feedback.publish(fb_msg)
-        rospy.loginfo(f"[{TARGET_NAME.upper()}] → Feedback enviado: UID={uid}, Status={status}")
-
-    def _get_twist_command(self, direction):
-        move_cmd = Twist()
-
-        if direction == 'frente':
-            move_cmd.linear.x = self.lin_vel_x
-        elif direction == "parar":
-            move_cmd.linear.x = 0
-            move_cmd.linear.y = 0
-            move_cmd.angular.z = 0
-        elif direction == 'tras':
-            move_cmd.linear.x = -self.lin_vel_x
-        elif direction == 'esquerda':
-            move_cmd.linear.y = self.lin_vel_y
-        elif direction == 'direita':
-            move_cmd.linear.y = -self.lin_vel_y
-        elif direction == 'horario':
-            move_cmd.angular.z = -self.ang_vel_z
-        elif direction == 'antihorario':
-            move_cmd.angular.z = self.ang_vel_z
-        else:
-            rospy.logwarn(f"[{TARGET_NAME.upper()}] Direção não reconhecida: {direction}")
-            return None, False
-            
-        return move_cmd, True
-
-    def _execute_move(self, direction, duration, uid, need_ack):
-        
-        move_cmd, success = self._get_twist_command(direction)
-        if not success:
-            if need_ack:
-                self._send_feedback(uid, "FAIL")
-            return
-
-        rate = rospy.Rate(50)  # 50 Hz
-        
-        start_time = rospy.Time.now()
-        duration_time = rospy.Duration(duration)
-
-        rospy.loginfo(f"[{TARGET_NAME.upper()}] Executando: {direction} por {duration:.2f}s...")
-
+    def run_segment(self, direction, duration, speed, is_cancelled):
+        if (direction not in DIRECTIONS or not math.isfinite(duration) or duration <= 0
+                or not math.isfinite(speed) or speed < 0):
+            return "FAIL", False
+        axes = DIRECTIONS[direction]
+        if any(axis and speed > maximum for axis, maximum in zip(axes, self.default_speeds)):
+            return "FAIL", False
+        if not self.owner.acquire(blocking=False):
+            return "FAIL", False
         try:
-            while rospy.Time.now() - start_time < duration_time and not rospy.is_shutdown():
-                self.pub_cmd_vel.publish(move_cmd)
+            command = velocity(*(axis * (speed or default)
+                                 for axis, default in zip(axes, self.default_speeds)))
+            until = rospy.Time.now() + rospy.Duration(duration)
+            rate = rospy.Rate(50)
+            while not rospy.is_shutdown() and not is_cancelled() and rospy.Time.now() < until:
+                self.output.publish(command)
                 rate.sleep()
-            
-            # Parar o robô após a duração
-            self.pub_cmd_vel.publish(Twist()) 
-            
-            if need_ack:
-                self._send_feedback(uid, "OK")
+            stopped = self.base_stop.stop(self.output)
+            if not stopped:
+                return "FAIL", False
+            return ("CANCELLED" if is_cancelled() else "OK"), True
+        finally:
+            self.owner.release()
 
-        except rospy.ROSInterruptException:
-            # Garante que o robô pare em caso de interrupção
-            self.pub_cmd_vel.publish(Twist())
-            rospy.logerr(f"[{TARGET_NAME.upper()}] Movimento interrompido!")
-            if need_ack:
-                self._send_feedback(uid, "FAIL")
+    def on_goal(self, goal):
+        status, stopped = self.run_segment(
+            goal.direction, goal.duration, goal.speed, self.server.is_preempt_requested,
+        )
+        result = MoveSegmentResult(stopped=stopped)
+        if status == "OK":
+            self.server.set_succeeded(result)
+        elif status == "CANCELLED":
+            self.server.set_preempted(result)
+        else:
+            self.server.set_aborted(result)
 
-    def _sched_cb(self, msg: SchedulerCommand):
-        
-        # Filtra comandos que não são para este nó
-        if msg.target != TARGET_NAME:
+    def on_command(self, command):
+        if command.target != "move":
             return
+        with self.command_lock:
+            if command.uid in self.seen:
+                return
+            self.seen.add(command.uid)
+            if self.active is not None:
+                self.respond(command, "FAIL")
+                return
+            cancelled = threading.Event()
+            self.active = command.uid, cancelled
+        threading.Thread(target=self.execute_command, args=(command, cancelled), daemon=True).start()
 
-        # Ignora burst commands repetidos
-        if msg.uid == self.last_uid:
-            return
-        
-        # Processa e Executa
-        self.last_uid = msg.uid
-        
-        try:
-            # O payload é a direção
-            direction = msg.payload
-            duration = msg.timeout # A duração do movimento é o timeout do Scheduler
-            need_ack = msg.need_ack
+    def on_cancel(self, command):
+        if command.target == "move":
+            with self.command_lock:
+                self.seen.add(command.uid)
+                if self.active and self.active[0] == command.uid:
+                    self.active[1].set()
 
-            # Execução de movimento (bloqueante)
-            self._execute_move(direction, duration, msg.uid, need_ack)
-            
-        except Exception as e:
-            rospy.logerr(f"[{TARGET_NAME.upper()}] Erro no processamento do comando UID={msg.uid}: {str(e)}")
-            if msg.need_ack:
-                self._send_feedback(msg.uid, "FAIL")
+    def execute_command(self, command, cancelled):
+        status, _ = self.run_segment(command.payload.strip().lower(), command.timeout, 0.0,
+                                     cancelled.is_set)
+        with self.command_lock:
+            self.active = None
+        self.respond(command, status)
 
-    def run(self):
-        rospy.spin()
+    def respond(self, command, status):
+        if command.need_ack:
+            self.feedback.publish(SchedulerResponse(uid=command.uid, target="move", status=status))
 
-if __name__ == '__main__':
-    try:
-        executor = MoveTime()
-        executor.run()
-    except rospy.ROSInterruptException:
-        pass
+
+if __name__ == "__main__":
+    rospy.init_node("move_time")
+    MoveTime()
+    rospy.spin()

@@ -1,0 +1,10 @@
+uint8 ELEVATOR=1
+uint8 BASE=2
+uint8 WRIST=4
+uint8 GRIPPER=8
+uint64 uid
+uint8 motor_mask
+float32 elevator_cm
+float32 base_angle_deg
+float32 wrist_angle_deg
+float32 gripper_angle_deg

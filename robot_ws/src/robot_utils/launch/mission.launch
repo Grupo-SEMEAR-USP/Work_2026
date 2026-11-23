@@ -1,0 +1,18 @@
+<launch>
+  <arg name="mission_config" default="$(find robot_scheduler)/config/mission.yaml"/>
+  <arg name="movement_config" default="$(find robot_movement)/config/mission_movement.yaml"/>
+  <arg name="manipulation_config" default="$(find robot_manipulation)/config/manipulation.yaml"/>
+  <arg name="container_vision_config" default="$(find robot_utils)/config/container_vision.yaml"/>
+  <arg name="comm_mode" default="UART"/>
+  <arg name="allow_uncalibrated" default="false"/>
+  <include file="$(find robot_utils)/launch/general.launch">
+    <arg name="movement_config" value="$(arg movement_config)"/>
+    <arg name="manipulation_config" value="$(arg manipulation_config)"/>
+    <arg name="container_vision_config" value="$(arg container_vision_config)"/>
+    <arg name="comm_mode" value="$(arg comm_mode)"/>
+  </include>
+  <include file="$(find robot_scheduler)/launch/scheduler.launch">
+    <arg name="mission_config" value="$(arg mission_config)"/>
+    <arg name="allow_uncalibrated" value="$(arg allow_uncalibrated)"/>
+  </include>
+</launch>

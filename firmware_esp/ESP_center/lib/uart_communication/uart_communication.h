@@ -20,7 +20,8 @@ typedef struct __attribute__((packed)) {
     float base_angle_rad;
     uint8_t upper_limit_active; // 1 = GPIO C_FIM_CS em HIGH
     uint8_t encoder_valid;      // 1 = leitura AS5600 teve sucesso
-    uint8_t mov_complete;
+    uint8_t mov_complete; // 0 pendente, 1 concluido, 2 falhou
+    uint64_t command_uid;
 } uart_telemetry_t;
 
 // Dados recebidos pelo ESP (Comandos)
@@ -30,6 +31,7 @@ typedef struct __attribute__((packed)) {
     float base_angle_deg;    // Absoluto [0,360]
     float wrist_angle_deg;   // Absoluto [0,180]
     float gripper_angle_deg; // Absoluto [0,180]
+    uint64_t command_uid; // 0 para comandos manuais
 } uart_command_t;
 
 /* Protótipos das Funções */

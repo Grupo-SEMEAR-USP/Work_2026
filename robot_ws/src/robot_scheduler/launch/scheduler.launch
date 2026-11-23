@@ -1,5 +1,8 @@
 <launch>
-
-  <node name="scheduler_node" pkg="robot_scheduler" type="scheduler.py" output="screen"/> 
-
+  <arg name="mission_config" default="$(find robot_scheduler)/config/mission.yaml"/>
+  <arg name="allow_uncalibrated" default="false"/>
+  <node name="scheduler_node" pkg="robot_scheduler" type="scheduler.py" output="screen">
+    <rosparam command="load" file="$(arg mission_config)"/>
+    <param name="allow_uncalibrated" value="$(arg allow_uncalibrated)" type="bool"/>
+  </node>
 </launch>

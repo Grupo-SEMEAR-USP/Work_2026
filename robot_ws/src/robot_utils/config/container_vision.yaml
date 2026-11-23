@@ -1,0 +1,16 @@
+# OpenCV HSV: H=0..179; S e V=0..255. Calibrar sob a luz do campo.
+colors:
+  red:
+    - [[0, 115, 30], [12, 255, 255]]
+    - [[168, 115, 30], [179, 255, 255]]
+  blue:
+    - [[90, 50, 25], [125, 255, 255]]
+  green:
+    - [[35, 70, 35], [86, 255, 255]]
+# Coordenadas normalizadas x_min, y_min, x_max, y_max. A busca começa com a imagem toda.
+roi: [0.0, 0.0, 1.0, 1.0]
+min_area_px: 500
+max_area_fraction: 0.45
+min_fill: 0.42
+max_aspect: 3.0
+kernel_size: 5

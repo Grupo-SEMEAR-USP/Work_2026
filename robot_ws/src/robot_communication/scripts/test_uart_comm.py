@@ -9,6 +9,7 @@ import time
 import types
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 
 # Stubs de modulos presentes na Jetson/ROS Noetic.
 rospy = types.ModuleType('rospy')
@@ -41,11 +42,19 @@ class encoder_comm:
 class velocity_comm(encoder_comm): pass
 class ultrasonic_comm:
     def __init__(self):
-        self.us_esq_1 = self.us_esq_2 = self.us_dir_1 = self.us_dir_2 = 0.0
-        self.us_esq_frt = self.us_dir_frt = 0.0
+        self.us_left_1 = self.us_left_2 = self.us_right_1 = self.us_right_2 = 0.0
+        self.us_front_left = self.us_front_right = 0.0
 robot_msg.encoder_comm = encoder_comm
 robot_msg.velocity_comm = velocity_comm
 robot_msg.ultrasonic_comm = ultrasonic_comm
+robot_msg.ManipulatorCommand = SimpleNamespace
+
+def manipulation_state(*args, **kwargs):
+    names = ("base_angle_deg", "base_angle_rad", "upper_limit_active", "encoder_valid",
+             "manip_feedback", "command_uid")
+    return SimpleNamespace(**dict(zip(names, args)), **kwargs)
+
+robot_msg.manipulation_comm = manipulation_state
 sys.modules['robot_communication'] = robot
 sys.modules['robot_communication.msg'] = robot_msg
 
@@ -84,8 +93,8 @@ class TestUARTComm(unittest.TestCase):
         for fmt, values, length in [
             (uart.FMT_LEFT_RX, (1., 2., 3., 4., 5., 6.), 27),
             (uart.FMT_RIGHT, (1., -2., 3., -4.), 19),
-            (uart.FMT_CENTER_TX, (15, 1., 90., 45., 120.), 20),
-            (uart.FMT_CENTER_RX, (90., 1.5, 0, 1, 1), 14),
+            (uart.FMT_CENTER_TX, (15, 1., 90., 45., 120., 123), 28),
+            (uart.FMT_CENTER_RX, (90., 1.5, 0, 1, 1, 123), 22),
         ]:
             with self.subTest(fmt=fmt):
                 f = uart.pack_frame(fmt, *values)
@@ -136,16 +145,16 @@ class TestUARTComm(unittest.TestCase):
         b.cb_end_effector(Float32MultiArray([45., 120.]))
         p = uart.FrameParser(uart.FMT_CENTER_TX)
         got = p.feed(b''.join(b.ports['center'].frames))
-        self.assertEqual(got, [(3, 2., 90., 0., 0.), (12, 0., 0., 45., 120.)])
+        self.assertEqual(got, [(3, 2., 90., 0., 0., 0), (12, 0., 0., 45., 120., 0)])
 
     def test_center_one_motor(self):
         b = self.bridge()
         b.cb_arm(Float32MultiArray([30.]))
         self.assertEqual(uart.FrameParser(uart.FMT_CENTER_TX).feed(b.ports['center'].frames[0]),
-                         [(2, 0., 30., 0., 0.)])
+                         [(2, 0., 30., 0., 0., 0)])
         self.assertEqual(b.send_center_command(8, gripper=90), True)
         self.assertEqual(uart.FrameParser(uart.FMT_CENTER_TX).feed(b.ports['center'].frames[1]),
-                         [(8, 0., 0., 0., 90.)])
+                         [(8, 0., 0., 0., 90., 0)])
 
     def test_center_reject_out_of_bounds(self):
         b = self.bridge()
@@ -157,7 +166,7 @@ class TestUARTComm(unittest.TestCase):
         b = self.bridge()
         b.states = {'left': (1., 2., 3., 4., 5., 6.),
                     'right': (10., 20., 30., 40.),
-                    'center': (90., 1.570796, 0., 1., 1.)}
+                    'center': (90., 1.570796, 0, 1, 1, 123)}
         b.received_at = {k: time.monotonic() for k in b.states}
         b.publish_ros_state(None)
         self.assertEqual(len(b.pub_ultrasonic.items), 1)
@@ -165,7 +174,7 @@ class TestUARTComm(unittest.TestCase):
         self.assertEqual(tuple(getattr(m, k) for k in uart.US_FIELDS), (1., 2., 3., 4., 5., 6.))
         self.assertEqual(len(b.pub_encoder.items), 1)
         self.assertEqual((b.pub_encoder.items[0].front_left, b.pub_encoder.items[0].rear_right), (10., 40.))
-        self.assertEqual(b.pub_manipulator.items[0].data, [90., 1.570796, 0., 1., 1.])
+        self.assertEqual(b.pub_manipulator.items[0].command_uid, 123)
 
     def test_stale_state_not_republished(self):
         b = self.bridge()
@@ -176,8 +185,8 @@ class TestUARTComm(unittest.TestCase):
 
     def test_not_stale_center_state(self):
         p = uart.FrameParser(uart.FMT_CENTER_RX)
-        s = uart.pack_frame(uart.FMT_CENTER_RX, 30., 0.5235988, 1, 0, 0)
-        self.assertEqual(p.feed(s)[0][2:], (1, 0, 0))
+        s = uart.pack_frame(uart.FMT_CENTER_RX, 30., 0.5235988, 1, 0, 0, 123)
+        self.assertEqual(p.feed(s)[0][2:], (1, 0, 0, 123))
 
     def test_corrupt_after_random_noise(self):
         p = uart.FrameParser(uart.FMT_RIGHT)

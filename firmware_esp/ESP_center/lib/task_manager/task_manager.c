@@ -24,7 +24,8 @@ static atomic_bool s_motors_ready = ATOMIC_VAR_INIT(false);
 static portMUX_TYPE s_cmd_mux = portMUX_INITIALIZER_UNLOCKED;
 
 // Confirmacao de conclusao do ultimo comando
-static bool s_mov_complete = false;
+static uint8_t s_mov_status = 0;
+static uint64_t s_command_uid = 0;
 static uint32_t s_cmd_generation = 0;
 
 /* Tags de Log */
@@ -35,8 +36,8 @@ static const char *TAG = "TASKS";
 // Formato exigido pelo frame_test.py atual:
 // TX Jetson -> Center: <Bffff> (17 B de payload).
 // RX Center -> Jetson: <ffBBB> (11 B de payload).
-_Static_assert(sizeof(uart_command_t) == 17, "UART Center: comando deve ter 17 bytes (sem sequence)");
-_Static_assert(sizeof(uart_telemetry_t) == 11, "UART Center: telemetria deve ter 11 bytes (com mov_complete)");
+_Static_assert(sizeof(uart_command_t) == 25, "UART Center: comando deve ter 25 bytes");
+_Static_assert(sizeof(uart_telemetry_t) == 19, "UART Center: telemetria deve ter 19 bytes");
 
 
 // Consulta das variaveis compartilhadas para debug
@@ -54,7 +55,7 @@ void task_manager_debug_snapshot(
         *ready = G_MOTOR_CMD_READY;
 
     if (mov_complete != NULL)
-        *mov_complete = s_mov_complete;
+        *mov_complete = s_mov_status == 1;
 
     taskEXIT_CRITICAL(&s_cmd_mux);
 }
@@ -96,7 +97,8 @@ static void mqtt_task(void *pvParameters) {
             taskENTER_CRITICAL(&s_cmd_mux);
             G_MOTOR_CMD = cmd;           // Ultimo comando fica salvo para debug da main.
             G_MOTOR_CMD_READY = true;    // Aviso para a actuators_task.
-            s_mov_complete = false;
+            s_command_uid = cmd.command_uid;
+            s_mov_status = 0;
             ++s_cmd_generation;
             taskEXIT_CRITICAL(&s_cmd_mux);
         }
@@ -117,7 +119,8 @@ static void mqtt_task(void *pvParameters) {
             }
 
             taskENTER_CRITICAL(&s_cmd_mux);
-            telemetry.mov_complete = s_mov_complete ? 1u : 0u;
+            telemetry.mov_complete = s_mov_status;
+            telemetry.command_uid = s_command_uid;
             taskEXIT_CRITICAL(&s_cmd_mux);
 
             (void)mqtt_publish_telemetry(&telemetry);
@@ -151,7 +154,8 @@ static void uart_task(void *pvParameters) {
             taskENTER_CRITICAL(&s_cmd_mux);
             G_MOTOR_CMD = cmd;              // Ultimo frame valido, preservado para debug.
             G_MOTOR_CMD_READY = motors_ready; // Pendente SO se a atuacao esta disponivel.
-            s_mov_complete = false;          // Recebimento nao significa movimento concluido.
+            s_command_uid = cmd.command_uid;
+            s_mov_status = motors_ready ? 0 : 2;
             ++s_cmd_generation;
             taskEXIT_CRITICAL(&s_cmd_mux);
 
@@ -186,7 +190,8 @@ static void uart_task(void *pvParameters) {
         }
 
         taskENTER_CRITICAL(&s_cmd_mux);
-        telemetry.mov_complete = s_mov_complete ? 1u : 0u;
+        telemetry.mov_complete = s_mov_status;
+        telemetry.command_uid = s_command_uid;
         taskEXIT_CRITICAL(&s_cmd_mux);
 
         ret = uart_send_telemetry(&telemetry);
@@ -350,6 +355,12 @@ static void actuators_task(void *pvParameters) {
             }
 
             command_active = accepted;
+            if (!accepted) {
+                taskENTER_CRITICAL(&s_cmd_mux);
+                if (active_generation == s_cmd_generation)
+                    s_mov_status = 2;
+                taskEXIT_CRITICAL(&s_cmd_mux);
+            }
         }
 
         /*=== Supervisao dos motores e sensores ===*/
@@ -377,13 +388,16 @@ static void actuators_task(void *pvParameters) {
                      status.base_stepper_error == ESP_OK);
 
                 // Servos sao considerados concluidos apos motors_apply().
-                if (elevator_done && base_done) {
+                bool failed =
+                    ((active_mask & UART_MOTOR_ELEVATOR) && status.elevator_error != ESP_OK) ||
+                    ((active_mask & UART_MOTOR_BASE) && status.base_stepper_error != ESP_OK);
+                if (failed || (elevator_done && base_done)) {
                     // Nao declarar um comando antigo concluido caso um
                     // mais recente ja tenha sido recebido.
                     taskENTER_CRITICAL(&s_cmd_mux);
                     if (active_generation == s_cmd_generation &&
                         !G_MOTOR_CMD_READY) {
-                        s_mov_complete = true;
+                        s_mov_status = failed ? 2 : 1;
                     }
                     taskEXIT_CRITICAL(&s_cmd_mux);
                     command_active = false;
@@ -436,7 +450,8 @@ esp_err_t init_tasks() {
     taskENTER_CRITICAL(&s_cmd_mux);
     G_MOTOR_CMD = (uart_command_t){0};
     G_MOTOR_CMD_READY = false;
-    s_mov_complete = false;
+    s_mov_status = 0;
+    s_command_uid = 0;
     s_cmd_generation = 0;
     taskEXIT_CRITICAL(&s_cmd_mux);
 

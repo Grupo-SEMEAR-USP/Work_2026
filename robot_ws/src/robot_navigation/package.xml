@@ -21,6 +21,12 @@
   <depend>actionlib_msgs</depend>
   <depend>move_base_msgs</depend>
   <depend>robot_communication</depend>
+  <exec_depend>robot_movement</exec_depend>
+  <exec_depend>robot_scheduler</exec_depend>
+  <exec_depend>python3-yaml</exec_depend>
+  <exec_depend>global_planner</exec_depend>
+  <exec_depend>dwa_local_planner</exec_depend>
+  <exec_depend>gmapping</exec_depend>
 
   <depend>move_base</depend>
   <depend>nav_core</depend>

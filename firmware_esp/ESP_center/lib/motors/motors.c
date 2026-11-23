@@ -18,6 +18,7 @@
 
 // Permite inspecionar o fim de curso e o encoder entre transmissoes.
 #define MOTORS_ELEVATOR_BLOCK_STEPS 4
+#define MOTORS_ELEVATOR_MAX_COMMAND_CM 25.0f
 #define MOTORS_BASE_BLOCK_STEPS     8
 #define MOTORS_POLL_MS              5
 #define MOTORS_TASK_STACK           4096
@@ -357,6 +358,7 @@ esp_err_t motors_apply(motor_id_t motor, float value)
     switch (motor) {
     case MOTOR_ELEVATOR: {
         if (value == 0.0f) return ESP_OK;
+        if (fabsf(value) > MOTORS_ELEVATOR_MAX_COMMAND_CM) return ESP_ERR_INVALID_ARG;
         double exact = (double)value * s_elevator_steps_per_cm;
         if (!isfinite(exact) || fabs(exact) > (double)INT32_MAX) {
             return ESP_ERR_INVALID_ARG;

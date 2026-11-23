@@ -8,7 +8,8 @@ import time
 import rospy
 import serial
 from std_msgs.msg import Float32MultiArray
-from robot_communication.msg import encoder_comm, velocity_comm, ultrasonic_comm, manipulation_comm
+from robot_communication.msg import (ManipulatorCommand, encoder_comm, manipulation_comm,
+                                     ultrasonic_comm, velocity_comm)
 
 BAUD_RATE = 115200
 FRAME_SOF = 0xAA
@@ -16,12 +17,12 @@ FRAME_EOF = 0xBB
 
 FMT_LEFT_RX = "<ffffff"
 FMT_RIGHT = "<ffff"          # TX e RX (4 velocidades, rad/s)
-FMT_CENTER_TX = "<Bffff"     # mask + elevador, base, pulso, garra
-FMT_CENTER_RX = "<ffBBB"     # base_deg, base_rad, upper_limit, encoder_valid, mov_complete
+FMT_CENTER_TX = "<BffffQ"     # mask + elevador, base, pulso, garra
+FMT_CENTER_RX = "<ffBBBQ"     # base_deg, base_rad, upper_limit, encoder_valid, mov_complete
 
 US_FIELDS = (
-    "us_esq_1", "us_esq_2", "us_dir_1", "us_dir_2",
-    "us_esq_frt", "us_dir_frt",
+    "us_left_1", "us_left_2", "us_right_1", "us_right_2",
+    "us_front_left", "us_front_right",
 )
 
 MOTOR_ELEVATOR = 1
@@ -32,8 +33,8 @@ MOTOR_ALL = MOTOR_ELEVATOR | MOTOR_BASE | MOTOR_WRIST | MOTOR_GRIPPER
 
 assert struct.calcsize(FMT_LEFT_RX) == 24
 assert struct.calcsize(FMT_RIGHT) == 16
-assert struct.calcsize(FMT_CENTER_TX) == 17
-assert struct.calcsize(FMT_CENTER_RX) == 11
+assert struct.calcsize(FMT_CENTER_TX) == 25
+assert struct.calcsize(FMT_CENTER_RX) == 19
 
 
 def is_finite(value):
@@ -234,6 +235,8 @@ class UARTBridge:
             "/end_effector_control", Float32MultiArray,
             self.cb_end_effector, queue_size=10)
 
+        self.sub_manipulator = rospy.Subscriber(
+            "/manipulator_command", ManipulatorCommand, self.cb_manipulator, queue_size=1)
         self.velocity_timer = rospy.Timer(
             rospy.Duration(1.0 / self.velocity_rate_hz), self.publish_velocity_uart)
         self.state_timer = rospy.Timer(
@@ -260,18 +263,18 @@ class UARTBridge:
                     if not all(is_finite(v) for v in values):
                         continue
                 elif name == "center":
-                    deg, rad, limit, encoder_valid, mov_complete = values
+                    deg, rad, limit, encoder_valid, status, uid = values
                     if not (is_finite(deg) and is_finite(rad)):
                         continue
                     if any(flag not in (0, 1) for flag in
-                           (limit, encoder_valid, mov_complete)):
+                           (limit, encoder_valid)) or status not in (0, 1, 2):
                         continue
                 else:  # ESP Left: NaN pode representar um ultrassom sem leitura.
                     if any(math.isinf(v) for v in values):
                         continue
 
                 with self.data_lock:
-                    self.states[name] = tuple(float(v) for v in values)
+                    self.states[name] = values
                     self.received_at[name] = time.monotonic()
 
     def cb_velocity(self, msg):
@@ -296,7 +299,7 @@ class UARTBridge:
         self.ports["right"].write(pack_frame(FMT_RIGHT, *speeds))
 
     def send_center_command(self, mask, elevator=0.0, base=0.0,
-                            wrist=0.0, gripper=0.0):
+                            wrist=0.0, gripper=0.0, uid=0):
         if mask < 1 or (mask & ~MOTOR_ALL):
             rospy.logwarn("ESP Center: motor_mask invalida")
             return False
@@ -313,13 +316,19 @@ class UARTBridge:
         # Cada evento ROS cria somente o comando para os atuadores solicitados.
         # Assume tratamento de redundância no UID
         try:
-            frame = pack_frame(FMT_CENTER_TX, mask, *values)
+            frame = pack_frame(FMT_CENTER_TX, mask, *values, uid)
         except (struct.error, OverflowError) as exc:
             rospy.logwarn("ESP Center: valor fora de float32: %s", exc)
             return False
 
         with self.center_tx_lock:
             return self.ports["center"].write(frame)
+
+    def cb_manipulator(self, msg):
+        if not self.send_center_command(
+                msg.motor_mask, msg.elevator_cm, msg.base_angle_deg,
+                msg.wrist_angle_deg, msg.gripper_angle_deg, msg.uid):
+            self.pub_manipulator.publish(manipulation_comm(manip_feedback=2, command_uid=msg.uid))
 
     def cb_arm(self, msg):
         values = list(msg.data)
@@ -357,6 +366,9 @@ class UARTBridge:
                 else None
                 for name in ("left", "right", "center")
             }
+            for name, values in fresh.items():
+                if values is not None:
+                    self.states[name] = None
 
         if fresh["right"] is not None:
             msg = encoder_comm()
@@ -371,15 +383,7 @@ class UARTBridge:
             self.pub_ultrasonic.publish(msg)
 
         if fresh["center"] is not None:
-            msg = manipulation_comm()
-
-            msg.base_angle_deg = fresh["center"][0]
-            msg.base_angle_rad = fresh["center"][1]
-            msg.upper_limit_active = fresh["center"][2]
-            msg.encoder_valid = fresh["center"][3]
-            msg.manip_feedback = fresh["center"][4]
-
-            self.pub_manipulator.publish(msg)
+            self.pub_manipulator.publish(manipulation_comm(*fresh["center"]))
 
     def shutdown(self):
         self.running = False

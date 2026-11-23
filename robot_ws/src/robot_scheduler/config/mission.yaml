@@ -1,0 +1,23 @@
+# Valores de bancada provisórios. Confirmar posições e alturas antes do robô.
+calibrated: false
+deliveries:
+  - {tag_id: 4, deposit: 1, color: red}
+  - {tag_id: 5, deposit: 2, color: blue}
+  - {tag_id: 6, deposit: 3, color: green}
+deposits:
+  "1": deposit_left
+  "2": deposit_middle
+  "3": deposit_right
+tables:
+  blocks: {waypoint: WS1, distance_cm: 10.0, start_edge: esquerda}
+  containers: {waypoint: WS2, distance_cm: 10.0, start_edge: esquerda}
+startup_delay_s: 30.0
+feedback_grace_s: 5.0
+timeouts:
+  navigation: 80.0
+  approach_table: 25.0
+  border_detect: 35.0
+  search_item: 65.0
+  align_block: 20.0
+  align_container: 20.0
+  manipulation: 190.0

@@ -1,4 +1,9 @@
 <launch>
+  <arg name="comm_mode" default="UART"/>
+  <arg name="movement_config" default="$(find robot_movement)/config/mission_movement.yaml"/>
+  <arg name="manipulation_config" default="$(find robot_manipulation)/config/manipulation.yaml"/>
+  <arg name="container_vision_config" default="$(find robot_utils)/config/container_vision.yaml"/>
+  <arg name="vision_camera" default="usb_cam_logitech"/>
   <env name="ROSCONSOLE_CONFIG_FILE" value="$(find robot_utils)/config/rosconsole.config"/>
 
   <!-- === Definição de Parâmetros === -->
@@ -44,7 +49,7 @@
 
   <!-- Lidar -->
   <arg name="ld_serial_baudrate"           default="256000"/>
-  <arg name="ld_frame_id"                  default="laser"/>
+  <arg name="ld_frame_id"                  default="lidar_link"/>
   <arg name="ld_inverted"                  default="true"/>
   <arg name="ld_angle_compensate"          default="true"/>
   <arg name="ld_serial_port"               default="/dev/lidar"/>
@@ -56,7 +61,7 @@
   <arg name="lt_image_width"               default="640"/>
   <arg name="lt_image_height"              default="480"/>
   <arg name="lt_framerate"                 default="30"/>
-  <arg name="lt_camera_frame_id"           default="head_camera"/>
+  <arg name="lt_camera_frame_id"           default="webcam_link"/>
 
 
   <!-- === Inicialização de Hardware === -->
@@ -81,6 +86,8 @@
       <arg name="unite_imu_method"  value="$(arg rs_unite_imu_method)"/>
     </include>
 
+    <node if="$(arg enable_urdf)" name="realsense_mount_tf" pkg="tf2_ros"
+          type="static_transform_publisher" args="0 0 0 0 0 0 realsense_link camera_link"/>
     <param name="camera/color_format"              value="$(arg rs_color_format)"/>
     <param name="camera/hold_back_imu_for_frames"  value="$(arg rs_hold_back_imu_for_frames)"/>
 
@@ -142,7 +149,9 @@
   <!-- === Inicialização de Pacotes Funcionais === -->
   <!-- Comunicação -->
   <group if="$(arg enable_communication)">
-    <include file="$(find robot_communication)/launch/communication.launch"/>
+    <include file="$(find robot_communication)/launch/communication.launch">
+      <arg name="comm_mode" value="$(arg comm_mode)"/>
+    </include>
   </group>
 
   <!-- Movimentação -->
@@ -157,25 +166,33 @@
 
   <!-- Visão -->  
   <group if="$(arg enable_vision)">
-      <include file="$(find robot_vision)/launch/apriltag_detector.launch" />
+    <include file="$(find robot_vision)/launch/apriltag_detector.launch">
+      <arg name="camera_name" value="$(arg vision_camera)"/>
+    </include>
+    <node name="container_detector" pkg="robot_utils" type="align_with_container.py" output="screen">
+      <rosparam command="load" file="$(arg container_vision_config)"/>
+      <param name="image_topic" value="/$(arg vision_camera)/image_raw"/>
+    </node>
   </group>
 
   <!-- === Inicialização de Comandos via scheduler === -->
   <!-- Navegação -->
   <group if="$(arg sched_navigation)">
-      <node pkg="robot_utils" type="timed_roslaunch.sh" 
-            name="timed_navigation_launcher" output="screen" 
-            args="20 robot_navigation scheduler_nav.launch" />
+    <include file="$(find robot_navigation)/launch/scheduler_nav.launch"/>
   </group>
 
   <!-- Movimentação -->
   <group if="$(arg sched_movement)">
-      <include file="$(find robot_movement)/launch/scheduler_mov.launch"/>
+    <include file="$(find robot_movement)/launch/scheduler_mov.launch">
+      <arg name="movement_config" value="$(arg movement_config)"/>
+    </include>
   </group>
 
   <!-- Manipulação -->
   <group if="$(arg sched_manipulation)">
-      <include file="$(find robot_manipulation)/launch/scheduler_manip.launch"/>
+    <include file="$(find robot_manipulation)/launch/scheduler_manip.launch">
+      <arg name="manipulation_config" value="$(arg manipulation_config)"/>
+    </include>
   </group>
 
 </launch>

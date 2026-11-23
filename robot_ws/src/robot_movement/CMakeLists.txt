@@ -4,6 +4,9 @@ project(robot_movement)
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
   roscpp
+  actionlib
+  actionlib_msgs
+  sensor_msgs
   std_msgs
   geometry_msgs
   nav_msgs
@@ -18,12 +21,17 @@ find_package(catkin REQUIRED COMPONENTS
 ###################################
 ## catkin specific configuration ##
 ###################################
+catkin_python_setup()
+
 catkin_package(
   INCLUDE_DIRS include  # Exporta a pasta 'include'
   # LIBRARIES robot_movement 
   # Lista todas as dependências que outro pacote precisaria se dependesse deste
   CATKIN_DEPENDS 
-    roscpp 
+    roscpp
+    actionlib
+    actionlib_msgs
+    sensor_msgs
     std_msgs 
     geometry_msgs 
     nav_msgs 
@@ -46,6 +54,7 @@ include_directories(
 
 ## Declare a C++ executable
 add_executable(hw_interface_node src/hw_interface.cpp)
+add_dependencies(hw_interface_node ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(hw_interface_node
@@ -63,7 +72,8 @@ install(TARGETS hw_interface_node
 
 catkin_install_python(PROGRAMS
   scripts/align_block.py
-  scripts/align_table.py
+  scripts/approach_table.py
+  scripts/search_item.py
   scripts/border_detect.py
   scripts/imu_stable.py
   scripts/move_time.py

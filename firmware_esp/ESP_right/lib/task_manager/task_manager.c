@@ -70,6 +70,7 @@ static void mqtt_task(void *pvParameters) {
 
 static void uart_task(void *pvParameters) {
     ESP_ERROR_CHECK(init_uart());
+    TickType_t last_command = xTaskGetTickCount();
 
     while (1) {
         uart_comm_t received_cmd = {0};
@@ -86,10 +87,15 @@ static void uart_task(void *pvParameters) {
         if (xSemaphoreTake(xDataMutex, pdMS_TO_TICKS(10)) == pdTRUE) {
 
             if (valid) {
+                last_command = xTaskGetTickCount();
                 G_TARGET_L_F = received_cmd.left_front_data;
                 G_TARGET_R_F = received_cmd.right_front_data;
                 G_TARGET_L_R = received_cmd.left_rear_data;
                 G_TARGET_R_R = received_cmd.right_rear_data;
+            }
+
+            if (xTaskGetTickCount() - last_command >= pdMS_TO_TICKS(300)) {
+                G_TARGET_L_F = G_TARGET_R_F = G_TARGET_L_R = G_TARGET_R_R = 0.0f;
             }
 
             // Feedback das quatro rodas

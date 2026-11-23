@@ -35,6 +35,9 @@ catkin_install_python(PROGRAMS
 #############
 
 ## roslaunch robot_utils general.launch
-install(DIRECTORY launch/
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
+install(DIRECTORY launch config
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
+)
+install(PROGRAMS scripts/timed_roslaunch.sh
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

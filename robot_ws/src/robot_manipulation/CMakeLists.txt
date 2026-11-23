@@ -37,3 +37,4 @@ catkin_install_python(PROGRAMS
   scripts/manipulation.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+install(DIRECTORY launch config DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})

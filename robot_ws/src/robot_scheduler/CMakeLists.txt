@@ -9,7 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
 )
 
 catkin_package(
-  CATKIN_DEPENDS message_runtime rospy std_msgs geometry_msgs robot_communication
+  CATKIN_DEPENDS rospy std_msgs geometry_msgs robot_communication
 )
 
 include_directories(
@@ -20,3 +20,5 @@ catkin_install_python(PROGRAMS
   scripts/scheduler.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
+
+install(DIRECTORY launch config DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})

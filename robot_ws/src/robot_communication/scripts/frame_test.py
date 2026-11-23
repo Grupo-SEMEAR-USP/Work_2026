@@ -13,8 +13,8 @@ Conexao serial: PySerial (sudo apt install python3-serial)
 Protocolo: AA + payload little-endian + sum(payload)&0xFF + BB.
 ESP LEFT:   RX <ffffff  (24 bytes de payload; 27 bytes de frame)
 ESP RIGHT:  TX/RX <ffff  (16 bytes de payload; 19 bytes de frame)
-ESP CENTER: TX <Bffff  (17 bytes de payload; 20 bytes de frame)
-ESP CENTER: RX <ffBBB  (11 bytes de payload; 14 bytes de frame)
+ESP CENTER: TX <BffffQ  (25 bytes de payload; 28 bytes de frame)
+ESP CENTER: RX <ffBBBQ  (19 bytes de payload; 22 bytes de frame)
 
 O programa NAO envia comandos para esp_left: ela so envia telemetria.
 """
@@ -76,8 +76,8 @@ TELEMETRY = {
     "left": ("<ffffff", ("us_esq_1", "us_esq_2", "us_dir_1", "us_dir_2",
                            "us_esq_frt", "us_dir_frt")),
     "right": ("<ffff", ("left_front", "right_front", "left_rear", "right_rear")),
-    "center": ("<ffBBB", ("base_angle_deg", "base_angle_rad", "upper_limit_active",
-                            "encoder_valid", "mov_complete")),
+    "center": ("<ffBBBQ", ("base_angle_deg", "base_angle_rad", "upper_limit_active",
+                            "encoder_valid", "mov_complete", "command_uid")),
 }
 ANSI_PATTERN = re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]")
 
@@ -129,7 +129,7 @@ def build_command(esp, values, active=None):
     if esp == "center":
         if not mask:
             raise ValueError("ESP Center: habilite pelo menos um motor")
-        payload = struct.pack("<Bffff", mask, *floats)
+        payload = struct.pack("<BffffQ", mask, *floats, 0)
     else:
         payload = struct.pack("<ffff", *floats)
     return payload, pack_frame(payload), mask
@@ -140,7 +140,7 @@ def describe_telemetry(esp, values):
     names = TELEMETRY[esp][1]
     result = []
     for key, val in zip(names, values):
-        if key in ("upper_limit_active", "encoder_valid", "mov_complete"):
+        if key in ("upper_limit_active", "encoder_valid", "mov_complete", "command_uid"):
             txt = "{} ({})".format(val, "SIM" if val else "NAO")
         elif key in ("base_angle_deg",):
             txt = "{:.4f} graus".format(val)
@@ -223,7 +223,8 @@ class MixedUARTParser:
         checksum = sum(payload) & 0xFF
         if raw[-1] == EOF and raw[-2] == checksum:
             vals = struct.unpack(self.fmt, payload)
-            if self.esp == "center" and any(x not in (0, 1) for x in vals[2:]):
+            if self.esp == "center" and (
+                    any(x not in (0, 1) for x in vals[2:4]) or vals[4] not in (0, 1, 2)):
                 self.callback("error", "Flags de telemetria Center invalidas: " + hex_spaced(raw))
                 self._recover(raw[1:])
                 return
@@ -1091,8 +1092,8 @@ def tests():
         def test_center_cmd(self):
             payload, frame, mask = build_command("center", {"base_angle_deg": "90"},
                                                  {"base_angle_deg": True})
-            self.assertEqual((len(payload), len(frame), mask), (17, 20, 2))
-            self.assertEqual(struct.unpack("<Bffff", payload), (2, 0., 90., 0., 0.))
+            self.assertEqual((len(payload), len(frame), mask), (25, 28, 2))
+            self.assertEqual(struct.unpack("<BffffQ", payload), (2, 0., 90., 0., 0., 0))
 
         def test_center_validation(self):
             with self.assertRaises(ValueError):
@@ -1123,11 +1124,11 @@ def tests():
         def test_center_telemetry(self):
             got = []
             p = MixedUARTParser("center", lambda *args: got.append(args))
-            frame = pack_frame(struct.pack("<ffBBB", 90., math.pi / 2, 0, 1, 1))
-            self.assertEqual(len(frame), 14)
+            frame = pack_frame(struct.pack("<ffBBBQ", 90., math.pi / 2, 0, 1, 1, 123))
+            self.assertEqual(len(frame), 22)
             p.feed(frame)
             self.assertEqual(got[0][0], "frame")
-            self.assertEqual(got[0][1][1][2:], (0, 1, 1))
+            self.assertEqual(got[0][1][1][2:], (0, 1, 1, 123))
 
         def test_checksum_fail(self):
             got = []
@@ -1141,9 +1142,9 @@ def tests():
         def test_bad_frame_then_good_frame(self):
             got = []
             p = MixedUARTParser("center", lambda *args: got.append(args))
-            f = bytearray(pack_frame(struct.pack("<ffBBB", 1, 2, 1, 1, 0)))
+            f = bytearray(pack_frame(struct.pack("<ffBBBQ", 1, 2, 1, 1, 0, 123)))
             f[-1] = 0x66
-            good = pack_frame(struct.pack("<ffBBB", 3, 4, 0, 1, 0))
+            good = pack_frame(struct.pack("<ffBBBQ", 3, 4, 0, 1, 0, 123))
             p.feed(f + good)
             self.assertEqual(len([x for x in got if x[0] == "frame"]), 1)
             self.assertEqual([x for x in got if x[0] == "frame"][0][1][1][0], 3.)
@@ -1247,7 +1248,7 @@ def tests():
         def test_flags_invalid(self):
             got = []
             p = MixedUARTParser("center", lambda *args: got.append(args))
-            p.feed(pack_frame(struct.pack("<ffBBB", 90., 2., 3, 1, 1)))
+            p.feed(pack_frame(struct.pack("<ffBBBQ", 90., 2., 3, 1, 1, 123)))
             self.assertFalse(any(x[0] == "frame" for x in got))
 
     result = unittest.TextTestRunner(verbosity=2).run(

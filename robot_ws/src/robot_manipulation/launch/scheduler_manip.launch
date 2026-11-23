@@ -1,5 +1,6 @@
 <launch>
-
-  <node name="manipulation" pkg="robot_manipulation" type="manipulation.py"/> 
-
+  <arg name="manipulation_config" default="$(find robot_manipulation)/config/manipulation.yaml"/>
+  <node name="manipulation" pkg="robot_manipulation" type="manipulation.py" output="screen">
+    <rosparam command="load" file="$(arg manipulation_config)"/>
+  </node>
 </launch>

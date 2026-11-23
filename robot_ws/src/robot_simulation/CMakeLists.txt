@@ -56,13 +56,7 @@ include_directories(
 ## Install ##
 #############
 
-# Instalação de Scripts Python
-catkin_install_python(PROGRAMS
-
-  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
-)
-
 # Instalação das pastas de configuração
-install(DIRECTORY launch config maps rviz
+install(DIRECTORY maps rviz world
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 )

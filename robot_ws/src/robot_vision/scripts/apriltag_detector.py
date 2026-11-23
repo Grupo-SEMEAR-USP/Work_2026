@@ -41,17 +41,20 @@ class AprilTagNode:
         self.pub_detections = rospy.Publisher("/tag_detections", AprilTagDetectionArray, queue_size=10)
         self.pub_debug_img = rospy.Publisher("/tag_detections_image", Image, queue_size=1)
 
+        self.camera_params = None
         # Subscribers
         rospy.Subscriber(self.info_topic, CameraInfo, self.info_cb)
         rospy.Subscriber(self.camera_topic, Image, self.image_cb, queue_size=1, buff_size=2**24)
 
-        self.camera_params = None
         rospy.loginfo(f"Detector Iniciado! Família: {self.family}")
 
     def info_cb(self, msg):
         if self.camera_params is None:
             # fx, fy, cx, cy
             K = msg.K
+            if not np.isfinite(K).all() or K[0] <= 0 or K[4] <= 0:
+                rospy.logwarn_throttle(5, "CameraInfo aguardando calibração válida.")
+                return
             self.camera_params = (K[0], K[4], K[2], K[5])
             rospy.loginfo("Calibração da câmera recebida.")
 
@@ -73,6 +76,10 @@ class AprilTagNode:
             msg_array.header = msg.header
 
             for det in detections:
+                if det.pose_t is None or det.pose_R is None:
+                    continue
+                if not np.isfinite(det.pose_t).all() or not np.isfinite(det.pose_R).all():
+                    continue
                 tag_id = int(det.tag_id)
                 
                 # Verifica se essa tag tem um tamanho específico configurado

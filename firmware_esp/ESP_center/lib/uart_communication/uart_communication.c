@@ -29,8 +29,8 @@ typedef enum {
 } parser_state_t;
 
 _Static_assert(sizeof(float) == 4, "O protocolo exige float de 32 bits");
-_Static_assert(sizeof(uart_command_t) == 17, "Payload de comando incorreto");
-_Static_assert(sizeof(uart_telemetry_t) == 11, "Payload de telemetria incorreto");
+_Static_assert(sizeof(uart_command_t) == 25, "Payload de comando incorreto");
+_Static_assert(sizeof(uart_telemetry_t) == 19, "Payload de telemetria incorreto");
 
 static bool s_initialized = false;
 static parser_state_t s_state = ST_WAIT_SOF;

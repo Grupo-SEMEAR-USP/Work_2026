@@ -1,23 +1,5 @@
 #!/usr/bin/env python3
-"""Bridge ROS Noetic <-> MQTT para esp_left, esp_right e esp_center.
-
-ROS existentes:
-    /velocity_cmd           robot_communication/velocity_comm
-    /arm_control            std_msgs/Float32MultiArray: [base_deg, elevator_cm]
-    /end_effector_control   std_msgs/Float32MultiArray: [wrist_deg, gripper_deg]
-    /encoder_data           robot_communication/encoder_comm
-    /ultrasonic_distances   robot_communication/ultrasonic_comm (legado)
-
-ROS adicionais (sem criar mensagens customizadas):
-    /ultrasonic_distances_6 std_msgs/Float32MultiArray:
-        [us_esq_1, us_esq_2, us_dir_1, us_dir_2, us_frt_1, us_trs_1] (cm)
-    /encoder_ticks          std_msgs/Int32MultiArray: [LF, RF, LR, RR]
-    /manipulator_state      std_msgs/Float32MultiArray:
-        [base_angle_deg, base_angle_rad, upper_limit_active, encoder_valid]
-
-Se ultrasonic_comm.msg for atualizado com os seis campos us_*, o bridge
-preenche-os diretamente. Caso contrario, usa o mapeamento legado documentado.
-"""
+"""Ponte ROS Noetic para o transporte MQTT das três ESPs."""
 
 import json
 import math
@@ -27,7 +9,8 @@ import time
 import paho.mqtt.client as mqtt
 import rospy
 from std_msgs.msg import Float32MultiArray, Int32MultiArray
-from robot_communication.msg import encoder_comm, velocity_comm, ultrasonic_comm
+from robot_communication.msg import (ManipulatorCommand, encoder_comm, manipulation_comm,
+                                     ultrasonic_comm, velocity_comm)
 
 BROKER_DEFAULT = "192.168.1.100"
 TOPIC_ULTRASONIC = "state/ultrasonic"           # esp_left
@@ -38,6 +21,7 @@ TOPIC_MANIPULATOR = "state/manipulator"         # esp_center
 
 WHEEL_KEYS = ("left_front", "right_front", "left_rear", "right_rear")
 US_KEYS = ("us_esq_1", "us_esq_2", "us_dir_1", "us_dir_2", "us_frt_1", "us_trs_1")
+US_FIELDS = ("us_left_1", "us_left_2", "us_right_1", "us_right_2", "us_front_left", "us_front_right")
 
 MASK_ELEVATOR = 1
 MASK_BASE = 2
@@ -62,25 +46,8 @@ def normal_us(value):
 
 
 def put_ultrasonic_message(msg, values):
-    """Suporta ultrasonic_comm atualizado (6 campos) ou o antigo (5)."""
-    if all(hasattr(msg, name) for name in US_KEYS):
-        for key, value in zip(US_KEYS, values):
-            setattr(msg, key, value)
-        return
-
-    # Compatibilidade PROVISORIA com a mensagem ROS antiga de 5 campos.
-    # Assume sensor lateral 1 proximo da frente e sensor lateral 2 atras.
-    # Nao existe campo legado para o ultrassonico frontal: usar topico _6.
-    mapping = {
-        "front_left": 0,  # us_esq_1
-        "rear_left": 1,   # us_esq_2
-        "front_right": 2, # us_dir_1
-        "rear_right": 3,  # us_dir_2
-        "back": 5,        # us_trs_1
-    }
-    for attr, index in mapping.items():
-        if hasattr(msg, attr):
-            setattr(msg, attr, values[index])
+    for key, value in zip(US_FIELDS, values):
+        setattr(msg, key, value)
 
 
 class MQTTBridge:
@@ -112,7 +79,7 @@ class MQTTBridge:
         self.pub_us = rospy.Publisher("/ultrasonic_distances", ultrasonic_comm, queue_size=10)
         self.pub_us6 = rospy.Publisher("/ultrasonic_distances_6", Float32MultiArray, queue_size=10)
         self.pub_ticks = rospy.Publisher("/encoder_ticks", Int32MultiArray, queue_size=10)
-        self.pub_manip = rospy.Publisher("/manipulator_state", Float32MultiArray, queue_size=10)
+        self.pub_manip = rospy.Publisher("/manipulator_state", manipulation_comm, queue_size=10)
 
         # Paho 1.x (ROS Noetic) e Paho 2.x: selecionar callbacks VERSION1,
         # quando disponibilizados, para manter a assinatura (client,userdata,flags,rc).
@@ -132,6 +99,8 @@ class MQTTBridge:
                                         self.cb_arm, queue_size=10)
         self.sub_ee = rospy.Subscriber("/end_effector_control", Float32MultiArray,
                                        self.cb_end_effector, queue_size=10)
+        self.sub_manip = rospy.Subscriber("/manipulator_command", ManipulatorCommand,
+                                           self.cb_manipulator, queue_size=1)
         self.vel_timer = rospy.Timer(rospy.Duration(1.0 / self.velocity_rate),
                                      self.velocity_timer)
         self.state_timer = rospy.Timer(rospy.Duration(1.0 / self.ros_rate),
@@ -200,7 +169,10 @@ class MQTTBridge:
                     raise ValueError("angulo nao finito")
                 if limit not in (0, 1) or valid not in (0, 1):
                     raise ValueError("flags invalidas")
-                state = (float(degrees), float(radians), float(limit), float(valid))
+                status, uid = obj["manip_feedback"], obj["command_uid"]
+                if status not in (0, 1, 2) or type(uid) is not int or not 0 <= uid <= 2**53 - 1:
+                    raise ValueError("estado do manipulador inválido")
+                state = (float(degrees), float(radians), int(limit), int(valid), int(status), uid)
                 with self.lock:
                     self.manip = state
                     self.received_at[TOPIC_MANIPULATOR] = time.monotonic()
@@ -238,25 +210,26 @@ class MQTTBridge:
                       else (0.0, 0.0, 0.0, 0.0))
         self.publish_json(TOPIC_VELOCITY, dict(zip(WHEEL_KEYS, values)))
 
-    def send_motors(self, mask, elevator=0.0, base=0.0, wrist=0.0, gripper=0.0):
-        if not 1 <= mask <= 15:
-            return
+    def send_motors(self, mask, elevator=0.0, base=0.0, wrist=0.0, gripper=0.0, uid=0):
+        if not 1 <= mask <= 15 or not 0 <= uid <= 2**53 - 1:
+            return False
         values = (elevator, base, wrist, gripper)
         if not all(finite_number(x) for x in values):
             rospy.logwarn("Comando de manipulador nao finito")
-            return
+            return False
         if ((mask & MASK_BASE) and not (0.0 <= base <= 360.0)) or \
            ((mask & MASK_WRIST) and not (0.0 <= wrist <= 180.0)) or \
            ((mask & MASK_GRIPPER) and not (0.0 <= gripper <= 180.0)):
             rospy.logwarn("Comando do manipulador fora dos limites")
-            return
+            return False
         # Trava dedicada: sequencias MQTT e publicacao em ordem mesmo que
         # /arm_control e /end_effector_control cheguem em threads diferentes.
         with self.manip_tx_lock:
             with self.lock:
                 seq = self.sequence
                 self.sequence = (self.sequence + 1) & 0xFFFF
-            self.publish_json(TOPIC_MOTORS, {
+            return self.publish_json(TOPIC_MOTORS, {
+                "command_uid": uid,
                 "sequence": seq,
                 "motor_mask": mask,
                 "elevator_cm": float(elevator),
@@ -264,6 +237,11 @@ class MQTTBridge:
                 "wrist_angle_deg": float(wrist),
                 "gripper_angle_deg": float(gripper),
             })
+
+    def cb_manipulator(self, msg):
+        if not self.send_motors(msg.motor_mask, msg.elevator_cm, msg.base_angle_deg,
+                                msg.wrist_angle_deg, msg.gripper_angle_deg, msg.uid):
+            self.pub_manip.publish(manipulation_comm(manip_feedback=2, command_uid=msg.uid))
 
     def cb_arm(self, msg):
         data = msg.data
@@ -298,6 +276,7 @@ class MQTTBridge:
                             <= self.state_timeout) else None
             manip = self.manip if (now - self.received_at.get(TOPIC_MANIPULATOR, -1e9)
                                   <= self.state_timeout) else None
+            self.enc = self.us = self.manip = None
 
         if enc is not None:
             m = encoder_comm()
@@ -311,7 +290,7 @@ class MQTTBridge:
             self.pub_us.publish(m)
             self.pub_us6.publish(Float32MultiArray(data=list(us)))
         if manip is not None:
-            self.pub_manip.publish(Float32MultiArray(data=list(manip)))
+            self.pub_manip.publish(manipulation_comm(*manip))
 
     def shutdown(self):
         # A ESP right possui watchdog proprio de 300 ms; o envio zero e adicional.

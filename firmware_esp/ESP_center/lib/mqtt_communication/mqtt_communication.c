@@ -174,7 +174,12 @@ static void parse_motor_command(const char *data, size_t length)
                              (mask & UART_MOTOR_GRIPPER) != 0,
                              0.0f, 180.0f, &gripper);
     }
+    const cJSON *uid_item = cJSON_GetObjectItemCaseSensitive(root, "command_uid");
+    double uid = uid_item == NULL ? 0.0 : uid_item->valuedouble;
+    valid = valid && (uid_item == NULL || (cJSON_IsNumber(uid_item) &&
+            isfinite(uid) && uid >= 0.0 && uid <= 9007199254740991.0 && floor(uid) == uid));
     uart_command_t cmd = {
+        .command_uid = valid ? (uint64_t)uid : 0,
         .motor_mask = (uint8_t)mask,
         .elevator_cm = elevator,
         .base_angle_deg = base,
@@ -329,7 +334,9 @@ esp_err_t mqtt_publish_telemetry(const uart_telemetry_t *data)
     cJSON_AddNumberToObject(root, "base_angle_rad", radians);
     cJSON_AddNumberToObject(root, "upper_limit_active", data->upper_limit_active ? 1 : 0);
     cJSON_AddNumberToObject(root, "encoder_valid", data->encoder_valid ? 1 : 0);
-    cJSON_AddBoolToObject(root, "mov_complete", data->mov_complete != 0);
+    cJSON_AddBoolToObject(root, "mov_complete", data->mov_complete == 1);
+    cJSON_AddNumberToObject(root, "manip_feedback", data->mov_complete);
+    cJSON_AddNumberToObject(root, "command_uid", (double)data->command_uid);
 
     char *payload = cJSON_PrintUnformatted(root);
     cJSON_Delete(root);

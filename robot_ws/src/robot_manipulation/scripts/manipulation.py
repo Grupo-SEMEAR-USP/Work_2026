@@ -1,145 +1,143 @@
 #!/usr/bin/env python3
+import math
+import threading
+
 import rospy
-from std_msgs.msg import Float32MultiArray
-from robot_communication.msg import SchedulerCommand, SchedulerResponse
-from robot_communication.msg import manipulation_comm
+from geometry_msgs.msg import Twist
+from robot_communication.msg import (
+    ManipulatorCommand, SchedulerCommand, SchedulerResponse, manipulation_comm,
+)
+from robot_movement.motion import BaseStop
 
 
-TARGET_NAME = "manipulation"
-
-arm_vals = [0.0, 0.0] #[base, arm]
-ee_vals = [0.0, 0.0] #[wrist, gripper]
-
-ACTION_MAP = {
-    "gripper": {
-        "open": 15.0, #270 é o max da garra (tava 160.0)
-        "close": 1.0 #0 é o min da garra (tava 10.0 - valor com o bloco)
-    },
-    "wrist": {
-        "center": 80.0,
-    },
-    "rotatory_base": {
-        # valores de ângulo mockados por enquanto
-
-        "deposit_left": 15.0,
-        "deposit_middle": 0.0,  
-        "deposit_right": 345.0,
-        "front": 180.0,
-        "back": 0.0,
-        "left": 90.0,
-        "right": 270.0,
-    },
-    "arm": {
-        "top": 40028922.0,  # playstation!
-
-        # Alterar esses valores para centímetros 
-        "deposit_to_top": 10100.0,
-        "top_to_deposit": -10100.0,
-        
-        "top_to_deposit_put": -9600.0,
-        "top_to_deposit_pick": -9900.0,
-
-        "top_to_bottom0": -14400.0,
-        "bottom0_to_top": 14400.0,
-        "top_to_bottom5": -12100.0,
-        "bottom5_to_top": 12100.0,
-        "top_to_bottom10": -10200.0,
-        "bottom10_to_top": 10200.0,
-        "top_to_bottom15": -8000.0,
-        "bottom15_to_top": 8000.0, #botton15 = altura da mesa de 15
-
-        "bottom15_to_deposit": -2900.0, #medidas intermediarias
-
-        "deposit_to_bottom10": -1.0,
-    }
+MASKS = {
+    "arm": (ManipulatorCommand.ELEVATOR, "elevator_cm"),
+    "rotatory_base": (ManipulatorCommand.BASE, "base_angle_deg"),
+    "wrist": (ManipulatorCommand.WRIST, "wrist_angle_deg"),
+    "gripper": (ManipulatorCommand.GRIPPER, "gripper_angle_deg"),
 }
+
 
 class ManipulationInterface:
     def __init__(self):
-        self.last_processed_uid = None
-        self.last_manip_feedback = 0
+        self.values = {component: rospy.get_param("~" + component) for component in MASKS}
+        self.max_travel_cm = rospy.get_param("~max_elevator_travel_cm")
+        self.servo_settle = rospy.get_param("~servo_settle_s", 0.75)
+        self.lock = threading.RLock()
+        self.current = None
+        self.seen = set()
+        self.homed = False
+        self.latest = None
+        self.stop = BaseStop()
+        self.vel = rospy.Publisher("/cmd_vel", Twist, queue_size=1)
+        self.motors = rospy.Publisher("/manipulator_command", ManipulatorCommand, queue_size=1)
+        self.feedback = rospy.Publisher("/scheduler/feedback", SchedulerResponse, queue_size=10)
+        self.subscriptions = [
+            rospy.Subscriber("/manipulator_state", manipulation_comm, self.on_state, queue_size=1),
+            rospy.Subscriber("/scheduler/commands", SchedulerCommand, self.on_command),
+            rospy.Subscriber("/scheduler/cancel", SchedulerCommand, self.on_cancel),
+        ]
+        self.timer = rospy.Timer(rospy.Duration(0.04), self.tick)
 
-        rospy.init_node("manipulation")
-
-        self.pub_arm = rospy.Publisher("/arm_control", Float32MultiArray, queue_size=10)
-        self.pub_ee = rospy.Publisher("/end_effector_control", Float32MultiArray, queue_size=10)
-        self.pub_fb = rospy.Publisher("/scheduler/feedback", SchedulerResponse, queue_size=10)
-
-        rospy.Subscriber("/manipulator_state", manipulation_comm, self.cb_manipulator_state, queue_size=10)
-        rospy.Subscriber("/scheduler/commands",
-                         SchedulerCommand, self.cb_command, queue_size=10)
-
-        rospy.loginfo("[manipulation] Inicializado e aguardando comandos...")
-
-    def cb_command(self, msg):
-        if msg.target != TARGET_NAME:
+    def on_command(self, msg):
+        if msg.target != "manipulation":
             return
-
-        if self.last_processed_uid == msg.uid:
-            # rospy.logdebug(f"[manipulation] Ignorando comando duplicado UID: {msg.uid}")
-            return
-        
-        self.last_processed_uid = msg.uid
-
-        rospy.loginfo(f"[manipulation] Recebido uid={msg.uid} payload='{msg.payload}'")
-
-        parts = [p.strip().lower() for p in msg.payload.split(",")]
-        if len(parts) != 2:
-            rospy.logerr("Payload inválido. Esperado formato: '<componente>, <ação>'")
-            return
-
-        component, action = parts
-
-        if component not in ACTION_MAP:
-            rospy.logerr(f"Componente desconhecido: '{component}'")
-            return
-
-        if action not in ACTION_MAP[component]:
-            rospy.logerr(f"Ação desconhecida: '{action}' para componente '{component}'")
-            return
-
-        value = ACTION_MAP[component][action]
-
-        if component in ["rotatory_base", "arm"]:
-            idx = 0 if component == "rotatory_base" else 1
-            arm_vals[idx] = value
-            self.pub_arm.publish(Float32MultiArray(data=arm_vals))
-            rospy.loginfo(f"[manipulation] Publicado arm_control: {arm_vals}")
-        else:
-            idx = 0 if component == "wrist" else 1
-            ee_vals[idx] = value
-            self.pub_ee.publish(Float32MultiArray(data=ee_vals))
-            rospy.loginfo(f"[manipulation] Publicado end_effector_control: {ee_vals}")
-
-    def cb_manipulator_state(self, msg):
-        # Aqui: recebe os valores de ângulo da base (deg e rad), booleano do fim de curso, 
-        # booleano de validade do encoder e booleano de ack da manip.
-
-        rospy.loginfo(f"[manipulation] Estado do manipulador recebido: base={msg.base_angle_deg:.2f}°, arm={msg.arm_angle:.2f}, upper_limit_active={msg.upper_limit_active}, encoder_ack={msg.encoder_ack}")
-
-        # Devolve o feedback para o scheduler só na borda, pra enviar mal entendido com atraso de comunicação
-        if (self.last_manip_feedback == 0 and msg.manip_feedback == 1):
-            self.publish_feedback()
-
-        self.last_manip_feedback = msg.manip_feedback
-
-    def publish_feedback(self, status="OK"):
-            if self.last_processed_uid is None:
+        with self.lock:
+            if msg.uid in self.seen:
                 return
-                
-            feedback = SchedulerResponse(uid=self.last_processed_uid, target=TARGET_NAME, status=status)
-            self.pub_feedback.publish(feedback)
-            
-            rospy.loginfo(f"[manipulation] Missão concluída com status: {status}")
-    
-            self.last_processed_uid = None
+            self.seen.add(msg.uid)
+            try:
+                component, action = (part.strip().lower() for part in msg.payload.split(","))
+                mask, field = MASKS[component]
+                value = float(self.values[component][action])
+                valid = math.isfinite(value) and math.isfinite(msg.timeout) and msg.timeout > 0
+                if component == "arm":
+                    valid &= (0 < value <= self.max_travel_cm if action == "home"
+                              else -self.max_travel_cm <= value < 0 and self.homed)
+                if component == "rotatory_base":
+                    valid &= self.homed and 0 <= value <= 360
+                if component in ("wrist", "gripper"):
+                    valid &= 0 <= value <= 180
+                if not valid or self.current is not None:
+                    raise ValueError("comando inválido, ocupado ou elevador fora da referência")
+            except (KeyError, ValueError) as exc:
+                rospy.logwarn("[manipulation] %s", exc)
+                self.respond(msg.uid, "FAIL")
+                return
+            start = rospy.Time.now()
+            self.current = ManipulatorCommand(uid=msg.uid, motor_mask=mask, **{field: value})
+            self.action = action
+            self.started = start
+            self.deadline = start + rospy.Duration(msg.timeout)
+            self.sent = False
+            self.completed = None
 
+    def on_cancel(self, msg):
+        if msg.target == "manipulation":
+            with self.lock:
+                self.seen.add(msg.uid)
+                if self.current and self.current.uid == msg.uid:
+                    self.finish("CANCELLED")
 
-    def run(self):
-        rospy.spin()
+    def on_state(self, msg):
+        with self.lock:
+            now = rospy.Time.now()
+            self.latest = now, msg
+            if self.current is None or not self.sent or msg.command_uid != self.current.uid:
+                return
+            if msg.manip_feedback == 2:
+                self.finish("FAIL")
+            elif msg.manip_feedback == 1:
+                if self.action == "home" and not msg.upper_limit_active:
+                    self.finish("FAIL")
+                elif self.completed is None:
+                    self.completed = now
+
+    def tick(self, _):
+        with self.lock:
+            if self.current is None:
+                return
+            self.vel.publish(Twist())
+            now = rospy.Time.now()
+            if now >= self.deadline:
+                self.finish("TIMEOUT")
+                return
+            if not self.stop.confirmed(self.started):
+                if self.sent or (now - self.started).to_sec() >= self.stop.timeout:
+                    self.finish("FAIL")
+                return
+            if not self.sent:
+                if self.motors.get_num_connections() == 0 or self.latest is None:
+                    return
+                stamp, state = self.latest
+                if (now - stamp).to_sec() > 0.5:
+                    return
+                if (self.current.motor_mask == ManipulatorCommand.BASE
+                        and not (state.upper_limit_active and state.encoder_valid)):
+                    self.finish("FAIL")
+                    return
+                self.sent = True
+                if self.current.motor_mask == ManipulatorCommand.ELEVATOR:
+                    self.homed = False
+                self.motors.publish(self.current)
+            elif self.completed is not None:
+                servo = self.current.motor_mask in (ManipulatorCommand.WRIST, ManipulatorCommand.GRIPPER)
+                if not servo or (now - self.completed).to_sec() >= self.servo_settle:
+                    self.finish("OK")
+
+    def finish(self, status):
+        if self.action == "home":
+            self.homed = status == "OK"
+        uid = self.current.uid
+        self.current = None
+        self.sent = False
+        self.respond(uid, status)
+
+    def respond(self, uid, status):
+        self.feedback.publish(SchedulerResponse(uid=uid, target="manipulation", status=status))
+
 
 if __name__ == "__main__":
-    try:
-        ManipulationInterface().run()
-    except rospy.ROSInterruptException:
-        pass
+    rospy.init_node("manipulation")
+    ManipulationInterface()
+    rospy.spin()

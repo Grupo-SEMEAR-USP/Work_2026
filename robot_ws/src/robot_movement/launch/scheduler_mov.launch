@@ -1,6 +1,10 @@
 <launch>
-    <node name="align_block" pkg="robot_movement" type="align_block.py" output="screen"/>
-    <node name="approach_table" pkg="robot_movement" type="approach_table.py" output="screen"/>
-    <node name="border_detect" pkg="robot_movement" type="border_detect.py" output="screen"/>
-    <node name="move_time" pkg="robot_movement" type="move_time.py" output="screen"/>
+  <arg name="movement_config" default="$(find robot_movement)/config/mission_movement.yaml"/>
+  <rosparam command="load" file="$(arg movement_config)"/>
+  <node name="align_block" pkg="robot_movement" type="align_block.py" output="screen"/>
+  <node name="align_container" pkg="robot_movement" type="align_block.py" output="screen"/>
+  <node name="approach_table" pkg="robot_movement" type="approach_table.py" output="screen"/>
+  <node name="border_detect" pkg="robot_movement" type="border_detect.py" output="screen"/>
+  <node name="search_item" pkg="robot_movement" type="search_item.py" output="screen"/>
+  <node name="move_time" pkg="robot_movement" type="move_time.py" output="screen"/>
 </launch>

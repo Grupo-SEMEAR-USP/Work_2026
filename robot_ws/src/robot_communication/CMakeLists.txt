@@ -4,6 +4,7 @@ project(robot_communication)
 ## Find catkin macros and libraries
 find_package(catkin REQUIRED COMPONENTS
   rospy
+  actionlib_msgs
   std_msgs
   message_generation
   geometry_msgs
@@ -25,11 +26,17 @@ add_message_files(
   AprilTagDetection.msg
   AprilTagDetectionArray.msg
   manipulation_comm.msg
+  ManipulatorCommand.msg
+  ContainerDetection.msg
+  ContainerDetectionArray.msg
 )
+
+add_action_files(FILES MoveSegment.action)
 
 ## Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES
+  actionlib_msgs
   geometry_msgs
   sensor_msgs
   std_msgs
@@ -41,7 +48,10 @@ generate_messages(
 ## The catkin_package macro generates cmake config files for your package
 catkin_package(
   CATKIN_DEPENDS 
-    message_runtime 
+    message_runtime
+    actionlib_msgs
+    geometry_msgs
+    sensor_msgs
     std_msgs
     rospy
 )
@@ -69,6 +79,10 @@ catkin_install_python(PROGRAMS
 ## Mark other files for installation (e.g. launch and bag files, etc.)
 install(DIRECTORY launch/
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch
+)
+
+install(DIRECTORY action/
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/action
 )
 
 install(DIRECTORY msg/

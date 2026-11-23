@@ -1,132 +1,125 @@
 #!/usr/bin/env python3
-import rospy
-import actionlib
-import yaml
+import math
 import os
+import threading
+
+import actionlib
 import rospkg
-from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+import rospy
+import yaml
 from actionlib_msgs.msg import GoalStatus
-from geometry_msgs.msg import PoseWithCovarianceStamped
+from geometry_msgs.msg import PoseWithCovarianceStamped, Twist
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from robot_communication.msg import SchedulerCommand, SchedulerResponse
+from robot_movement.motion import BaseStop
+
 
 class NavigationNode:
     def __init__(self):
-        rospy.init_node("navigation_node")
-        
-        self.last_processed_uid = None
-
-        # Carrega o arquivo YAML
-        rospack = rospkg.RosPack()
-        
-        self.file_path = os.path.join(rospack.get_path('robot_scheduler'), 'config', 'points.yaml')
-        self.waypoints = {}
-        
-        if os.path.exists(self.file_path):
-            with open(self.file_path, 'r') as f:
-                self.waypoints = yaml.safe_load(f) or {}
-            rospy.loginfo(f"Carregados {len(self.waypoints)} pontos.")
-        else:
-            rospy.logerr(f"ARQUIVO {self.file_path} NÃO ENCONTRADO!")
-
-        # Configurar Move Base Client
+        directory = rospkg.RosPack().get_path("robot_scheduler")
+        path = rospy.get_param("~waypoint_file", os.path.join(directory, "config", "points.yaml"))
+        with open(path, encoding="utf-8") as stream:
+            self.waypoints = yaml.safe_load(stream)
         self.client = actionlib.SimpleActionClient("move_base", MoveBaseAction)
-        rospy.loginfo("Aguardando move_base server...")
-        self.client.wait_for_server()
-        rospy.loginfo("Conectado ao move_base.")
+        self.feedback = rospy.Publisher("/scheduler/feedback", SchedulerResponse, queue_size=10)
+        self.initial_pose = rospy.Publisher("/initialpose", PoseWithCovarianceStamped, queue_size=1, latch=True)
+        self.velocity = rospy.Publisher("/cmd_vel", Twist, queue_size=1)
+        self.stop = BaseStop()
+        self.lock = threading.Lock()
+        self.seen = set()
+        self.active = None
+        self.set_initial_pose(rospy.get_param("~initial_waypoint", "Start"))
+        self.command_sub = rospy.Subscriber("/scheduler/commands", SchedulerCommand, self.on_command)
+        self.cancel_sub = rospy.Subscriber("/scheduler/cancel", SchedulerCommand, self.on_cancel)
 
-        # Publicadores e Assinantes do Scheduler
-        self.pub_fb = rospy.Publisher("/scheduler/feedback", SchedulerResponse, queue_size=10)
-        self.pub_initial_pose = rospy.Publisher('/initialpose', PoseWithCovarianceStamped, queue_size=1, latch=True)
-        
-        rospy.Subscriber("/scheduler/commands", SchedulerCommand, self.command_cb)
+    def set_pose(self, pose, name):
+        point = self.waypoints[name]
+        pose.position.x, pose.position.y, pose.position.z = (point[a] for a in ("x", "y", "z"))
+        (pose.orientation.x, pose.orientation.y, pose.orientation.z,
+         pose.orientation.w) = (point[a] for a in ("qx", "qy", "qz", "qw"))
 
-        # Automaticamente define a pose inicial
-        # Se existir um ponto chamado 'Start' ou 'INITIAL_POSE' no yaml, ele usa.
-        self.set_initial_pose("Start") 
-
-    def set_initial_pose(self, point_name):
-        if point_name not in self.waypoints:
-            rospy.logwarn(f"Ponto de inicialização '{point_name}' não encontrado no YAML. Configure manualmente no RViz.")
+    def set_initial_pose(self, waypoint):
+        if not waypoint:
             return
-
-        data = self.waypoints[point_name]
         msg = PoseWithCovarianceStamped()
-        msg.header.frame_id = "map"
         msg.header.stamp = rospy.Time.now()
-        
-        # Posição
-        msg.pose.pose.position.x = data['x']
-        msg.pose.pose.position.y = data['y']
-        msg.pose.pose.position.z = data['z']
-        msg.pose.pose.orientation.x = data['qx']
-        msg.pose.pose.orientation.y = data['qy']
-        msg.pose.pose.orientation.z = data['qz']
-        msg.pose.pose.orientation.w = data['qw']
-        
-        # Covariância (Confiança): Diagonal principal com valores baixos = alta confiança
-        cov = [0.0] * 36
-        cov[0] = 0.25  # X
-        cov[7] = 0.25  # Y
-        cov[35] = 0.06 # Yaw (rotação)
-        msg.pose.covariance = cov
+        msg.header.frame_id = "map"
+        self.set_pose(msg.pose.pose, waypoint)
+        msg.pose.covariance[0] = msg.pose.covariance[7] = 0.25
+        msg.pose.covariance[35] = 0.06
+        self.initial_pose.publish(msg)
 
-        rospy.sleep(1.0) # Espera conexões
-        self.pub_initial_pose.publish(msg)
-        rospy.loginfo(f"*** POSE INICIAL DEFINIDA AUTOMATICAMENTE PARA '{point_name}' ***")
-
-    def command_cb(self, msg: SchedulerCommand):
-        # Filtra comandos apenas para este nó
+    def on_command(self, msg):
         if msg.target != "navigation":
             return
-        
-        if self.last_processed_uid == msg.uid:
-            # rospy.logdebug(f"[NAV] Ignorando comando duplicado UID: {msg.uid}")
-            return
-        
-        self.last_processed_uid = msg.uid
+        with self.lock:
+            if msg.uid in self.seen:
+                return
+            self.seen.add(msg.uid)
+            if (self.active is not None or msg.payload not in self.waypoints
+                    or not math.isfinite(msg.timeout) or msg.timeout <= 0):
+                self.respond(msg.uid, "FAIL")
+                return
+            cancel = threading.Event()
+            self.active = msg.uid, cancel
+            deadline = rospy.Time.now() + rospy.Duration(msg.timeout)
+        threading.Thread(target=self.navigate, args=(msg, cancel, deadline), daemon=True).start()
 
-        point_name = msg.payload
-        rospy.loginfo(f"[NAV] Comando recebido: Ir para '{point_name}' (UID: {msg.uid})")
+    def on_cancel(self, msg):
+        if msg.target == "navigation":
+            with self.lock:
+                self.seen.add(msg.uid)
+                if self.active and self.active[0] == msg.uid:
+                    self.active[1].set()
 
-        if point_name not in self.waypoints:
-            rospy.logwarn(f"[NAV] Ponto '{point_name}' desconhecido!")
-            self.send_feedback(msg.uid, point_name, "FAIL")
-            return
+    def run_goal(self, msg, cancel, deadline):
+        def unfinished_status():
+            if cancel.is_set() or rospy.is_shutdown():
+                return "CANCELLED"
+            return "TIMEOUT" if rospy.Time.now() >= deadline else None
 
-        # Executa a navegação
-        result_status = self.go_to_point(point_name)
-        
-        # Responde ao Scheduler
-        status_str = "OK" if result_status else "FAIL"
-        self.send_feedback(msg.uid, point_name, status_str)
-
-    def go_to_point(self, name):
-        data = self.waypoints[name]
+        while not self.client.wait_for_server(rospy.Duration(0.10)):
+            status = unfinished_status()
+            if status:
+                return status
+        status = unfinished_status()
+        if status:
+            return status
         goal = MoveBaseGoal()
-        goal.target_pose.header.frame_id = "map"
         goal.target_pose.header.stamp = rospy.Time.now()
-        
-        goal.target_pose.pose.position.x = data['x']
-        goal.target_pose.pose.position.y = data['y']
-        goal.target_pose.pose.position.z = data['z']
-        goal.target_pose.pose.orientation.x = data['qx']
-        goal.target_pose.pose.orientation.y = data['qy']
-        goal.target_pose.pose.orientation.z = data['qz']
-        goal.target_pose.pose.orientation.w = data['qw']
-
+        goal.target_pose.header.frame_id = "map"
+        self.set_pose(goal.target_pose.pose, msg.payload)
         self.client.send_goal(goal)
-        self.client.wait_for_result()
-        
-        state = self.client.get_state()
-        return state == GoalStatus.SUCCEEDED
+        while True:
+            status = unfinished_status()
+            if status:
+                self.client.cancel_goal()
+                if not self.client.wait_for_result(rospy.Duration(2.0)):
+                    rospy.logerr("[navigation] Cancelamento do move_base sem confirmação")
+                    return "FAIL"
+                return status
+            if self.client.wait_for_result(rospy.Duration(0.10)):
+                return "OK" if self.client.get_state() == GoalStatus.SUCCEEDED else "FAIL"
 
-    def send_feedback(self, uid, target, status):
-        resp = SchedulerResponse()
-        resp.uid = uid
-        resp.target = target
-        resp.status = status
-        self.pub_fb.publish(resp)
+    def navigate(self, msg, cancel, deadline):
+        status = "FAIL"
+        try:
+            status = self.run_goal(msg, cancel, deadline)
+        except Exception as exc:
+            self.client.cancel_goal()
+            rospy.logerr("[navigation] %s", exc)
+        finally:
+            if not self.stop.stop(self.velocity):
+                status = "FAIL"
+            with self.lock:
+                self.active = None
+            self.respond(msg.uid, status)
+
+    def respond(self, uid, status):
+        self.feedback.publish(SchedulerResponse(uid=uid, target="navigation", status=status))
+
 
 if __name__ == "__main__":
+    rospy.init_node("navigation_node")
     NavigationNode()
     rospy.spin()

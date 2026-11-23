@@ -1,0 +1,7 @@
+string direction
+float32 duration
+# 0 selects the configured default speed. Units are m/s or rad/s.
+float32 speed
+---
+bool stopped
+---

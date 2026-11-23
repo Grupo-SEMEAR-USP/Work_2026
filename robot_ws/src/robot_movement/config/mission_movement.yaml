@@ -1,0 +1,31 @@
+# Confirmar velocidades, referências de borda e janela de trabalho nas duas mesas.
+approach_table:
+  parallel_tolerance_cm: 0.5
+  distance_tolerance_cm: 1.0
+border_detect:
+  lateral_speed_m_s: 0.05
+  table_return_max_cm: 30.0
+  edge_delta_cm: 12.0
+  max_lateral_m: 1.20
+search_item:
+  lateral_segment_s: 0.7
+  depth_segment_s: 0.7
+  lateral_speed_m_s: 0.05
+  depth_speed_m_s: 0.05
+  table_return_max_cm: 30.0
+  edge_delta_cm: 12.0
+  max_lateral_m: 1.20
+align_block:
+  goal_x: 0.0
+  goal_depth: 0.30
+  lateral_sign: -1.0
+  depth_sign: 1.0
+align_container:
+  kind: container
+  # Frações da imagem em que o centro aparece quando a garra está sobre o alvo.
+  goal_x: 0.50
+  goal_depth: 0.50
+  lateral_sign: -1.0
+  depth_sign: -1.0
+  lateral_tolerance: 0.025
+  depth_tolerance: 0.030
