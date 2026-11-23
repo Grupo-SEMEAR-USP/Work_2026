@@ -14,98 +14,112 @@
 
 (defclass robot_communication::ultrasonic_comm
   :super ros::object
-  :slots (_front_left _front_right _rear_left _rear_right _back ))
+  :slots (_us_left_1 _us_left_2 _us_right_1 _us_right_2 _us_front_left _us_front_right ))
 
 (defmethod robot_communication::ultrasonic_comm
   (:init
    (&key
-    ((:front_left __front_left) 0.0)
-    ((:front_right __front_right) 0.0)
-    ((:rear_left __rear_left) 0.0)
-    ((:rear_right __rear_right) 0.0)
-    ((:back __back) 0.0)
+    ((:us_left_1 __us_left_1) 0.0)
+    ((:us_left_2 __us_left_2) 0.0)
+    ((:us_right_1 __us_right_1) 0.0)
+    ((:us_right_2 __us_right_2) 0.0)
+    ((:us_front_left __us_front_left) 0.0)
+    ((:us_front_right __us_front_right) 0.0)
     )
    (send-super :init)
-   (setq _front_left (float __front_left))
-   (setq _front_right (float __front_right))
-   (setq _rear_left (float __rear_left))
-   (setq _rear_right (float __rear_right))
-   (setq _back (float __back))
+   (setq _us_left_1 (float __us_left_1))
+   (setq _us_left_2 (float __us_left_2))
+   (setq _us_right_1 (float __us_right_1))
+   (setq _us_right_2 (float __us_right_2))
+   (setq _us_front_left (float __us_front_left))
+   (setq _us_front_right (float __us_front_right))
    self)
-  (:front_left
-   (&optional __front_left)
-   (if __front_left (setq _front_left __front_left)) _front_left)
-  (:front_right
-   (&optional __front_right)
-   (if __front_right (setq _front_right __front_right)) _front_right)
-  (:rear_left
-   (&optional __rear_left)
-   (if __rear_left (setq _rear_left __rear_left)) _rear_left)
-  (:rear_right
-   (&optional __rear_right)
-   (if __rear_right (setq _rear_right __rear_right)) _rear_right)
-  (:back
-   (&optional __back)
-   (if __back (setq _back __back)) _back)
+  (:us_left_1
+   (&optional __us_left_1)
+   (if __us_left_1 (setq _us_left_1 __us_left_1)) _us_left_1)
+  (:us_left_2
+   (&optional __us_left_2)
+   (if __us_left_2 (setq _us_left_2 __us_left_2)) _us_left_2)
+  (:us_right_1
+   (&optional __us_right_1)
+   (if __us_right_1 (setq _us_right_1 __us_right_1)) _us_right_1)
+  (:us_right_2
+   (&optional __us_right_2)
+   (if __us_right_2 (setq _us_right_2 __us_right_2)) _us_right_2)
+  (:us_front_left
+   (&optional __us_front_left)
+   (if __us_front_left (setq _us_front_left __us_front_left)) _us_front_left)
+  (:us_front_right
+   (&optional __us_front_right)
+   (if __us_front_right (setq _us_front_right __us_front_right)) _us_front_right)
   (:serialization-length
    ()
    (+
-    ;; float32 _front_left
+    ;; float32 _us_left_1
     4
-    ;; float32 _front_right
+    ;; float32 _us_left_2
     4
-    ;; float32 _rear_left
+    ;; float32 _us_right_1
     4
-    ;; float32 _rear_right
+    ;; float32 _us_right_2
     4
-    ;; float32 _back
+    ;; float32 _us_front_left
+    4
+    ;; float32 _us_front_right
     4
     ))
   (:serialize
    (&optional strm)
    (let ((s (if strm strm
               (make-string-output-stream (send self :serialization-length)))))
-     ;; float32 _front_left
-       (sys::poke _front_left (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
-     ;; float32 _front_right
-       (sys::poke _front_right (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
-     ;; float32 _rear_left
-       (sys::poke _rear_left (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
-     ;; float32 _rear_right
-       (sys::poke _rear_right (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
-     ;; float32 _back
-       (sys::poke _back (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
+     ;; float32 _us_left_1
+       (sys::poke _us_left_1 (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
+     ;; float32 _us_left_2
+       (sys::poke _us_left_2 (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
+     ;; float32 _us_right_1
+       (sys::poke _us_right_1 (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
+     ;; float32 _us_right_2
+       (sys::poke _us_right_2 (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
+     ;; float32 _us_front_left
+       (sys::poke _us_front_left (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
+     ;; float32 _us_front_right
+       (sys::poke _us_front_right (send s :buffer) (send s :count) :float) (incf (stream-count s) 4)
      ;;
      (if (null strm) (get-output-stream-string s))))
   (:deserialize
    (buf &optional (ptr- 0))
-   ;; float32 _front_left
-     (setq _front_left (sys::peek buf ptr- :float)) (incf ptr- 4)
-   ;; float32 _front_right
-     (setq _front_right (sys::peek buf ptr- :float)) (incf ptr- 4)
-   ;; float32 _rear_left
-     (setq _rear_left (sys::peek buf ptr- :float)) (incf ptr- 4)
-   ;; float32 _rear_right
-     (setq _rear_right (sys::peek buf ptr- :float)) (incf ptr- 4)
-   ;; float32 _back
-     (setq _back (sys::peek buf ptr- :float)) (incf ptr- 4)
+   ;; float32 _us_left_1
+     (setq _us_left_1 (sys::peek buf ptr- :float)) (incf ptr- 4)
+   ;; float32 _us_left_2
+     (setq _us_left_2 (sys::peek buf ptr- :float)) (incf ptr- 4)
+   ;; float32 _us_right_1
+     (setq _us_right_1 (sys::peek buf ptr- :float)) (incf ptr- 4)
+   ;; float32 _us_right_2
+     (setq _us_right_2 (sys::peek buf ptr- :float)) (incf ptr- 4)
+   ;; float32 _us_front_left
+     (setq _us_front_left (sys::peek buf ptr- :float)) (incf ptr- 4)
+   ;; float32 _us_front_right
+     (setq _us_front_right (sys::peek buf ptr- :float)) (incf ptr- 4)
    ;;
    self)
   )
 
-(setf (get robot_communication::ultrasonic_comm :md5sum-) "428636691d2e367ce654d88bbe9851c3")
+(setf (get robot_communication::ultrasonic_comm :md5sum-) "e2d56a586910c98d1be0a922e15f0ddb")
 (setf (get robot_communication::ultrasonic_comm :datatype-) "robot_communication/ultrasonic_comm")
 (setf (get robot_communication::ultrasonic_comm :definition-)
       "# ultrasonic_comm.msg
-float32 front_left
-float32 front_right
-float32 rear_left
-float32 rear_right
-float32 back
+float32 us_left_1
+float32 us_left_2
+
+float32 us_right_1
+float32 us_right_2
+
+float32 us_front_left
+float32 us_front_right
 ")
 
 
 
-(provide :robot_communication/ultrasonic_comm "428636691d2e367ce654d88bbe9851c3")
+(provide :robot_communication/ultrasonic_comm "e2d56a586910c98d1be0a922e15f0ddb")
 
 

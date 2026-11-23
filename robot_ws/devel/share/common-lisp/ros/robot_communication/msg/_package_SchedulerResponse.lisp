@@ -1,8 +1,1 @@
-(cl:in-package robot_communication-msg)
-(cl:export '(UID-VAL
-          UID
-          TARGET-VAL
-          TARGET
-          STATUS-VAL
-          STATUS
-))
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/share/common-lisp/ros/robot_communication/msg/_package_SchedulerResponse.lisp

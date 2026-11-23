@@ -1,8 +1,1 @@
-prefix=/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_vision
-
-Name: robot_vision
-Description: Description of robot_vision
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: rospy std_msgs sensor_msgs cv_bridge robot_communication
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_vision/lib/pkgconfig/robot_vision.pc

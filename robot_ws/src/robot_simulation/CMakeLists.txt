@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.2)
-project(robot_navigation)
+project(robot_simulation)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
@@ -58,9 +58,7 @@ include_directories(
 
 # Instalação de Scripts Python
 catkin_install_python(PROGRAMS
-  ../robot_navigation/scripts/navigation.py
-  ../robot_navigation/scripts/waypoint_saver.py
-  
+
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 

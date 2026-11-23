@@ -16,6 +16,8 @@
     (:file "_package_SchedulerResponse" :depends-on ("_package"))
     (:file "encoder_comm" :depends-on ("_package_encoder_comm"))
     (:file "_package_encoder_comm" :depends-on ("_package"))
+    (:file "manipulation_comm" :depends-on ("_package_manipulation_comm"))
+    (:file "_package_manipulation_comm" :depends-on ("_package"))
     (:file "ultrasonic_comm" :depends-on ("_package_ultrasonic_comm"))
     (:file "_package_ultrasonic_comm" :depends-on ("_package"))
     (:file "velocity_comm" :depends-on ("_package_velocity_comm"))

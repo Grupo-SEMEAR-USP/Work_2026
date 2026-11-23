@@ -1,21 +1,21 @@
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD failed with the following output:
-Change Dir: /home/rmajetson/ProjectV/robot_ws/build/robot_vision/CMakeFiles/CMakeTmp
+Change Dir: /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_vision/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/make cmTC_9510c/fast && /usr/bin/make -f CMakeFiles/cmTC_9510c.dir/build.make CMakeFiles/cmTC_9510c.dir/build
-make[1]: Entering directory '/home/rmajetson/ProjectV/robot_ws/build/robot_vision/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_9510c.dir/src.c.o
-/usr/bin/cc   -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_9510c.dir/src.c.o   -c /home/rmajetson/ProjectV/robot_ws/build/robot_vision/CMakeFiles/CMakeTmp/src.c
-Linking C executable cmTC_9510c
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_9510c.dir/link.txt --verbose=1
-/usr/bin/cc  -DCMAKE_HAVE_LIBC_PTHREAD    -rdynamic CMakeFiles/cmTC_9510c.dir/src.c.o  -o cmTC_9510c 
-/usr/bin/ld: CMakeFiles/cmTC_9510c.dir/src.c.o: in function `main':
-src.c:(.text+0x48): undefined reference to `pthread_create'
-/usr/bin/ld: src.c:(.text+0x50): undefined reference to `pthread_detach'
-/usr/bin/ld: src.c:(.text+0x5c): undefined reference to `pthread_join'
+Run Build Command(s):/usr/bin/make cmTC_7d1f2/fast && /usr/bin/make -f CMakeFiles/cmTC_7d1f2.dir/build.make CMakeFiles/cmTC_7d1f2.dir/build
+make[1]: Entering directory '/home/rosUsr/Shared/Work_2026/robot_ws/build/robot_vision/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_7d1f2.dir/src.c.o
+/usr/bin/cc   -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_7d1f2.dir/src.c.o   -c /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_vision/CMakeFiles/CMakeTmp/src.c
+Linking C executable cmTC_7d1f2
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_7d1f2.dir/link.txt --verbose=1
+/usr/bin/cc  -DCMAKE_HAVE_LIBC_PTHREAD    -rdynamic CMakeFiles/cmTC_7d1f2.dir/src.c.o  -o cmTC_7d1f2 
+/usr/bin/ld: CMakeFiles/cmTC_7d1f2.dir/src.c.o: in function `main':
+src.c:(.text+0x46): undefined reference to `pthread_create'
+/usr/bin/ld: src.c:(.text+0x52): undefined reference to `pthread_detach'
+/usr/bin/ld: src.c:(.text+0x63): undefined reference to `pthread_join'
 collect2: error: ld returned 1 exit status
-make[1]: *** [CMakeFiles/cmTC_9510c.dir/build.make:87: cmTC_9510c] Error 1
-make[1]: Leaving directory '/home/rmajetson/ProjectV/robot_ws/build/robot_vision/CMakeFiles/CMakeTmp'
-make: *** [Makefile:121: cmTC_9510c/fast] Error 2
+make[1]: *** [CMakeFiles/cmTC_7d1f2.dir/build.make:87: cmTC_7d1f2] Error 1
+make[1]: Leaving directory '/home/rosUsr/Shared/Work_2026/robot_ws/build/robot_vision/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_7d1f2/fast] Error 2
 
 
 Source file was:
@@ -39,20 +39,20 @@ int main(void)
 }
 
 Determining if the function pthread_create exists in the pthreads failed with the following output:
-Change Dir: /home/rmajetson/ProjectV/robot_ws/build/robot_vision/CMakeFiles/CMakeTmp
+Change Dir: /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_vision/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/bin/make cmTC_ff088/fast && /usr/bin/make -f CMakeFiles/cmTC_ff088.dir/build.make CMakeFiles/cmTC_ff088.dir/build
-make[1]: Entering directory '/home/rmajetson/ProjectV/robot_ws/build/robot_vision/CMakeFiles/CMakeTmp'
-Building C object CMakeFiles/cmTC_ff088.dir/CheckFunctionExists.c.o
-/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_ff088.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
-Linking C executable cmTC_ff088
-/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ff088.dir/link.txt --verbose=1
-/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_ff088.dir/CheckFunctionExists.c.o  -o cmTC_ff088  -lpthreads 
+Run Build Command(s):/usr/bin/make cmTC_ff7aa/fast && /usr/bin/make -f CMakeFiles/cmTC_ff7aa.dir/build.make CMakeFiles/cmTC_ff7aa.dir/build
+make[1]: Entering directory '/home/rosUsr/Shared/Work_2026/robot_ws/build/robot_vision/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ff7aa.dir/CheckFunctionExists.c.o
+/usr/bin/cc   -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_ff7aa.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.16/Modules/CheckFunctionExists.c
+Linking C executable cmTC_ff7aa
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ff7aa.dir/link.txt --verbose=1
+/usr/bin/cc  -DCHECK_FUNCTION_EXISTS=pthread_create    -rdynamic CMakeFiles/cmTC_ff7aa.dir/CheckFunctionExists.c.o  -o cmTC_ff7aa  -lpthreads 
 /usr/bin/ld: cannot find -lpthreads
 collect2: error: ld returned 1 exit status
-make[1]: *** [CMakeFiles/cmTC_ff088.dir/build.make:87: cmTC_ff088] Error 1
-make[1]: Leaving directory '/home/rmajetson/ProjectV/robot_ws/build/robot_vision/CMakeFiles/CMakeTmp'
-make: *** [Makefile:121: cmTC_ff088/fast] Error 2
+make[1]: *** [CMakeFiles/cmTC_ff7aa.dir/build.make:87: cmTC_ff7aa] Error 1
+make[1]: Leaving directory '/home/rosUsr/Shared/Work_2026/robot_ws/build/robot_vision/CMakeFiles/CMakeTmp'
+make: *** [Makefile:121: cmTC_ff7aa/fast] Error 2
 
 
 

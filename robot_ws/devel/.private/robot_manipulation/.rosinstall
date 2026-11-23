@@ -1,2 +1,2 @@
 - setup-file:
-    local-name: /home/rmajetson/ProjectV/robot_ws/devel/.private/robot_manipulation/setup.sh
+    local-name: /home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_manipulation/setup.sh

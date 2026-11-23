@@ -24,37 +24,42 @@ struct ultrasonic_comm_
   typedef ultrasonic_comm_<ContainerAllocator> Type;
 
   ultrasonic_comm_()
-    : front_left(0.0)
-    , front_right(0.0)
-    , rear_left(0.0)
-    , rear_right(0.0)
-    , back(0.0)  {
+    : us_left_1(0.0)
+    , us_left_2(0.0)
+    , us_right_1(0.0)
+    , us_right_2(0.0)
+    , us_front_left(0.0)
+    , us_front_right(0.0)  {
     }
   ultrasonic_comm_(const ContainerAllocator& _alloc)
-    : front_left(0.0)
-    , front_right(0.0)
-    , rear_left(0.0)
-    , rear_right(0.0)
-    , back(0.0)  {
+    : us_left_1(0.0)
+    , us_left_2(0.0)
+    , us_right_1(0.0)
+    , us_right_2(0.0)
+    , us_front_left(0.0)
+    , us_front_right(0.0)  {
   (void)_alloc;
     }
 
 
 
-   typedef float _front_left_type;
-  _front_left_type front_left;
+   typedef float _us_left_1_type;
+  _us_left_1_type us_left_1;
 
-   typedef float _front_right_type;
-  _front_right_type front_right;
+   typedef float _us_left_2_type;
+  _us_left_2_type us_left_2;
 
-   typedef float _rear_left_type;
-  _rear_left_type rear_left;
+   typedef float _us_right_1_type;
+  _us_right_1_type us_right_1;
 
-   typedef float _rear_right_type;
-  _rear_right_type rear_right;
+   typedef float _us_right_2_type;
+  _us_right_2_type us_right_2;
 
-   typedef float _back_type;
-  _back_type back;
+   typedef float _us_front_left_type;
+  _us_front_left_type us_front_left;
+
+   typedef float _us_front_right_type;
+  _us_front_right_type us_front_right;
 
 
 
@@ -85,11 +90,12 @@ return s;
 template<typename ContainerAllocator1, typename ContainerAllocator2>
 bool operator==(const ::robot_communication::ultrasonic_comm_<ContainerAllocator1> & lhs, const ::robot_communication::ultrasonic_comm_<ContainerAllocator2> & rhs)
 {
-  return lhs.front_left == rhs.front_left &&
-    lhs.front_right == rhs.front_right &&
-    lhs.rear_left == rhs.rear_left &&
-    lhs.rear_right == rhs.rear_right &&
-    lhs.back == rhs.back;
+  return lhs.us_left_1 == rhs.us_left_1 &&
+    lhs.us_left_2 == rhs.us_left_2 &&
+    lhs.us_right_1 == rhs.us_right_1 &&
+    lhs.us_right_2 == rhs.us_right_2 &&
+    lhs.us_front_left == rhs.us_front_left &&
+    lhs.us_front_right == rhs.us_front_right;
 }
 
 template<typename ContainerAllocator1, typename ContainerAllocator2>
@@ -146,12 +152,12 @@ struct MD5Sum< ::robot_communication::ultrasonic_comm_<ContainerAllocator> >
 {
   static const char* value()
   {
-    return "428636691d2e367ce654d88bbe9851c3";
+    return "e2d56a586910c98d1be0a922e15f0ddb";
   }
 
   static const char* value(const ::robot_communication::ultrasonic_comm_<ContainerAllocator>&) { return value(); }
-  static const uint64_t static_value1 = 0x428636691d2e367cULL;
-  static const uint64_t static_value2 = 0xe654d88bbe9851c3ULL;
+  static const uint64_t static_value1 = 0xe2d56a586910c98dULL;
+  static const uint64_t static_value2 = 0x1be0a922e15f0ddbULL;
 };
 
 template<class ContainerAllocator>
@@ -171,11 +177,14 @@ struct Definition< ::robot_communication::ultrasonic_comm_<ContainerAllocator> >
   static const char* value()
   {
     return "# ultrasonic_comm.msg\n"
-"float32 front_left\n"
-"float32 front_right\n"
-"float32 rear_left\n"
-"float32 rear_right\n"
-"float32 back\n"
+"float32 us_left_1\n"
+"float32 us_left_2\n"
+"\n"
+"float32 us_right_1\n"
+"float32 us_right_2\n"
+"\n"
+"float32 us_front_left\n"
+"float32 us_front_right\n"
 ;
   }
 
@@ -194,11 +203,12 @@ namespace serialization
   {
     template<typename Stream, typename T> inline static void allInOne(Stream& stream, T m)
     {
-      stream.next(m.front_left);
-      stream.next(m.front_right);
-      stream.next(m.rear_left);
-      stream.next(m.rear_right);
-      stream.next(m.back);
+      stream.next(m.us_left_1);
+      stream.next(m.us_left_2);
+      stream.next(m.us_right_1);
+      stream.next(m.us_right_2);
+      stream.next(m.us_front_left);
+      stream.next(m.us_front_right);
     }
 
     ROS_DECLARE_ALLINONE_SERIALIZER
@@ -219,24 +229,28 @@ struct Printer< ::robot_communication::ultrasonic_comm_<ContainerAllocator> >
   {
     if (false || !indent.empty())
       s << std::endl;
-    s << indent << "front_left: ";
-    Printer<float>::stream(s, indent + "  ", v.front_left);
+    s << indent << "us_left_1: ";
+    Printer<float>::stream(s, indent + "  ", v.us_left_1);
     if (true || !indent.empty())
       s << std::endl;
-    s << indent << "front_right: ";
-    Printer<float>::stream(s, indent + "  ", v.front_right);
+    s << indent << "us_left_2: ";
+    Printer<float>::stream(s, indent + "  ", v.us_left_2);
     if (true || !indent.empty())
       s << std::endl;
-    s << indent << "rear_left: ";
-    Printer<float>::stream(s, indent + "  ", v.rear_left);
+    s << indent << "us_right_1: ";
+    Printer<float>::stream(s, indent + "  ", v.us_right_1);
     if (true || !indent.empty())
       s << std::endl;
-    s << indent << "rear_right: ";
-    Printer<float>::stream(s, indent + "  ", v.rear_right);
+    s << indent << "us_right_2: ";
+    Printer<float>::stream(s, indent + "  ", v.us_right_2);
     if (true || !indent.empty())
       s << std::endl;
-    s << indent << "back: ";
-    Printer<float>::stream(s, indent + "  ", v.back);
+    s << indent << "us_front_left: ";
+    Printer<float>::stream(s, indent + "  ", v.us_front_left);
+    if (true || !indent.empty())
+      s << std::endl;
+    s << indent << "us_front_right: ";
+    Printer<float>::stream(s, indent + "  ", v.us_front_right);
   }
 };
 

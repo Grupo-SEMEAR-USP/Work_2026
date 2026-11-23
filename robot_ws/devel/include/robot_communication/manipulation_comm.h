@@ -1,0 +1,1 @@
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/include/robot_communication/manipulation_comm.h

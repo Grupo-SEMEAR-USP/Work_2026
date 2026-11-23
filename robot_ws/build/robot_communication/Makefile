@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/rmajetson/ProjectV/robot_ws/src/robot_communication
+CMAKE_SOURCE_DIR = /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/rmajetson/ProjectV/robot_ws/build/robot_communication
+CMAKE_BINARY_DIR = /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_communication
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -115,8 +115,8 @@ rebuild_cache/fast: rebuild_cache
 
 # Special rule for the target edit_cache
 edit_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/ccmake -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
+	/usr/bin/cmake -E echo No\ interactive\ CMake\ dialog\ available.
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -137,9 +137,9 @@ test/fast: test
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/rmajetson/ProjectV/robot_ws/build/robot_communication/CMakeFiles /home/rmajetson/ProjectV/robot_ws/build/robot_communication/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_communication/CMakeFiles /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_communication/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/rmajetson/ProjectV/robot_ws/build/robot_communication/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_communication/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -231,6 +231,32 @@ robot_communication_generate_messages_eus: cmake_check_build_system
 robot_communication_generate_messages_eus/fast:
 	$(MAKE) -f CMakeFiles/robot_communication_generate_messages_eus.dir/build.make CMakeFiles/robot_communication_generate_messages_eus.dir/build
 .PHONY : robot_communication_generate_messages_eus/fast
+
+#=============================================================================
+# Target rules for targets named robot_communication_gencpp
+
+# Build rule for target.
+robot_communication_gencpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 robot_communication_gencpp
+.PHONY : robot_communication_gencpp
+
+# fast build rule for target.
+robot_communication_gencpp/fast:
+	$(MAKE) -f CMakeFiles/robot_communication_gencpp.dir/build.make CMakeFiles/robot_communication_gencpp.dir/build
+.PHONY : robot_communication_gencpp/fast
+
+#=============================================================================
+# Target rules for targets named robot_communication_generate_messages_cpp
+
+# Build rule for target.
+robot_communication_generate_messages_cpp: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 robot_communication_generate_messages_cpp
+.PHONY : robot_communication_generate_messages_cpp
+
+# fast build rule for target.
+robot_communication_generate_messages_cpp/fast:
+	$(MAKE) -f CMakeFiles/robot_communication_generate_messages_cpp.dir/build.make CMakeFiles/robot_communication_generate_messages_cpp.dir/build
+.PHONY : robot_communication_generate_messages_cpp/fast
 
 #=============================================================================
 # Target rules for targets named geometry_msgs_generate_messages_cpp
@@ -571,19 +597,6 @@ _robot_communication_generate_messages_check_deps_ultrasonic_comm/fast:
 .PHONY : _robot_communication_generate_messages_check_deps_ultrasonic_comm/fast
 
 #=============================================================================
-# Target rules for targets named _robot_communication_generate_messages_check_deps_velocity_comm
-
-# Build rule for target.
-_robot_communication_generate_messages_check_deps_velocity_comm: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 _robot_communication_generate_messages_check_deps_velocity_comm
-.PHONY : _robot_communication_generate_messages_check_deps_velocity_comm
-
-# fast build rule for target.
-_robot_communication_generate_messages_check_deps_velocity_comm/fast:
-	$(MAKE) -f CMakeFiles/_robot_communication_generate_messages_check_deps_velocity_comm.dir/build.make CMakeFiles/_robot_communication_generate_messages_check_deps_velocity_comm.dir/build
-.PHONY : _robot_communication_generate_messages_check_deps_velocity_comm/fast
-
-#=============================================================================
 # Target rules for targets named _robot_communication_generate_messages_check_deps_AprilTagDetection
 
 # Build rule for target.
@@ -636,30 +649,30 @@ _robot_communication_generate_messages_check_deps_AprilTagDetectionArray/fast:
 .PHONY : _robot_communication_generate_messages_check_deps_AprilTagDetectionArray/fast
 
 #=============================================================================
-# Target rules for targets named robot_communication_gencpp
+# Target rules for targets named _robot_communication_generate_messages_check_deps_velocity_comm
 
 # Build rule for target.
-robot_communication_gencpp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 robot_communication_gencpp
-.PHONY : robot_communication_gencpp
+_robot_communication_generate_messages_check_deps_velocity_comm: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 _robot_communication_generate_messages_check_deps_velocity_comm
+.PHONY : _robot_communication_generate_messages_check_deps_velocity_comm
 
 # fast build rule for target.
-robot_communication_gencpp/fast:
-	$(MAKE) -f CMakeFiles/robot_communication_gencpp.dir/build.make CMakeFiles/robot_communication_gencpp.dir/build
-.PHONY : robot_communication_gencpp/fast
+_robot_communication_generate_messages_check_deps_velocity_comm/fast:
+	$(MAKE) -f CMakeFiles/_robot_communication_generate_messages_check_deps_velocity_comm.dir/build.make CMakeFiles/_robot_communication_generate_messages_check_deps_velocity_comm.dir/build
+.PHONY : _robot_communication_generate_messages_check_deps_velocity_comm/fast
 
 #=============================================================================
-# Target rules for targets named robot_communication_generate_messages_cpp
+# Target rules for targets named _robot_communication_generate_messages_check_deps_manipulation_comm
 
 # Build rule for target.
-robot_communication_generate_messages_cpp: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 robot_communication_generate_messages_cpp
-.PHONY : robot_communication_generate_messages_cpp
+_robot_communication_generate_messages_check_deps_manipulation_comm: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 _robot_communication_generate_messages_check_deps_manipulation_comm
+.PHONY : _robot_communication_generate_messages_check_deps_manipulation_comm
 
 # fast build rule for target.
-robot_communication_generate_messages_cpp/fast:
-	$(MAKE) -f CMakeFiles/robot_communication_generate_messages_cpp.dir/build.make CMakeFiles/robot_communication_generate_messages_cpp.dir/build
-.PHONY : robot_communication_generate_messages_cpp/fast
+_robot_communication_generate_messages_check_deps_manipulation_comm/fast:
+	$(MAKE) -f CMakeFiles/_robot_communication_generate_messages_check_deps_manipulation_comm.dir/build.make CMakeFiles/_robot_communication_generate_messages_check_deps_manipulation_comm.dir/build
+.PHONY : _robot_communication_generate_messages_check_deps_manipulation_comm/fast
 
 #=============================================================================
 # Target rules for targets named gmock_main
@@ -731,6 +744,8 @@ help:
 	@echo "... robot_communication_genlisp"
 	@echo "... robot_communication_generate_messages_lisp"
 	@echo "... robot_communication_generate_messages_eus"
+	@echo "... robot_communication_gencpp"
+	@echo "... robot_communication_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_cpp"
 	@echo "... geometry_msgs_generate_messages_nodejs"
 	@echo "... std_msgs_generate_messages_py"
@@ -757,13 +772,12 @@ help:
 	@echo "... sensor_msgs_generate_messages_nodejs"
 	@echo "... sensor_msgs_generate_messages_eus"
 	@echo "... _robot_communication_generate_messages_check_deps_ultrasonic_comm"
-	@echo "... _robot_communication_generate_messages_check_deps_velocity_comm"
 	@echo "... _robot_communication_generate_messages_check_deps_AprilTagDetection"
 	@echo "... sensor_msgs_generate_messages_py"
 	@echo "... geometry_msgs_generate_messages_py"
 	@echo "... _robot_communication_generate_messages_check_deps_AprilTagDetectionArray"
-	@echo "... robot_communication_gencpp"
-	@echo "... robot_communication_generate_messages_cpp"
+	@echo "... _robot_communication_generate_messages_check_deps_velocity_comm"
+	@echo "... _robot_communication_generate_messages_check_deps_manipulation_comm"
 	@echo "... gmock_main"
 	@echo "... gmock"
 	@echo "... gtest_main"

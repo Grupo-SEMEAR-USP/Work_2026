@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/rmajetson/ProjectV/robot_ws/src/robot_movement
+CMAKE_SOURCE_DIR = /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_movement
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/rmajetson/ProjectV/robot_ws/build/robot_movement
+CMAKE_BINARY_DIR = /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_movement
 
 # Include any dependencies generated for this target.
 include CMakeFiles/hw_interface_node.dir/depend.make
@@ -58,17 +58,17 @@ include CMakeFiles/hw_interface_node.dir/progress.make
 include CMakeFiles/hw_interface_node.dir/flags.make
 
 CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.o: CMakeFiles/hw_interface_node.dir/flags.make
-CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.o: /home/rmajetson/ProjectV/robot_ws/src/robot_movement/src/hw_interface.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/rmajetson/ProjectV/robot_ws/build/robot_movement/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.o -c /home/rmajetson/ProjectV/robot_ws/src/robot_movement/src/hw_interface.cpp
+CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.o: /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_movement/src/hw_interface.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/rosUsr/Shared/Work_2026/robot_ws/build/robot_movement/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.o -c /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_movement/src/hw_interface.cpp
 
 CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/rmajetson/ProjectV/robot_ws/src/robot_movement/src/hw_interface.cpp > CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_movement/src/hw_interface.cpp > CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.i
 
 CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/rmajetson/ProjectV/robot_ws/src/robot_movement/src/hw_interface.cpp -o CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_movement/src/hw_interface.cpp -o CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.s
 
 # Object files for target hw_interface_node
 hw_interface_node_OBJECTS = \
@@ -77,38 +77,38 @@ hw_interface_node_OBJECTS = \
 # External object files for target hw_interface_node
 hw_interface_node_EXTERNAL_OBJECTS =
 
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.o
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: CMakeFiles/hw_interface_node.dir/build.make
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libtf.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/liborocos-kdl.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/liborocos-kdl.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libtf2_ros.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libactionlib.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libmessage_filters.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libroscpp.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/aarch64-linux-gnu/libpthread.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/aarch64-linux-gnu/libboost_chrono.so.1.71.0
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/aarch64-linux-gnu/libboost_filesystem.so.1.71.0
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/librosconsole.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/librosconsole_log4cxx.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/librosconsole_backend_interface.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/aarch64-linux-gnu/liblog4cxx.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/aarch64-linux-gnu/libboost_regex.so.1.71.0
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libxmlrpcpp.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libtf2.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libroscpp_serialization.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/librostime.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/aarch64-linux-gnu/libboost_date_time.so.1.71.0
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libcpp_common.so
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/aarch64-linux-gnu/libboost_system.so.1.71.0
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/aarch64-linux-gnu/libboost_thread.so.1.71.0
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/aarch64-linux-gnu/libconsole_bridge.so.0.4
-/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: CMakeFiles/hw_interface_node.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/rmajetson/ProjectV/robot_ws/build/robot_movement/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable /home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node"
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: CMakeFiles/hw_interface_node.dir/src/hw_interface.cpp.o
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: CMakeFiles/hw_interface_node.dir/build.make
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libtf.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/liborocos-kdl.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/liborocos-kdl.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libtf2_ros.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libactionlib.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libmessage_filters.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libroscpp.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/x86_64-linux-gnu/libpthread.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/x86_64-linux-gnu/libboost_chrono.so.1.71.0
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.71.0
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/librosconsole.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/librosconsole_log4cxx.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/librosconsole_backend_interface.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/x86_64-linux-gnu/liblog4cxx.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/x86_64-linux-gnu/libboost_regex.so.1.71.0
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libxmlrpcpp.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libtf2.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libroscpp_serialization.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/librostime.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/x86_64-linux-gnu/libboost_date_time.so.1.71.0
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /opt/ros/noetic/lib/libcpp_common.so
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/x86_64-linux-gnu/libboost_system.so.1.71.0
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/x86_64-linux-gnu/libboost_thread.so.1.71.0
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: /usr/lib/x86_64-linux-gnu/libconsole_bridge.so.0.4
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node: CMakeFiles/hw_interface_node.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/rosUsr/Shared/Work_2026/robot_ws/build/robot_movement/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable /home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/hw_interface_node.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
-CMakeFiles/hw_interface_node.dir/build: /home/rmajetson/ProjectV/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node
+CMakeFiles/hw_interface_node.dir/build: /home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/hw_interface_node
 
 .PHONY : CMakeFiles/hw_interface_node.dir/build
 
@@ -117,6 +117,6 @@ CMakeFiles/hw_interface_node.dir/clean:
 .PHONY : CMakeFiles/hw_interface_node.dir/clean
 
 CMakeFiles/hw_interface_node.dir/depend:
-	cd /home/rmajetson/ProjectV/robot_ws/build/robot_movement && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/rmajetson/ProjectV/robot_ws/src/robot_movement /home/rmajetson/ProjectV/robot_ws/src/robot_movement /home/rmajetson/ProjectV/robot_ws/build/robot_movement /home/rmajetson/ProjectV/robot_ws/build/robot_movement /home/rmajetson/ProjectV/robot_ws/build/robot_movement/CMakeFiles/hw_interface_node.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_movement && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_movement /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_movement /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_movement /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_movement /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_movement/CMakeFiles/hw_interface_node.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/hw_interface_node.dir/depend
 

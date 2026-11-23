@@ -1,8 +1,8 @@
 # generated from genmsg/cmake/pkg-genmsg.cmake.em
 
-message(STATUS "robot_communication: 7 messages, 0 services")
+message(STATUS "robot_communication: 8 messages, 0 services")
 
-set(MSG_I_FLAGS "-Irobot_communication:/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg;-Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg;-Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg;-Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg")
+set(MSG_I_FLAGS "-Irobot_communication:/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg;-Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg;-Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg;-Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg")
 
 # Find all generators
 find_package(gencpp REQUIRED)
@@ -17,39 +17,44 @@ add_custom_target(robot_communication_generate_messages ALL)
 
 
 
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg" NAME_WE)
 add_custom_target(_robot_communication_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg" ""
 )
 
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/encoder_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/encoder_comm.msg" NAME_WE)
 add_custom_target(_robot_communication_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/encoder_comm.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/encoder_comm.msg" ""
 )
 
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/velocity_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/velocity_comm.msg" NAME_WE)
 add_custom_target(_robot_communication_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/velocity_comm.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/velocity_comm.msg" ""
 )
 
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerCommand.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerCommand.msg" NAME_WE)
 add_custom_target(_robot_communication_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerCommand.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerCommand.msg" ""
 )
 
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerResponse.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerResponse.msg" NAME_WE)
 add_custom_target(_robot_communication_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerResponse.msg" ""
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerResponse.msg" ""
 )
 
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" NAME_WE)
 add_custom_target(_robot_communication_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" "geometry_msgs/PoseWithCovarianceStamped:std_msgs/Header:geometry_msgs/Pose:geometry_msgs/Quaternion:geometry_msgs/Point:geometry_msgs/PoseWithCovariance"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" "geometry_msgs/Point:std_msgs/Header:geometry_msgs/PoseWithCovarianceStamped:geometry_msgs/PoseWithCovariance:geometry_msgs/Pose:geometry_msgs/Quaternion"
 )
 
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
 add_custom_target(_robot_communication_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" "geometry_msgs/PoseWithCovarianceStamped:std_msgs/Header:geometry_msgs/Pose:robot_communication/AprilTagDetection:geometry_msgs/Quaternion:geometry_msgs/Point:geometry_msgs/PoseWithCovariance"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" "geometry_msgs/Point:std_msgs/Header:robot_communication/AprilTagDetection:geometry_msgs/PoseWithCovarianceStamped:geometry_msgs/PoseWithCovariance:geometry_msgs/Pose:geometry_msgs/Quaternion"
+)
+
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg" NAME_WE)
+add_custom_target(_robot_communication_generate_messages_check_deps_${_filename}
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg" ""
 )
 
 #
@@ -59,45 +64,51 @@ add_custom_target(_robot_communication_generate_messages_check_deps_${_filename}
 ### Section generating for lang: gencpp
 ### Generating Messages
 _generate_msg_cpp(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/robot_communication
 )
 _generate_msg_cpp(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/encoder_comm.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/encoder_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/robot_communication
 )
 _generate_msg_cpp(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/velocity_comm.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/velocity_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/robot_communication
 )
 _generate_msg_cpp(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerCommand.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerCommand.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/robot_communication
 )
 _generate_msg_cpp(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerResponse.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerResponse.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/robot_communication
 )
 _generate_msg_cpp(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/robot_communication
 )
 _generate_msg_cpp(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/robot_communication
+)
+_generate_msg_cpp(robot_communication
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg"
+  "${MSG_I_FLAGS}"
+  ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/robot_communication
 )
 
@@ -115,19 +126,21 @@ add_custom_target(robot_communication_generate_messages_cpp
 add_dependencies(robot_communication_generate_messages robot_communication_generate_messages_cpp)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_cpp _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/encoder_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/encoder_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_cpp _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/velocity_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/velocity_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_cpp _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerCommand.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerCommand.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_cpp _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerResponse.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerResponse.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_cpp _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_cpp _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
+add_dependencies(robot_communication_generate_messages_cpp _robot_communication_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_cpp _robot_communication_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -140,45 +153,51 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS robot_communication_generate_messag
 ### Section generating for lang: geneus
 ### Generating Messages
 _generate_msg_eus(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/robot_communication
 )
 _generate_msg_eus(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/encoder_comm.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/encoder_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/robot_communication
 )
 _generate_msg_eus(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/velocity_comm.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/velocity_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/robot_communication
 )
 _generate_msg_eus(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerCommand.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerCommand.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/robot_communication
 )
 _generate_msg_eus(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerResponse.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerResponse.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/robot_communication
 )
 _generate_msg_eus(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/robot_communication
 )
 _generate_msg_eus(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
+  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/robot_communication
+)
+_generate_msg_eus(robot_communication
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg"
+  "${MSG_I_FLAGS}"
+  ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/robot_communication
 )
 
@@ -196,19 +215,21 @@ add_custom_target(robot_communication_generate_messages_eus
 add_dependencies(robot_communication_generate_messages robot_communication_generate_messages_eus)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_eus _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/encoder_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/encoder_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_eus _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/velocity_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/velocity_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_eus _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerCommand.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerCommand.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_eus _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerResponse.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerResponse.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_eus _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_eus _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
+add_dependencies(robot_communication_generate_messages_eus _robot_communication_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_eus _robot_communication_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -221,45 +242,51 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS robot_communication_generate_messag
 ### Section generating for lang: genlisp
 ### Generating Messages
 _generate_msg_lisp(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/robot_communication
 )
 _generate_msg_lisp(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/encoder_comm.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/encoder_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/robot_communication
 )
 _generate_msg_lisp(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/velocity_comm.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/velocity_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/robot_communication
 )
 _generate_msg_lisp(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerCommand.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerCommand.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/robot_communication
 )
 _generate_msg_lisp(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerResponse.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerResponse.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/robot_communication
 )
 _generate_msg_lisp(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/robot_communication
 )
 _generate_msg_lisp(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/robot_communication
+)
+_generate_msg_lisp(robot_communication
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg"
+  "${MSG_I_FLAGS}"
+  ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/robot_communication
 )
 
@@ -277,19 +304,21 @@ add_custom_target(robot_communication_generate_messages_lisp
 add_dependencies(robot_communication_generate_messages robot_communication_generate_messages_lisp)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_lisp _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/encoder_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/encoder_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_lisp _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/velocity_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/velocity_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_lisp _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerCommand.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerCommand.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_lisp _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerResponse.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerResponse.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_lisp _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_lisp _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
+add_dependencies(robot_communication_generate_messages_lisp _robot_communication_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_lisp _robot_communication_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -302,45 +331,51 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS robot_communication_generate_messag
 ### Section generating for lang: gennodejs
 ### Generating Messages
 _generate_msg_nodejs(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/robot_communication
 )
 _generate_msg_nodejs(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/encoder_comm.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/encoder_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/robot_communication
 )
 _generate_msg_nodejs(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/velocity_comm.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/velocity_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/robot_communication
 )
 _generate_msg_nodejs(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerCommand.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerCommand.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/robot_communication
 )
 _generate_msg_nodejs(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerResponse.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerResponse.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/robot_communication
 )
 _generate_msg_nodejs(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/robot_communication
 )
 _generate_msg_nodejs(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
+  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/robot_communication
+)
+_generate_msg_nodejs(robot_communication
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg"
+  "${MSG_I_FLAGS}"
+  ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/robot_communication
 )
 
@@ -358,19 +393,21 @@ add_custom_target(robot_communication_generate_messages_nodejs
 add_dependencies(robot_communication_generate_messages robot_communication_generate_messages_nodejs)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_nodejs _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/encoder_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/encoder_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_nodejs _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/velocity_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/velocity_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_nodejs _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerCommand.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerCommand.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_nodejs _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerResponse.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerResponse.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_nodejs _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_nodejs _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
+add_dependencies(robot_communication_generate_messages_nodejs _robot_communication_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_nodejs _robot_communication_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -383,45 +420,51 @@ list(APPEND ${PROJECT_NAME}_EXPORTED_TARGETS robot_communication_generate_messag
 ### Section generating for lang: genpy
 ### Generating Messages
 _generate_msg_py(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/robot_communication
 )
 _generate_msg_py(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/encoder_comm.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/encoder_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/robot_communication
 )
 _generate_msg_py(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/velocity_comm.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/velocity_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/robot_communication
 )
 _generate_msg_py(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerCommand.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerCommand.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/robot_communication
 )
 _generate_msg_py(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerResponse.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerResponse.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/robot_communication
 )
 _generate_msg_py(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/robot_communication
 )
 _generate_msg_py(robot_communication
-  "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg"
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/robot_communication
+)
+_generate_msg_py(robot_communication
+  "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg"
+  "${MSG_I_FLAGS}"
+  ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/robot_communication
 )
 
@@ -439,19 +482,21 @@ add_custom_target(robot_communication_generate_messages_py
 add_dependencies(robot_communication_generate_messages robot_communication_generate_messages_py)
 
 # add dependencies to all check dependencies targets
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/ultrasonic_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_py _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/encoder_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/encoder_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_py _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/velocity_comm.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/velocity_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_py _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerCommand.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerCommand.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_py _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/SchedulerResponse.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/SchedulerResponse.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_py _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_py _robot_communication_generate_messages_check_deps_${_filename})
-get_filename_component(_filename "/home/rmajetson/ProjectV/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
+add_dependencies(robot_communication_generate_messages_py _robot_communication_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_py _robot_communication_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
