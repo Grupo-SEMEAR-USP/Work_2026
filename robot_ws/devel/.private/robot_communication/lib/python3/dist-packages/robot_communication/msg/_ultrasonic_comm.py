@@ -8,17 +8,20 @@ import struct
 
 
 class ultrasonic_comm(genpy.Message):
-  _md5sum = "428636691d2e367ce654d88bbe9851c3"
+  _md5sum = "e2d56a586910c98d1be0a922e15f0ddb"
   _type = "robot_communication/ultrasonic_comm"
   _has_header = False  # flag to mark the presence of a Header object
   _full_text = """# ultrasonic_comm.msg
-float32 front_left
-float32 front_right
-float32 rear_left
-float32 rear_right
-float32 back"""
-  __slots__ = ['front_left','front_right','rear_left','rear_right','back']
-  _slot_types = ['float32','float32','float32','float32','float32']
+float32 us_left_1
+float32 us_left_2
+
+float32 us_right_1
+float32 us_right_2
+
+float32 us_front_left
+float32 us_front_right"""
+  __slots__ = ['us_left_1','us_left_2','us_right_1','us_right_2','us_front_left','us_front_right']
+  _slot_types = ['float32','float32','float32','float32','float32','float32']
 
   def __init__(self, *args, **kwds):
     """
@@ -28,7 +31,7 @@ float32 back"""
     changes.  You cannot mix in-order arguments and keyword arguments.
 
     The available fields are:
-       front_left,front_right,rear_left,rear_right,back
+       us_left_1,us_left_2,us_right_1,us_right_2,us_front_left,us_front_right
 
     :param args: complete set of field values, in .msg order
     :param kwds: use keyword arguments corresponding to message field names
@@ -37,22 +40,25 @@ float32 back"""
     if args or kwds:
       super(ultrasonic_comm, self).__init__(*args, **kwds)
       # message fields cannot be None, assign default values for those that are
-      if self.front_left is None:
-        self.front_left = 0.
-      if self.front_right is None:
-        self.front_right = 0.
-      if self.rear_left is None:
-        self.rear_left = 0.
-      if self.rear_right is None:
-        self.rear_right = 0.
-      if self.back is None:
-        self.back = 0.
+      if self.us_left_1 is None:
+        self.us_left_1 = 0.
+      if self.us_left_2 is None:
+        self.us_left_2 = 0.
+      if self.us_right_1 is None:
+        self.us_right_1 = 0.
+      if self.us_right_2 is None:
+        self.us_right_2 = 0.
+      if self.us_front_left is None:
+        self.us_front_left = 0.
+      if self.us_front_right is None:
+        self.us_front_right = 0.
     else:
-      self.front_left = 0.
-      self.front_right = 0.
-      self.rear_left = 0.
-      self.rear_right = 0.
-      self.back = 0.
+      self.us_left_1 = 0.
+      self.us_left_2 = 0.
+      self.us_right_1 = 0.
+      self.us_right_2 = 0.
+      self.us_front_left = 0.
+      self.us_front_right = 0.
 
   def _get_types(self):
     """
@@ -67,7 +73,7 @@ float32 back"""
     """
     try:
       _x = self
-      buff.write(_get_struct_5f().pack(_x.front_left, _x.front_right, _x.rear_left, _x.rear_right, _x.back))
+      buff.write(_get_struct_6f().pack(_x.us_left_1, _x.us_left_2, _x.us_right_1, _x.us_right_2, _x.us_front_left, _x.us_front_right))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -82,8 +88,8 @@ float32 back"""
       end = 0
       _x = self
       start = end
-      end += 20
-      (_x.front_left, _x.front_right, _x.rear_left, _x.rear_right, _x.back,) = _get_struct_5f().unpack(str[start:end])
+      end += 24
+      (_x.us_left_1, _x.us_left_2, _x.us_right_1, _x.us_right_2, _x.us_front_left, _x.us_front_right,) = _get_struct_6f().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -97,7 +103,7 @@ float32 back"""
     """
     try:
       _x = self
-      buff.write(_get_struct_5f().pack(_x.front_left, _x.front_right, _x.rear_left, _x.rear_right, _x.back))
+      buff.write(_get_struct_6f().pack(_x.us_left_1, _x.us_left_2, _x.us_right_1, _x.us_right_2, _x.us_front_left, _x.us_front_right))
     except struct.error as se: self._check_types(struct.error("%s: '%s' when writing '%s'" % (type(se), str(se), str(locals().get('_x', self)))))
     except TypeError as te: self._check_types(ValueError("%s: '%s' when writing '%s'" % (type(te), str(te), str(locals().get('_x', self)))))
 
@@ -113,8 +119,8 @@ float32 back"""
       end = 0
       _x = self
       start = end
-      end += 20
-      (_x.front_left, _x.front_right, _x.rear_left, _x.rear_right, _x.back,) = _get_struct_5f().unpack(str[start:end])
+      end += 24
+      (_x.us_left_1, _x.us_left_2, _x.us_right_1, _x.us_right_2, _x.us_front_left, _x.us_front_right,) = _get_struct_6f().unpack(str[start:end])
       return self
     except struct.error as e:
       raise genpy.DeserializationError(e)  # most likely buffer underfill
@@ -123,9 +129,9 @@ _struct_I = genpy.struct_I
 def _get_struct_I():
     global _struct_I
     return _struct_I
-_struct_5f = None
-def _get_struct_5f():
-    global _struct_5f
-    if _struct_5f is None:
-        _struct_5f = struct.Struct("<5f")
-    return _struct_5f
+_struct_6f = None
+def _get_struct_6f():
+    global _struct_6f
+    if _struct_6f is None:
+        _struct_6f = struct.Struct("<6f")
+    return _struct_6f

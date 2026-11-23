@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/rmajetson/ProjectV/robot_ws/src/robot_manipulation
+CMAKE_SOURCE_DIR = /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_manipulation
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/rmajetson/ProjectV/robot_ws/build/robot_manipulation
+CMAKE_BINARY_DIR = /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_manipulation
 
 # Utility rule file for robot_communication_generate_messages_cpp.
 
@@ -67,6 +67,6 @@ CMakeFiles/robot_communication_generate_messages_cpp.dir/clean:
 .PHONY : CMakeFiles/robot_communication_generate_messages_cpp.dir/clean
 
 CMakeFiles/robot_communication_generate_messages_cpp.dir/depend:
-	cd /home/rmajetson/ProjectV/robot_ws/build/robot_manipulation && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/rmajetson/ProjectV/robot_ws/src/robot_manipulation /home/rmajetson/ProjectV/robot_ws/src/robot_manipulation /home/rmajetson/ProjectV/robot_ws/build/robot_manipulation /home/rmajetson/ProjectV/robot_ws/build/robot_manipulation /home/rmajetson/ProjectV/robot_ws/build/robot_manipulation/CMakeFiles/robot_communication_generate_messages_cpp.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_manipulation && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_manipulation /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_manipulation /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_manipulation /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_manipulation /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_manipulation/CMakeFiles/robot_communication_generate_messages_cpp.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/robot_communication_generate_messages_cpp.dir/depend
 

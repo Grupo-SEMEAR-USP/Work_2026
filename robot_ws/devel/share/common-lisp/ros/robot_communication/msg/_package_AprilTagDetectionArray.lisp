@@ -1,6 +1,1 @@
-(cl:in-package robot_communication-msg)
-(cl:export '(HEADER-VAL
-          HEADER
-          DETECTIONS-VAL
-          DETECTIONS
-))
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/share/common-lisp/ros/robot_communication/msg/_package_AprilTagDetectionArray.lisp

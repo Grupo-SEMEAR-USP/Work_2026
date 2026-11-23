@@ -1,259 +1,400 @@
 #!/usr/bin/env python3
-import rospy
-import serial
+# -*- coding: utf-8 -*-
+import math
 import struct
 import threading
-import math
+import time
+
+import rospy
+import serial
 from std_msgs.msg import Float32MultiArray
 from robot_communication.msg import encoder_comm, velocity_comm, ultrasonic_comm
 
-# --- Configuração das Portas ---
-PORT_FRONT     = "/dev/esp_front"     # Encoder/Velocidade Roda Frontal
-PORT_REAR      = "/dev/esp_rear"      # Encoder/Velocidade Roda Traseira
-PORT_MANIP     = "/dev/esp_manip"     # Ultrassom/Comando Manipulador
-BAUD_RATE      = 115200
-
-# --- Definições do Protocolo ---
+BAUD_RATE = 115200
 FRAME_SOF = 0xAA
 FRAME_EOF = 0xBB
 
-# Pacote Encoder/Velocidade (2 floats - 8 bytes)
-ENC_PAYLOAD_SIZE = 8 
-ENC_FRAME_SIZE   = 1 + ENC_PAYLOAD_SIZE + 1 + 1  # 11 bytes
+FMT_LEFT_RX = "<ffffff"
+FMT_RIGHT = "<ffff"          # TX e RX (4 velocidades, rad/s)
+FMT_CENTER_TX = "<Bffff"     # mask + elevador, base, pulso, garra
+FMT_CENTER_RX = "<ffBBB"     # base_deg, base_rad, upper_limit, encoder_valid, mov_complete
 
-# Pacote Ultrassom (3 floats - 12 bytes)
-US_PAYLOAD_SIZE  = 12 
-US_FRAME_SIZE    = 1 + US_PAYLOAD_SIZE + 1 + 1   # 15 bytes
+US_FIELDS = (
+    "us_esq_1", "us_esq_2", "us_dir_1", "us_dir_2",
+    "us_esq_frt", "us_dir_frt",
+)
 
-# Pacote Comando Manipulação (4 floats - 16 bytes)
-CMD_PAYLOAD_SIZE = 16 
-CMD_FRAME_SIZE   = 1 + CMD_PAYLOAD_SIZE + 1 + 1  # 19 bytes
+MOTOR_ELEVATOR = 1
+MOTOR_BASE = 2
+MOTOR_WRIST = 4
+MOTOR_GRIPPER = 8
+MOTOR_ALL = MOTOR_ELEVATOR | MOTOR_BASE | MOTOR_WRIST | MOTOR_GRIPPER
 
-# Variável para verificação numérica
-def _is_num(x):
-    return x is not None and not math.isnan(x) and not math.isinf(x)
+assert struct.calcsize(FMT_LEFT_RX) == 24
+assert struct.calcsize(FMT_RIGHT) == 16
+assert struct.calcsize(FMT_CENTER_TX) == 17
+assert struct.calcsize(FMT_CENTER_RX) == 11
+
+
+def is_finite(value):
+    """Aceita valores numericos ROS finitos, rejeitando bool, NaN e Inf."""
+    try:
+        return not isinstance(value, bool) and math.isfinite(float(value))
+    except (TypeError, ValueError, OverflowError):
+        return False
+
+
+def pack_frame(fmt, *values):
+    payload = struct.pack(fmt, *values)
+    return bytes((FRAME_SOF,)) + payload + bytes((sum(payload) & 0xFF, FRAME_EOF))
+
+
+class FrameParser:
+    """Parser incremental resiliente a chunks incompletos, logs e ruido UART0."""
+
+    def __init__(self, fmt):
+        self.fmt = fmt
+        self.payload_size = struct.calcsize(fmt)
+        self.frame_size = self.payload_size + 3
+        self.buffer = bytearray()
+
+    def feed(self, chunk):
+        if not chunk:
+            return []
+        self.buffer.extend(chunk)
+        frames = []
+        sof = bytes((FRAME_SOF,))
+
+        while True:
+            pos = self.buffer.find(sof)
+            if pos < 0:
+                self.buffer.clear()  # descarta log textual / ruido
+                break
+            if pos:
+                del self.buffer[:pos]
+
+            if len(self.buffer) < self.frame_size:
+                break  # aguarda complemento do frame na proxima leitura
+
+            payload = self.buffer[1:1 + self.payload_size]
+            chk = self.buffer[1 + self.payload_size]
+            eof = self.buffer[2 + self.payload_size]
+
+            if eof == FRAME_EOF and chk == (sum(payload) & 0xFF):
+                frames.append(struct.unpack(self.fmt, payload))
+                del self.buffer[:self.frame_size]
+            else:
+                # Re-sincroniza byte a byte; preserva frames validos subsequentes.
+                del self.buffer[0]
+
+        return frames
+
+
+class SerialEndpoint:
+    """Porta UART com reconexao e exclusao mutua entre RX e TX."""
+
+    def __init__(self, path, reconnect_interval_s):
+        self.path = path
+        self.reconnect_interval_s = reconnect_interval_s
+        self.lock = threading.RLock()
+        self.serial = None
+        self.retry_after = 0.0
+        self.generation = 0
+
+    def _connect_locked(self):
+        if self.serial is not None and self.serial.is_open:
+            return True
+        if time.monotonic() < self.retry_after:
+            return False
+        self.retry_after = time.monotonic() + self.reconnect_interval_s
+        try:
+            # exclusive=True em Linux impede outra abertura PySerial exclusiva.
+            port = serial.Serial(
+                port=self.path,
+                baudrate=BAUD_RATE,
+                bytesize=serial.EIGHTBITS,
+                parity=serial.PARITY_NONE,
+                stopbits=serial.STOPBITS_ONE,
+                timeout=0.03,
+                write_timeout=0.2,
+                exclusive=True,
+            )
+            self.serial = port
+            self.generation += 1
+            rospy.loginfo("UART conectada: %s", self.path)
+            return True
+        except (serial.SerialException, OSError, ValueError) as exc:
+            self.serial = None
+            rospy.logwarn_throttle(5.0, "UART %s indisponivel: %s", self.path, exc)
+            return False
+
+    def _disconnect_locked(self):
+        port = self.serial
+        self.serial = None
+        self.retry_after = time.monotonic() + self.reconnect_interval_s
+        if port is not None:
+            try:
+                port.close()
+            except Exception:
+                pass
+
+    def read(self):
+        with self.lock:
+            if not self._connect_locked():
+                return b"", self.generation
+            try:
+                count = min(max(self.serial.in_waiting, 1), 256)
+                return self.serial.read(count), self.generation
+            except (serial.SerialException, OSError) as exc:
+                rospy.logwarn_throttle(5.0, "Erro RX %s: %s", self.path, exc)
+                self._disconnect_locked()
+                return b"", self.generation
+
+    def write(self, frame, reconnect=True):
+        with self.lock:
+            if not reconnect and (self.serial is None or not self.serial.is_open):
+                return False
+            if reconnect and not self._connect_locked():
+                return False
+            try:
+                n = self.serial.write(frame)
+                if n != len(frame):
+                    rospy.logwarn_throttle(5.0, "UART %s: escrita parcial %d/%d",
+                                           self.path, n, len(frame))
+                    self._disconnect_locked()
+                    return False
+                return True
+            except (serial.SerialException, serial.SerialTimeoutException, OSError) as exc:
+                rospy.logwarn_throttle(5.0, "Erro TX %s: %s", self.path, exc)
+                self._disconnect_locked()
+                return False
+
+    def close(self):
+        with self.lock:
+            self._disconnect_locked()
 
 
 class UARTBridge:
     def __init__(self):
-        rospy.init_node('uart_bridge', anonymous=False)
-        
-        # --- Publishers ---
-        self.pub_encoder    = rospy.Publisher('/encoder_data', encoder_comm, queue_size=10)
-        self.pub_ultrasonic = rospy.Publisher('/ultrasonic_distances', ultrasonic_comm, queue_size=10)
-        
-        # --- Subscribers ---
-        self.sub_velocity = rospy.Subscriber('/velocity_cmd', velocity_comm, self.cb_vel_control)
-        self.sub_arm      = rospy.Subscriber('/arm_control', Float32MultiArray, self.cb_arm_control)
-        self.sub_ee       = rospy.Subscriber('/end_effector_control', Float32MultiArray, self.cb_ee_control)
+        rospy.init_node("uart_bridge", anonymous=False)
 
-        # --- Estado Interno e Cache ---
-        self.enc_data = {'front_left': 0.0, 'front_right': 0.0, 'rear_left': 0.0, 'rear_right': 0.0}
-        self.us_data = {'front_left': 0.0, 'front_right': 0.0, 'rear_left': 0.0}
-        
-        # Cache para o pacote COMPLETO de manipulação (4 floats - 16 bytes)
-        self.cached_manip_cmd = {'arm': 0.0, 'base': 0.0, 'wrist': 0.0, 'grip': 0.0}
+        self.publish_rate_hz = float(rospy.get_param("~publish_rate_hz", 50.0))
+        self.velocity_rate_hz = float(rospy.get_param("~velocity_rate_hz", 20.0))
+        self.velocity_timeout_s = float(rospy.get_param("~velocity_timeout_s", 0.5))
+        self.state_timeout_s = float(rospy.get_param("~state_timeout_s", 1.0))
+        reconnect_interval_s = float(rospy.get_param("~reconnect_interval_s", 1.0))
+        if (self.publish_rate_hz <= 0 or self.velocity_rate_hz <= 0 or
+                self.velocity_timeout_s < 0 or self.state_timeout_s <= 0 or
+                reconnect_interval_s <= 0):
+            raise ValueError("Parametros ROS de taxas e timeouts invalidos")
 
-        self.data_lock = threading.Lock() # Mutex para dados compartilhados
-
-        # --- Inicialização das Portas Seriais ---
-        self.serial_front = self.open_serial(PORT_FRONT)
-        self.serial_rear  = self.open_serial(PORT_REAR)
-        self.serial_manip = self.open_serial(PORT_MANIP)
-
-        if not all([self.serial_front, self.serial_rear, self.serial_manip]):
-            rospy.logerr("Impossível iniciar sem as 3 ESPs conectadas.")
-            # A falha aqui pode ser ajustada para permitir que o nó ROS continue, mas avise.
-            exit(1)
-
+        self.ports = {
+            "left": SerialEndpoint(rospy.get_param("~port_left", "/dev/esp_left"),
+                                   reconnect_interval_s),
+            "right": SerialEndpoint(rospy.get_param("~port_right", "/dev/esp_right"),
+                                    reconnect_interval_s),
+            "center": SerialEndpoint(rospy.get_param("~port_center", "/dev/esp_center"),
+                                     reconnect_interval_s),
+        }
         self.running = True
+        self.data_lock = threading.Lock()
+        self.center_tx_lock = threading.Lock()
 
-        # --- Threads de Leitura ---
-        self.thread_front = threading.Thread(target=self.read_loop, args=(self.serial_front, 'FRONT', 'ENC'), daemon=True)
-        self.thread_rear  = threading.Thread(target=self.read_loop, args=(self.serial_rear,  'REAR', 'ENC'), daemon=True)
-        self.thread_manip = threading.Thread(target=self.read_loop, args=(self.serial_manip, 'MANIP', 'US'), daemon=True)
-        
-        self.thread_front.start()
-        self.thread_rear.start()
-        self.thread_manip.start()
+        # Ultimas informacoes ROS/serial validas.
+        self.velocity = (0.0, 0.0, 0.0, 0.0)
+        self.velocity_received_at = None
+        self.states = {"left": None, "right": None, "center": None}
+        self.received_at = {}
 
-        # Timer para publicar dados unificados (50 Hz)
-        rospy.Timer(rospy.Duration(1.0/50.0), self.publish_unified_data)
-        
-    def open_serial(self, port_name):
-        try:
-            ser = serial.Serial(port=port_name, baudrate=BAUD_RATE, timeout=0.1)
-            rospy.loginfo(f"Conectado: {port_name}")
-            return ser
-        except serial.SerialException as e:
-            rospy.logerr(f"Falha ao abrir {port_name}: {e}")
-            return None
+        # Publicacoes ROS.
+        self.pub_encoder = rospy.Publisher(
+            "/encoder_data", encoder_comm, queue_size=10)
+        self.pub_ultrasonic = rospy.Publisher(
+            "/ultrasonic_distances", ultrasonic_comm, queue_size=10)
+        self.pub_manipulator = rospy.Publisher(
+            "/manipulator_state", Float32MultiArray, queue_size=10)
 
-    def calculate_checksum(self, data_bytes):
-        """Calcula o checksum somando todos os bytes do payload."""
-        return sum(data_bytes) & 0xFF
+        # Threads de leitura: um parser por ESP, sem compartilhar buffers.
+        self.threads = [
+            threading.Thread(target=self.read_loop,
+                             args=("left", FMT_LEFT_RX), daemon=True),
+            threading.Thread(target=self.read_loop,
+                             args=("right", FMT_RIGHT), daemon=True),
+            threading.Thread(target=self.read_loop,
+                             args=("center", FMT_CENTER_RX), daemon=True),
+        ]
+        for thread in self.threads:
+            thread.start()
 
-    # =========================================================================
-    # ENVIOS (ROS -> ESP32)
-    # =========================================================================
+        # Mapeamento ROS -> placas existentes.
+        self.sub_velocity = rospy.Subscriber(
+            "/velocity_cmd", velocity_comm, self.cb_velocity, queue_size=1)
+        self.sub_arm = rospy.Subscriber(
+            "/arm_control", Float32MultiArray, self.cb_arm, queue_size=10)
+        self.sub_end_effector = rospy.Subscriber(
+            "/end_effector_control", Float32MultiArray,
+            self.cb_end_effector, queue_size=10)
 
-    # Envio de Velocidade (2 floats, 8 bytes payload) ---
-    def send_vel_packet(self, serial_obj, val1, val2):
-        if serial_obj is None or not serial_obj.is_open:
-            return
+        self.velocity_timer = rospy.Timer(
+            rospy.Duration(1.0 / self.velocity_rate_hz), self.publish_velocity_uart)
+        self.state_timer = rospy.Timer(
+            rospy.Duration(1.0 / self.publish_rate_hz), self.publish_ros_state)
+        rospy.on_shutdown(self.shutdown)
+        rospy.loginfo("UART bridge iniciada: esp_left, esp_right e esp_center")
 
-        try:
-            payload = struct.pack('<ff', val1, val2) # 2 floats
-            checksum = self.calculate_checksum(payload)
-            frame = struct.pack('B', FRAME_SOF) + payload + struct.pack('B', checksum) + struct.pack('B', FRAME_EOF)
-            serial_obj.write(frame)
-        except Exception as e:
-            rospy.logwarn(f"Erro escrita serial (Vel): {e}")
-
-    def cb_vel_control(self, msg):
-        self.send_vel_packet(self.serial_front, msg.front_left, msg.front_right)
-        self.send_vel_packet(self.serial_rear, msg.rear_left, msg.rear_right)
-
-    # --- Envio de Manipulação (4 floats, 16 bytes payload) ---
-    def send_manip_command(self, val_arm, val_base, val_wrist, val_grip):
-        if self.serial_manip is None or not self.serial_manip.is_open:
-            rospy.logwarn_throttle(2, "Aguardando conexão com esp_manipulator.")
-            return
-
-        try:
-            # Pacote de 16 bytes (arm, base, wrist, grip)
-            payload = struct.pack('<ffff', val_arm, val_base, val_wrist, val_grip)
-            checksum = self.calculate_checksum(payload)
-            
-            frame = struct.pack('B', FRAME_SOF) + payload + struct.pack('B', checksum) + struct.pack('B', FRAME_EOF)
-            self.serial_manip.write(frame)
-        except Exception as e:
-            rospy.logwarn(f"Erro escrita serial (Manip): {e}")
-
-    def cb_arm_control(self, msg: Float32MultiArray):
-        data = msg.data or [0.0, 0.0]
-        
-        # A ESP32 de manipulação espera setpoints de passo/valor.
-        self.cached_manip_cmd['base'] = data[0] if len(data) > 0 and _is_num(data[0]) else self.cached_manip_cmd['base']
-        self.cached_manip_cmd['arm']  = data[1] if len(data) > 1 and _is_num(data[1]) else self.cached_manip_cmd['arm']
-
-        self._flush_manip_command()
-
-    def cb_ee_control(self, msg: Float32MultiArray):
-        data = msg.data or [0.0, 0.0]
-
-        # Clamping de segurança antes do envio
-        wrist = data[0] if len(data) > 0 and _is_num(data[0]) else self.cached_manip_cmd['wrist']
-        grip  = data[1] if len(data) > 1 and _is_num(data[1]) else self.cached_manip_cmd['grip']
-        
-        self.cached_manip_cmd['wrist'] = max(0.0, min(180.0, float(wrist)))
-        self.cached_manip_cmd['grip']  = max(0.0, min(180.0, float(grip)))
-        
-        self._flush_manip_command()
-        
-    def _flush_manip_command(self):
-        self.send_manip_command(
-            self.cached_manip_cmd['arm'], 
-            self.cached_manip_cmd['base'], 
-            self.cached_manip_cmd['wrist'], 
-            self.cached_manip_cmd['grip']
-        )
-
-    # =========================================================================
-    # LEITURA (ESP32 -> ROS)
-    # =========================================================================
-    def read_loop(self, serial_obj, location, data_type):
-        expected_sof = struct.pack('B', FRAME_SOF)
-        
-        # Define o protocolo esperado para esta porta/thread
-        if data_type == 'ENC':
-            payload_size = ENC_PAYLOAD_SIZE  # 8 bytes (2 floats)
-            frame_size   = ENC_FRAME_SIZE    # 11 bytes
-            format_str   = '<ff'
-        elif data_type == 'US':
-            payload_size = US_PAYLOAD_SIZE   # 12 bytes (3 floats)
-            frame_size   = US_FRAME_SIZE     # 15 bytes
-            format_str   = '<fff' # 3 floats
-        else:
-            return
+    def read_loop(self, name, fmt):
+        port = self.ports[name]
+        parser = FrameParser(fmt)
+        generation = -1
 
         while self.running and not rospy.is_shutdown():
-            try:
-                if serial_obj.in_waiting > 0:
-                    byte = serial_obj.read(1)
-                    
-                    if byte == expected_sof:
-                        rest = serial_obj.read(frame_size - 1)
-                        
-                        if len(rest) == (frame_size - 1):
-                            payload = rest[0:payload_size]
-                            received_chk = rest[payload_size:payload_size+1]
-                            received_eof = rest[payload_size+1:payload_size+2]
+            raw, current_generation = port.read()
+            if current_generation != generation:
+                parser = FrameParser(fmt)  # descarta fragmentos da conexao anterior
+                generation = current_generation
+            if not raw:
+                time.sleep(0.01)
+                continue
 
-                            # Validação EOF
-                            if received_eof != struct.pack('B', FRAME_EOF):
-                                continue 
+            for values in parser.feed(raw):
+                if name == "right":
+                    if not all(is_finite(v) for v in values):
+                        continue
+                elif name == "center":
+                    deg, rad, limit, encoder_valid, mov_complete = values
+                    if not (is_finite(deg) and is_finite(rad)):
+                        continue
+                    if any(flag not in (0, 1) for flag in
+                           (limit, encoder_valid, mov_complete)):
+                        continue
+                else:  # ESP Left: NaN pode representar um ultrassom sem leitura.
+                    if any(math.isinf(v) for v in values):
+                        continue
 
-                            # Validação Checksum
-                            calc_chk = self.calculate_checksum(payload)
-                            if received_chk != struct.pack('B', calc_chk):
-                                rospy.logwarn(f"Checksum error em {location} ({data_type})")
-                                continue
+                with self.data_lock:
+                    self.states[name] = tuple(float(v) for v in values)
+                    self.received_at[name] = time.monotonic()
 
-                            # Desempacota
-                            values = struct.unpack(format_str, payload)
-
-                            # Atualiza a memória compartilhada com segurança
-                            with self.data_lock:
-                                if data_type == 'ENC':
-                                    if location == 'FRONT':
-                                        self.enc_data['front_left'], self.enc_data['front_right'] = values
-                                    elif location == 'REAR':
-                                        self.enc_data['rear_left'], self.enc_data['rear_right'] = values
-                                
-                                elif data_type == 'US':
-                                    self.us_data['front_left'], self.us_data['front_right'], self.us_data['rear_left'] = values
-                                    
-            except Exception as e:
-                rospy.logerr(f"Erro leitura {location} ({data_type}): {e}")
-                rospy.sleep(0.01)
-
-    # --- Publicação Unificada (50 Hz Timer) ---
-    def publish_unified_data(self, event):
+    def cb_velocity(self, msg):
+        values = (msg.front_left, msg.front_right,
+                  msg.rear_left, msg.rear_right)
+        if not all(is_finite(v) for v in values):
+            rospy.logwarn_throttle(5.0, "Comando /velocity_cmd invalido (NaN/Inf)")
+            return
         with self.data_lock:
-            # Encoders
-            enc_msg = encoder_comm()
-            enc_msg.front_left  = self.enc_data['front_left']
-            enc_msg.front_right = self.enc_data['front_right']
-            enc_msg.rear_left   = self.enc_data['rear_left']
-            enc_msg.rear_right  = self.enc_data['rear_right']
-            self.pub_encoder.publish(enc_msg)
+            self.velocity = tuple(float(x) for x in values)
+            self.velocity_received_at = time.monotonic()
 
-            # Ultrassônicos
-            us_msg = ultrasonic_comm()
-            us_msg.front_left   = self.us_data['front_left']
-            us_msg.front_right  = self.us_data['front_right']
-            us_msg.rear_left    = self.us_data['rear_left']
-            us_msg.rear_right   = 0.0 # O ESP de manipulação só envia 3 sensores
-            us_msg.back         = 0.0
-            self.pub_ultrasonic.publish(us_msg)
+    def publish_velocity_uart(self, event):
+        now = time.monotonic()
+        with self.data_lock:
+            if (self.velocity_received_at is None or
+                    (self.velocity_timeout_s > 0 and
+                     now - self.velocity_received_at > self.velocity_timeout_s)):
+                speeds = (0.0, 0.0, 0.0, 0.0)
+            else:
+                speeds = self.velocity
+        self.ports["right"].write(pack_frame(FMT_RIGHT, *speeds))
+
+    def send_center_command(self, mask, elevator=0.0, base=0.0,
+                            wrist=0.0, gripper=0.0):
+        if mask < 1 or (mask & ~MOTOR_ALL):
+            rospy.logwarn("ESP Center: motor_mask invalida")
+            return False
+        values = (elevator, base, wrist, gripper)
+        if not all(is_finite(v) for v in values):
+            rospy.logwarn("ESP Center: comando contem NaN ou Inf")
+            return False
+        if ((mask & MOTOR_BASE) and not 0.0 <= base <= 360.0) or \
+           ((mask & MOTOR_WRIST) and not 0.0 <= wrist <= 180.0) or \
+           ((mask & MOTOR_GRIPPER) and not 0.0 <= gripper <= 180.0):
+            rospy.logwarn("ESP Center: comando fora dos limites")
+            return False
+
+        # Cada evento ROS cria somente o comando para os atuadores solicitados.
+        # NUNCA reenviar comandos antigos, especialmente elevator_cm (relativo).
+        try:
+            frame = pack_frame(FMT_CENTER_TX, mask, *values)
+        except (struct.error, OverflowError) as exc:
+            rospy.logwarn("ESP Center: valor fora de float32: %s", exc)
+            return False
+
+        with self.center_tx_lock:
+            return self.ports["center"].write(frame)
+
+    def cb_arm(self, msg):
+        values = list(msg.data)
+        # Interface ROS historica: [base_deg, elevator_cm].
+        mask = 0
+        elevator = base = 0.0
+        if len(values) >= 1 and is_finite(values[0]):
+            base = float(values[0])
+            mask |= MOTOR_BASE
+        if len(values) >= 2 and is_finite(values[1]):
+            elevator = float(values[1])
+            mask |= MOTOR_ELEVATOR
+        if mask:
+            self.send_center_command(mask, elevator=elevator, base=base)
+
+    def cb_end_effector(self, msg):
+        values = list(msg.data)
+        mask = 0
+        wrist = gripper = 0.0
+        if len(values) >= 1 and is_finite(values[0]):
+            wrist = max(0.0, min(180.0, float(values[0])))
+            mask |= MOTOR_WRIST
+        if len(values) >= 2 and is_finite(values[1]):
+            gripper = max(0.0, min(180.0, float(values[1])))
+            mask |= MOTOR_GRIPPER
+        if mask:
+            self.send_center_command(mask, wrist=wrist, gripper=gripper)
+
+    def publish_ros_state(self, event):
+        now = time.monotonic()
+        with self.data_lock:
+            fresh = {
+                name: self.states[name]
+                if now - self.received_at.get(name, float("-inf")) <= self.state_timeout_s
+                else None
+                for name in ("left", "right", "center")
+            }
+
+        if fresh["right"] is not None:
+            msg = encoder_comm()
+            (msg.front_left, msg.front_right,
+             msg.rear_left, msg.rear_right) = fresh["right"]
+            self.pub_encoder.publish(msg)
+
+        if fresh["left"] is not None:
+            msg = ultrasonic_comm()
+            for field, value in zip(US_FIELDS, fresh["left"]):
+                setattr(msg, field, value)
+            self.pub_ultrasonic.publish(msg)
+
+        if fresh["center"] is not None:
+            self.pub_manipulator.publish(
+                Float32MultiArray(data=list(fresh["center"])))
 
     def shutdown(self):
-        rospy.loginfo("Encerrando conexões seriais.")
         self.running = False
-        if self.serial_front and self.serial_front.is_open:
-            self.serial_front.close()
-        if self.serial_rear and self.serial_rear.is_open:
-            self.serial_rear.close()
-        if self.serial_manip and self.serial_manip.is_open:
-            self.serial_manip.close()
+        if hasattr(self, "velocity_timer"):
+            self.velocity_timer.shutdown()
+        if hasattr(self, "state_timer"):
+            self.state_timer.shutdown()
+
+        # Parada segura na ESP Right, sem abrir novas conexoes durante shutdown.
+        self.ports["right"].write(
+            pack_frame(FMT_RIGHT, 0.0, 0.0, 0.0, 0.0), reconnect=False)
+
+        for thread in self.threads:
+            thread.join(timeout=0.5)
+        for port in self.ports.values():
+            port.close()
+
 
 if __name__ == "__main__":
     try:
-        bridge = UARTBridge()
+        UARTBridge()
         rospy.spin()
     except rospy.ROSInterruptException:
         pass
-    finally:
-        if 'bridge' in locals():
-            bridge.shutdown()

@@ -1,8 +1,1 @@
-prefix=/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_utils
-
-Name: robot_utils
-Description: Description of robot_utils
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_utils/lib/pkgconfig/robot_utils.pc

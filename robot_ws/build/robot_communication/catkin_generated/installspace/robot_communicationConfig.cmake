@@ -67,14 +67,14 @@ set(robot_communication_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(robot_communication_SOURCE_PREFIX /home/rmajetson/ProjectV/robot_ws/src/robot_communication)
-  set(robot_communication_DEVEL_PREFIX /home/rmajetson/ProjectV/robot_ws/devel/.private/robot_communication)
+  set(robot_communication_SOURCE_PREFIX /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication)
+  set(robot_communication_DEVEL_PREFIX /home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication)
   set(robot_communication_INSTALL_PREFIX "")
   set(robot_communication_PREFIX ${robot_communication_DEVEL_PREFIX})
 else()
   set(robot_communication_SOURCE_PREFIX "")
   set(robot_communication_DEVEL_PREFIX "")
-  set(robot_communication_INSTALL_PREFIX /home/rmajetson/ProjectV/robot_ws/install)
+  set(robot_communication_INSTALL_PREFIX /home/rosUsr/Shared/Work_2026/robot_ws/install)
   set(robot_communication_PREFIX ${robot_communication_INSTALL_PREFIX})
 endif()
 
@@ -156,7 +156,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/rmajetson/ProjectV/robot_ws/install/lib;/home/rmajetson/ProjectV/robot_ws/devel/lib;/home/rmajetson/catkin_ws/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/rosUsr/Shared/Work_2026/robot_ws/install/lib;/home/rosUsr/Shared/Work_2026/robot_ws/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

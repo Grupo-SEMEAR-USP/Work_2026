@@ -1,4 +1,4 @@
-prefix=/home/rmajetson/ProjectV/robot_ws/install
+prefix=/home/rosUsr/Shared/Work_2026/robot_ws/install
 
 Name: robot_movement
 Description: Description of robot_movement

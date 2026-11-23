@@ -1,8 +1,1 @@
-(cl:in-package robot_communication-msg)
-(cl:export '(ID-VAL
-          ID
-          SIZE-VAL
-          SIZE
-          POSE-VAL
-          POSE
-))
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/share/common-lisp/ros/robot_communication/msg/_package_AprilTagDetection.lisp

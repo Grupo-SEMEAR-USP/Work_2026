@@ -67,14 +67,14 @@ set(robot_communication_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("TRUE" STREQUAL "TRUE")
-  set(robot_communication_SOURCE_PREFIX /home/rmajetson/ProjectV/robot_ws/src/robot_communication)
-  set(robot_communication_DEVEL_PREFIX /home/rmajetson/ProjectV/robot_ws/devel/.private/robot_communication)
+  set(robot_communication_SOURCE_PREFIX /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication)
+  set(robot_communication_DEVEL_PREFIX /home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication)
   set(robot_communication_INSTALL_PREFIX "")
   set(robot_communication_PREFIX ${robot_communication_DEVEL_PREFIX})
 else()
   set(robot_communication_SOURCE_PREFIX "")
   set(robot_communication_DEVEL_PREFIX "")
-  set(robot_communication_INSTALL_PREFIX /home/rmajetson/ProjectV/robot_ws/install)
+  set(robot_communication_INSTALL_PREFIX /home/rosUsr/Shared/Work_2026/robot_ws/install)
   set(robot_communication_PREFIX ${robot_communication_INSTALL_PREFIX})
 endif()
 
@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(robot_communication_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT "/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_communication/include " STREQUAL " ")
+if(NOT "/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/include " STREQUAL " ")
   set(robot_communication_INCLUDE_DIRS "")
-  set(_include_dirs "/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_communication/include")
+  set(_include_dirs "/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/include")
   if(NOT " " STREQUAL " ")
     set(_report "Check the issue tracker '' and consider creating a ticket if the problem has not been reported yet.")
   elseif(NOT " " STREQUAL " ")
@@ -110,7 +110,7 @@ if(NOT "/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_communication/inc
         message(FATAL_ERROR "Project 'robot_communication' specifies '${idir}' as an include dir, which is not found.  It does not exist in '${include}'.  ${_report}")
       endif()
     else()
-      message(FATAL_ERROR "Project 'robot_communication' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/rmajetson/ProjectV/robot_ws/src/robot_communication/${idir}'.  ${_report}")
+      message(FATAL_ERROR "Project 'robot_communication' specifies '${idir}' as an include dir, which is not found.  It does neither exist as an absolute directory nor in '/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_communication/${idir}'.  ${_report}")
     endif()
     _list_append_unique(robot_communication_INCLUDE_DIRS ${include})
   endforeach()
@@ -156,7 +156,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/rmajetson/ProjectV/robot_ws/devel/.private/robot_communication/lib;/home/rmajetson/ProjectV/robot_ws/devel/lib;/home/rmajetson/catkin_ws/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/lib;/home/rosUsr/Shared/Work_2026/robot_ws/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

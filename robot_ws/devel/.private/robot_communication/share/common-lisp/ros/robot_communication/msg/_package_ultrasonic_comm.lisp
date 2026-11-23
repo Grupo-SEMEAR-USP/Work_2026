@@ -1,12 +1,14 @@
 (cl:in-package robot_communication-msg)
-(cl:export '(FRONT_LEFT-VAL
-          FRONT_LEFT
-          FRONT_RIGHT-VAL
-          FRONT_RIGHT
-          REAR_LEFT-VAL
-          REAR_LEFT
-          REAR_RIGHT-VAL
-          REAR_RIGHT
-          BACK-VAL
-          BACK
+(cl:export '(US_LEFT_1-VAL
+          US_LEFT_1
+          US_LEFT_2-VAL
+          US_LEFT_2
+          US_RIGHT_1-VAL
+          US_RIGHT_1
+          US_RIGHT_2-VAL
+          US_RIGHT_2
+          US_FRONT_LEFT-VAL
+          US_FRONT_LEFT
+          US_FRONT_RIGHT-VAL
+          US_FRONT_RIGHT
 ))

@@ -18,58 +18,67 @@ class ultrasonic_comm {
   constructor(initObj={}) {
     if (initObj === null) {
       // initObj === null is a special case for deserialization where we don't initialize fields
-      this.front_left = null;
-      this.front_right = null;
-      this.rear_left = null;
-      this.rear_right = null;
-      this.back = null;
+      this.us_left_1 = null;
+      this.us_left_2 = null;
+      this.us_right_1 = null;
+      this.us_right_2 = null;
+      this.us_front_left = null;
+      this.us_front_right = null;
     }
     else {
-      if (initObj.hasOwnProperty('front_left')) {
-        this.front_left = initObj.front_left
+      if (initObj.hasOwnProperty('us_left_1')) {
+        this.us_left_1 = initObj.us_left_1
       }
       else {
-        this.front_left = 0.0;
+        this.us_left_1 = 0.0;
       }
-      if (initObj.hasOwnProperty('front_right')) {
-        this.front_right = initObj.front_right
-      }
-      else {
-        this.front_right = 0.0;
-      }
-      if (initObj.hasOwnProperty('rear_left')) {
-        this.rear_left = initObj.rear_left
+      if (initObj.hasOwnProperty('us_left_2')) {
+        this.us_left_2 = initObj.us_left_2
       }
       else {
-        this.rear_left = 0.0;
+        this.us_left_2 = 0.0;
       }
-      if (initObj.hasOwnProperty('rear_right')) {
-        this.rear_right = initObj.rear_right
-      }
-      else {
-        this.rear_right = 0.0;
-      }
-      if (initObj.hasOwnProperty('back')) {
-        this.back = initObj.back
+      if (initObj.hasOwnProperty('us_right_1')) {
+        this.us_right_1 = initObj.us_right_1
       }
       else {
-        this.back = 0.0;
+        this.us_right_1 = 0.0;
+      }
+      if (initObj.hasOwnProperty('us_right_2')) {
+        this.us_right_2 = initObj.us_right_2
+      }
+      else {
+        this.us_right_2 = 0.0;
+      }
+      if (initObj.hasOwnProperty('us_front_left')) {
+        this.us_front_left = initObj.us_front_left
+      }
+      else {
+        this.us_front_left = 0.0;
+      }
+      if (initObj.hasOwnProperty('us_front_right')) {
+        this.us_front_right = initObj.us_front_right
+      }
+      else {
+        this.us_front_right = 0.0;
       }
     }
   }
 
   static serialize(obj, buffer, bufferOffset) {
     // Serializes a message object of type ultrasonic_comm
-    // Serialize message field [front_left]
-    bufferOffset = _serializer.float32(obj.front_left, buffer, bufferOffset);
-    // Serialize message field [front_right]
-    bufferOffset = _serializer.float32(obj.front_right, buffer, bufferOffset);
-    // Serialize message field [rear_left]
-    bufferOffset = _serializer.float32(obj.rear_left, buffer, bufferOffset);
-    // Serialize message field [rear_right]
-    bufferOffset = _serializer.float32(obj.rear_right, buffer, bufferOffset);
-    // Serialize message field [back]
-    bufferOffset = _serializer.float32(obj.back, buffer, bufferOffset);
+    // Serialize message field [us_left_1]
+    bufferOffset = _serializer.float32(obj.us_left_1, buffer, bufferOffset);
+    // Serialize message field [us_left_2]
+    bufferOffset = _serializer.float32(obj.us_left_2, buffer, bufferOffset);
+    // Serialize message field [us_right_1]
+    bufferOffset = _serializer.float32(obj.us_right_1, buffer, bufferOffset);
+    // Serialize message field [us_right_2]
+    bufferOffset = _serializer.float32(obj.us_right_2, buffer, bufferOffset);
+    // Serialize message field [us_front_left]
+    bufferOffset = _serializer.float32(obj.us_front_left, buffer, bufferOffset);
+    // Serialize message field [us_front_right]
+    bufferOffset = _serializer.float32(obj.us_front_right, buffer, bufferOffset);
     return bufferOffset;
   }
 
@@ -77,21 +86,23 @@ class ultrasonic_comm {
     //deserializes a message object of type ultrasonic_comm
     let len;
     let data = new ultrasonic_comm(null);
-    // Deserialize message field [front_left]
-    data.front_left = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [front_right]
-    data.front_right = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [rear_left]
-    data.rear_left = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [rear_right]
-    data.rear_right = _deserializer.float32(buffer, bufferOffset);
-    // Deserialize message field [back]
-    data.back = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [us_left_1]
+    data.us_left_1 = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [us_left_2]
+    data.us_left_2 = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [us_right_1]
+    data.us_right_1 = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [us_right_2]
+    data.us_right_2 = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [us_front_left]
+    data.us_front_left = _deserializer.float32(buffer, bufferOffset);
+    // Deserialize message field [us_front_right]
+    data.us_front_right = _deserializer.float32(buffer, bufferOffset);
     return data;
   }
 
   static getMessageSize(object) {
-    return 20;
+    return 24;
   }
 
   static datatype() {
@@ -101,18 +112,21 @@ class ultrasonic_comm {
 
   static md5sum() {
     //Returns md5sum for a message object
-    return '428636691d2e367ce654d88bbe9851c3';
+    return 'e2d56a586910c98d1be0a922e15f0ddb';
   }
 
   static messageDefinition() {
     // Returns full string definition for message
     return `
     # ultrasonic_comm.msg
-    float32 front_left
-    float32 front_right
-    float32 rear_left
-    float32 rear_right
-    float32 back
+    float32 us_left_1
+    float32 us_left_2
+    
+    float32 us_right_1
+    float32 us_right_2
+    
+    float32 us_front_left
+    float32 us_front_right
     `;
   }
 
@@ -122,39 +136,46 @@ class ultrasonic_comm {
       msg = {};
     }
     const resolved = new ultrasonic_comm(null);
-    if (msg.front_left !== undefined) {
-      resolved.front_left = msg.front_left;
+    if (msg.us_left_1 !== undefined) {
+      resolved.us_left_1 = msg.us_left_1;
     }
     else {
-      resolved.front_left = 0.0
+      resolved.us_left_1 = 0.0
     }
 
-    if (msg.front_right !== undefined) {
-      resolved.front_right = msg.front_right;
+    if (msg.us_left_2 !== undefined) {
+      resolved.us_left_2 = msg.us_left_2;
     }
     else {
-      resolved.front_right = 0.0
+      resolved.us_left_2 = 0.0
     }
 
-    if (msg.rear_left !== undefined) {
-      resolved.rear_left = msg.rear_left;
+    if (msg.us_right_1 !== undefined) {
+      resolved.us_right_1 = msg.us_right_1;
     }
     else {
-      resolved.rear_left = 0.0
+      resolved.us_right_1 = 0.0
     }
 
-    if (msg.rear_right !== undefined) {
-      resolved.rear_right = msg.rear_right;
+    if (msg.us_right_2 !== undefined) {
+      resolved.us_right_2 = msg.us_right_2;
     }
     else {
-      resolved.rear_right = 0.0
+      resolved.us_right_2 = 0.0
     }
 
-    if (msg.back !== undefined) {
-      resolved.back = msg.back;
+    if (msg.us_front_left !== undefined) {
+      resolved.us_front_left = msg.us_front_left;
     }
     else {
-      resolved.back = 0.0
+      resolved.us_front_left = 0.0
+    }
+
+    if (msg.us_front_right !== undefined) {
+      resolved.us_front_right = msg.us_front_right;
+    }
+    else {
+      resolved.us_front_right = 0.0
     }
 
     return resolved;

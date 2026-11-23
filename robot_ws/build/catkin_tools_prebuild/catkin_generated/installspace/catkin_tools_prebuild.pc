@@ -1,4 +1,4 @@
-prefix=/home/rmajetson/ProjectV/robot_ws/install
+prefix=/home/rosUsr/Shared/Work_2026/robot_ws/install
 
 Name: catkin_tools_prebuild
 Description: Description of catkin_tools_prebuild

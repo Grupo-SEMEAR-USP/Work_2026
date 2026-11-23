@@ -4,5 +4,5 @@ PROJECT_PKG_CONFIG_INCLUDE_DIRS = "".split(';') if "" != "" else []
 PROJECT_CATKIN_DEPENDS = "rospy;std_msgs;sensor_msgs;cv_bridge;robot_communication".replace(';', ' ')
 PKG_CONFIG_LIBRARIES_WITH_PREFIX = "".split(';') if "" != "" else []
 PROJECT_NAME = "robot_vision"
-PROJECT_SPACE_DIR = "/home/rmajetson/ProjectV/robot_ws/devel/.private/robot_vision"
+PROJECT_SPACE_DIR = "/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_vision"
 PROJECT_VERSION = "0.0.0"

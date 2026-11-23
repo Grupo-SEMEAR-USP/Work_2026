@@ -1,12 +1,1 @@
-(cl:in-package robot_communication-msg)
-(cl:export '(FRONT_LEFT-VAL
-          FRONT_LEFT
-          FRONT_RIGHT-VAL
-          FRONT_RIGHT
-          REAR_LEFT-VAL
-          REAR_LEFT
-          REAR_RIGHT-VAL
-          REAR_RIGHT
-          BACK-VAL
-          BACK
-))
+/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/share/common-lisp/ros/robot_communication/msg/_package_ultrasonic_comm.lisp
