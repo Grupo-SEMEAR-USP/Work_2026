@@ -20,6 +20,8 @@ include_directories(
 
 catkin_install_python(PROGRAMS
   scripts/apriltag_detector.py
+  scripts/findcontainer.py
+  search_item.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
