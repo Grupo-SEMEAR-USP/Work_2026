@@ -41,9 +41,16 @@ HwInterface::HwInterface(ros::NodeHandle& nh)
 
 void HwInterface::cb_cmdVel(const geometry_msgs::Twist::ConstPtr& msg)
 {
+    int mode = 0;
+
     double vx = msg->linear.x;
     double vy = msg->linear.y;
     double w  = msg->angular.z;
+
+    double v_fl = 0.0;
+    double v_fr = 0.0;
+    double v_rl = 0.0;
+    double v_rr = 0.0;
 
     /*——— Cinemática Inversa (Omnidirecional) ———*/
     // FL = vx - vy - w(geo)
@@ -51,15 +58,54 @@ void HwInterface::cb_cmdVel(const geometry_msgs::Twist::ConstPtr& msg)
     // RL = vx + vy - w(geo)
     // RR = vx - vy + w(geo)
 
-    double v_fl = (vx - vy - (w * base_geometry_sum_)) / wheel_radius_;
-    double v_fr = (vx + vy + (w * base_geometry_sum_)) / wheel_radius_;
-    double v_rl = (vx + vy - (w * base_geometry_sum_)) / wheel_radius_;
-    double v_rr = (vx - vy + (w * base_geometry_sum_)) / wheel_radius_;
+    if(vy == 0 && w == 0) {
+
+        mode = 1; // MODO DIRECIONAL
+
+    }
+
+    else if (vy == 0 && w != 0) {
+
+        mode = 2; // MODO GIRO COM TRES RODAS
+    }
+
+    switch(mode) {
+
+        case 1:
+
+                v_fl = (vx - vy - (w * base_geometry_sum_)) / wheel_radius_;
+                v_fr = (vx + vy + (w * base_geometry_sum_)) / wheel_radius_;
+                v_rl = 0;
+                v_rr = 0;
+                
+                break;
+
+        case 2:
+
+                v_fl = (vx - vy - (w * base_geometry_sum_)) / wheel_radius_;
+                v_fr = 0; //(vx + vy + (w * base_geometry_sum_)) / wheel_radius_;
+                v_rl = 0;
+                v_rr = (vx - vy + (w * base_geometry_sum_)) / wheel_radius_;
+
+                break;
+
+        default:
+
+                v_fl = 0;
+                v_fr = 0;
+                v_rl = 0;
+                v_rr = 0;
+    }
+
+    // double v_fl = (vx - vy - (w * base_geometry_sum_)) / wheel_radius_;
+    // double v_fr = (vx + vy + (w * base_geometry_sum_)) / wheel_radius_;
+    // double v_rl = (vx + vy - (w * base_geometry_sum_)) / wheel_radius_;
+    // double v_rr = (vx - vy + (w * base_geometry_sum_)) / wheel_radius_;
 
     // Aplica limitação e armazena
     cmd_vel_fl_ = clampSpeed(v_fl);
     cmd_vel_fr_ = clampSpeed(v_fr);
-    cmd_vel_rl_ = clampSpeed(v_rl);
+    //cmd_vel_rl_ = clampSpeed(v_rl);
     cmd_vel_rr_ = clampSpeed(v_rr);
 
     // Reinicia Watchdog
@@ -137,7 +183,7 @@ void HwInterface::publishWheelSpeeds()
     // Preenche mensagem para o hardware
     commanded_vel_msg_.front_left  = (float)cmd_vel_fl_;
     commanded_vel_msg_.front_right = (float)cmd_vel_fr_;
-    commanded_vel_msg_.rear_left   = (float)cmd_vel_rl_;
+    commanded_vel_msg_.rear_left   = 0; //(float)cmd_vel_rl_;
     commanded_vel_msg_.rear_right  = (float)cmd_vel_rr_;
 
     velocity_command_pub_.publish(commanded_vel_msg_);
@@ -220,7 +266,7 @@ void HwInterface::updateOdometry()
     geometry_msgs::TransformStamped odom_trans;
     odom_trans.header.stamp = current_time_;
     odom_trans.header.frame_id = "odom";
-    odom_trans.child_frame_id = "base_footprint";
+    odom_trans.child_frame_id = "base_link";
     odom_trans.transform.translation.x = odom_x_;
     odom_trans.transform.translation.y = odom_y_;
     odom_trans.transform.translation.z = 0.0;
@@ -231,7 +277,7 @@ void HwInterface::updateOdometry()
     nav_msgs::Odometry odom;
     odom.header.stamp = current_time_;
     odom.header.frame_id = "odom";
-    odom.child_frame_id = "base_footprint";
+    odom.child_frame_id = "base_link";
     
     // Pose
     odom.pose.pose.position.x = odom_x_;

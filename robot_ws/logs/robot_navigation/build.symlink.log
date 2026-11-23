@@ -1,5 +1,5 @@
-Linked: (/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_navigation/lib/pkgconfig/robot_navigation.pc, /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/pkgconfig/robot_navigation.pc)
-Linked: (/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_navigation/lib/robot_navigation/waypoint_saver.py, /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/robot_navigation/waypoint_saver.py)
-Linked: (/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_navigation/lib/robot_navigation/navigation.py, /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/robot_navigation/navigation.py)
-Linked: (/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_navigation/share/robot_navigation/cmake/robot_navigationConfig.cmake, /home/rosUsr/Shared/Work_2026/robot_ws/devel/share/robot_navigation/cmake/robot_navigationConfig.cmake)
-Linked: (/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_navigation/share/robot_navigation/cmake/robot_navigationConfig-version.cmake, /home/rosUsr/Shared/Work_2026/robot_ws/devel/share/robot_navigation/cmake/robot_navigationConfig-version.cmake)
+Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/pkgconfig/robot_navigation.pc
+Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/robot_navigation/waypoint_saver.py
+Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/robot_navigation/navigation.py
+Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/share/robot_navigation/cmake/robot_navigationConfig.cmake
+Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/share/robot_navigation/cmake/robot_navigationConfig-version.cmake
