@@ -1,0 +1,9 @@
+<launch>
+  <include file="$(find robot_navigation)/launch/navigation.launch">
+    <arg name="open_rviz" value="false"/>
+    
+    <arg name="output_type" value="log"/>
+  </include>
+  
+  <node name="navigation_node" pkg="robot_navigation" type="navigation.py" output="screen"/>
+</launch>
