@@ -1,5 +1,5 @@
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/pkgconfig/robot_navigation.pc
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/robot_navigation/waypoint_saver.py
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/robot_navigation/navigation.py
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/share/robot_navigation/cmake/robot_navigationConfig.cmake
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/share/robot_navigation/cmake/robot_navigationConfig-version.cmake
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/pkgconfig/robot_navigation.pc
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/robot_navigation/waypoint_saver.py
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/robot_navigation/navigation.py
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/robot_navigation/cmake/robot_navigationConfig.cmake
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/robot_navigation/cmake/robot_navigationConfig-version.cmake

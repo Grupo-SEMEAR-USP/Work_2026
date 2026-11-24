@@ -1,1 +1,1 @@
-/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_manipulation/lib/robot_manipulation/manipulation.py
+/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_manipulation/lib/robot_manipulation/manipulation.py

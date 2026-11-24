@@ -3,20 +3,20 @@
 
   <!-- === Definição de Parâmetros === -->
   <!-- Habilitação de Hardware -->
-  <arg name="enable_realsense"      default="true"/>
-  <arg name="enable_lidar"          default="true"/>
+  <arg name="enable_realsense"      default="false"/>
+  <arg name="enable_lidar"          default="false"/>
   <arg name="enable_logitech"       default="true"/>
 
   <!-- Habilitação de Pacotes Funcionais -->
-  <arg name="enable_communication"  default="true"/>
-  <arg name="enable_movement"       default="true"/>
-  <arg name="enable_urdf"           default="true"/>
+  <arg name="enable_communication"  default="false"/>
+  <arg name="enable_movement"       default="false"/>
+  <arg name="enable_urdf"           default="false"/>
   <arg name="enable_vision"         default="true"/>
 
   <!-- Habilitação de Comandos via scheduler -->
-  <arg name="sched_navigation"      default="true"/>
-  <arg name="sched_movement"        default="true"/>
-  <arg name="sched_manipulation"    default="true"/>
+  <arg name="sched_navigation"      default="false"/>
+  <arg name="sched_movement"        default="false"/>
+  <arg name="sched_manipulation"    default="false"/>
 
   <!-- RealSense -->
   <arg name="rs_initial_reset"             default="true"/>
@@ -50,7 +50,7 @@
   <arg name="ld_serial_port"               default="/dev/lidar"/>
 
   <!-- Câmera Logitech -->
-  <arg name="lt_video_device"              default="/dev/cam_logitech"/>
+  <arg name="lt_video_device"              default="/dev/video2"/>
   <arg name="lt_autofocus"                 default="false"/>
   <arg name="lt_pixel_format"              default="yuyv"/>
   <arg name="lt_image_width"               default="640"/>

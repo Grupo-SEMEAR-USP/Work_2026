@@ -1,12 +1,12 @@
 file(REMOVE_RECURSE
-  "/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/AprilTagDetection.js"
-  "/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/AprilTagDetectionArray.js"
-  "/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/SchedulerCommand.js"
-  "/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/SchedulerResponse.js"
-  "/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/encoder_comm.js"
-  "/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/manipulation_comm.js"
-  "/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/ultrasonic_comm.js"
-  "/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/velocity_comm.js"
+  "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/AprilTagDetection.js"
+  "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/AprilTagDetectionArray.js"
+  "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/SchedulerCommand.js"
+  "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/SchedulerResponse.js"
+  "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/encoder_comm.js"
+  "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/manipulation_comm.js"
+  "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/ultrasonic_comm.js"
+  "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/velocity_comm.js"
   "CMakeFiles/robot_communication_generate_messages_nodejs"
 )
 

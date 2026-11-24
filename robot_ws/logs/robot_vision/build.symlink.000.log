@@ -1,4 +1,7 @@
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/pkgconfig/robot_vision.pc
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/robot_vision/apriltag_detector.py
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/share/robot_vision/cmake/robot_visionConfig.cmake
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/share/robot_vision/cmake/robot_visionConfig-version.cmake
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/robot_vision/findcontainer.py
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/robot_vision/color_detector.py
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/robot_vision/search_item.py
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/robot_vision/apriltag_detector.py
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/pkgconfig/robot_vision.pc
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/robot_vision/cmake/robot_visionConfig.cmake
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/robot_vision/cmake/robot_visionConfig-version.cmake

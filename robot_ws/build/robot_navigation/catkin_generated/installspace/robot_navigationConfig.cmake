@@ -67,14 +67,14 @@ set(robot_navigation_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(robot_navigation_SOURCE_PREFIX /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_navigation)
-  set(robot_navigation_DEVEL_PREFIX /home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_navigation)
+  set(robot_navigation_SOURCE_PREFIX /home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_navigation)
+  set(robot_navigation_DEVEL_PREFIX /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_navigation)
   set(robot_navigation_INSTALL_PREFIX "")
   set(robot_navigation_PREFIX ${robot_navigation_DEVEL_PREFIX})
 else()
   set(robot_navigation_SOURCE_PREFIX "")
   set(robot_navigation_DEVEL_PREFIX "")
-  set(robot_navigation_INSTALL_PREFIX /home/rosUsr/Shared/Work_2026/robot_ws/install)
+  set(robot_navigation_INSTALL_PREFIX /home/bruna/worknaoaguentomais/Work_2026/robot_ws/install)
   set(robot_navigation_PREFIX ${robot_navigation_INSTALL_PREFIX})
 endif()
 
@@ -156,7 +156,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/rosUsr/Shared/Work_2026/robot_ws/install/lib;/home/rosUsr/Shared/Work_2026/robot_ws/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/bruna/worknaoaguentomais/Work_2026/robot_ws/install/lib;/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

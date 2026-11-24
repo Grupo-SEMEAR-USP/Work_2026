@@ -6,5 +6,5 @@ CXX_FLAGS =
 
 CXX_DEFINES = -DROSCONSOLE_BACKEND_LOG4CXX -DROS_BUILD_SHARED_LIBS=1 -DROS_PACKAGE_NAME=\"robot_movement\"
 
-CXX_INCLUDES = -I/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_movement/include -I/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 
+CXX_INCLUDES = -I/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_movement/include -I/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_communication/include -I/opt/ros/noetic/include -I/opt/ros/noetic/share/xmlrpcpp/cmake/../../../include/xmlrpcpp -I/usr/include/eigen3 
 

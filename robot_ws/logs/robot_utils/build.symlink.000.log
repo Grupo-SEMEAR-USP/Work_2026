@@ -1,7 +1,7 @@
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/pkgconfig/robot_utils.pc
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/robot_utils/image_save_logitech.py
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/robot_utils/image_save_realsense.py
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/robot_utils/align_with_container.py
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/robot_utils/print_yaw.py
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/share/robot_utils/cmake/robot_utilsConfig.cmake
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/share/robot_utils/cmake/robot_utilsConfig-version.cmake
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/pkgconfig/robot_utils.pc
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/robot_utils/align_with_container.py
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/robot_utils/image_save_realsense.py
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/robot_utils/image_save_logitech.py
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/robot_utils/print_yaw.py
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/robot_utils/cmake/robot_utilsConfig.cmake
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/robot_utils/cmake/robot_utilsConfig-version.cmake

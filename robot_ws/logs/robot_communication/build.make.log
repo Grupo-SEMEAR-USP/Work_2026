@@ -1,29 +1,100 @@
-[  0%] Built target geometry_msgs_generate_messages_py
+[35m[1mScanning dependencies of target _robot_communication_generate_messages_check_deps_manipulation_comm[0m
+[35m[1mScanning dependencies of target _robot_communication_generate_messages_check_deps_encoder_comm[0m
+[35m[1mScanning dependencies of target _robot_communication_generate_messages_check_deps_SchedulerResponse[0m
+[35m[1mScanning dependencies of target std_msgs_generate_messages_py[0m
 [  0%] Built target std_msgs_generate_messages_py
-[  0%] Built target sensor_msgs_generate_messages_py
-[  0%] Built target geometry_msgs_generate_messages_nodejs
-[  0%] Built target std_msgs_generate_messages_lisp
-[  0%] Built target sensor_msgs_generate_messages_nodejs
-[  0%] Built target std_msgs_generate_messages_nodejs
-[  0%] Built target geometry_msgs_generate_messages_lisp
-[  0%] Built target _robot_communication_generate_messages_check_deps_SchedulerResponse
-[  0%] Built target _robot_communication_generate_messages_check_deps_ultrasonic_comm
-[  0%] Built target _robot_communication_generate_messages_check_deps_AprilTagDetectionArray
-[  0%] Built target _robot_communication_generate_messages_check_deps_manipulation_comm
-[  0%] Built target sensor_msgs_generate_messages_lisp
-[  0%] Built target _robot_communication_generate_messages_check_deps_velocity_comm
+[35m[1mScanning dependencies of target _robot_communication_generate_messages_check_deps_SchedulerCommand[0m
 [  0%] Built target _robot_communication_generate_messages_check_deps_encoder_comm
-[  0%] Built target _robot_communication_generate_messages_check_deps_AprilTagDetection
-[  0%] Built target std_msgs_generate_messages_eus
-[  0%] Built target sensor_msgs_generate_messages_eus
+[  0%] Built target _robot_communication_generate_messages_check_deps_SchedulerResponse
+[35m[1mScanning dependencies of target _robot_communication_generate_messages_check_deps_AprilTagDetection[0m
+[35m[1mScanning dependencies of target _robot_communication_generate_messages_check_deps_ultrasonic_comm[0m
+[  0%] Built target _robot_communication_generate_messages_check_deps_manipulation_comm
+[35m[1mScanning dependencies of target sensor_msgs_generate_messages_py[0m
+[  0%] Built target sensor_msgs_generate_messages_py
+[35m[1mScanning dependencies of target geometry_msgs_generate_messages_py[0m
+[  0%] Built target geometry_msgs_generate_messages_py
 [  0%] Built target _robot_communication_generate_messages_check_deps_SchedulerCommand
-[  0%] Built target std_msgs_generate_messages_cpp
+[35m[1mScanning dependencies of target _robot_communication_generate_messages_check_deps_AprilTagDetectionArray[0m
+[35m[1mScanning dependencies of target _robot_communication_generate_messages_check_deps_velocity_comm[0m
+[  0%] Built target _robot_communication_generate_messages_check_deps_ultrasonic_comm
+[  0%] Built target _robot_communication_generate_messages_check_deps_AprilTagDetection
+[35m[1mScanning dependencies of target geometry_msgs_generate_messages_nodejs[0m
+[35m[1mScanning dependencies of target std_msgs_generate_messages_nodejs[0m
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target _robot_communication_generate_messages_check_deps_velocity_comm
+[35m[1mScanning dependencies of target sensor_msgs_generate_messages_nodejs[0m
+[35m[1mScanning dependencies of target std_msgs_generate_messages_lisp[0m
+[  0%] Built target sensor_msgs_generate_messages_nodejs
+[35m[1mScanning dependencies of target geometry_msgs_generate_messages_lisp[0m
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target _robot_communication_generate_messages_check_deps_AprilTagDetectionArray
+[  0%] Built target geometry_msgs_generate_messages_lisp
+[35m[1mScanning dependencies of target sensor_msgs_generate_messages_lisp[0m
+[35m[1mScanning dependencies of target std_msgs_generate_messages_eus[0m
+[35m[1mScanning dependencies of target geometry_msgs_generate_messages_eus[0m
+[35m[1mScanning dependencies of target sensor_msgs_generate_messages_eus[0m
+[  0%] Built target sensor_msgs_generate_messages_lisp
+[  0%] Built target std_msgs_generate_messages_eus
 [  0%] Built target geometry_msgs_generate_messages_eus
-[  0%] Built target geometry_msgs_generate_messages_cpp
-[  0%] Built target sensor_msgs_generate_messages_cpp
-[ 26%] Built target robot_communication_generate_messages_lisp
-[ 40%] Built target robot_communication_generate_messages_py
-[ 59%] Built target robot_communication_generate_messages_nodejs
-[ 80%] Built target robot_communication_generate_messages_eus
+[  0%] Built target sensor_msgs_generate_messages_eus
+[35m[1mScanning dependencies of target sensor_msgs_generate_messages_cpp[0m
+[35m[1mScanning dependencies of target geometry_msgs_generate_messages_cpp[0m
+[35m[1mScanning dependencies of target robot_communication_generate_messages_py[0m
+[35m[1mScanning dependencies of target std_msgs_generate_messages_cpp[0m
+[  2%] [34m[1mGenerating Python from MSG robot_communication/ultrasonic_comm[0m
+[  2%] Built target std_msgs_generate_messages_cpp
+[  2%] Built target sensor_msgs_generate_messages_cpp
+[  2%] Built target geometry_msgs_generate_messages_cpp
+[35m[1mScanning dependencies of target robot_communication_generate_messages_nodejs[0m
+[35m[1mScanning dependencies of target robot_communication_generate_messages_lisp[0m
+[  4%] [34m[1mGenerating Python from MSG robot_communication/encoder_comm[0m
+[  7%] [34m[1mGenerating Javascript code from robot_communication/ultrasonic_comm.msg[0m
+[  9%] [34m[1mGenerating Lisp code from robot_communication/ultrasonic_comm.msg[0m
+[ 11%] [34m[1mGenerating Javascript code from robot_communication/encoder_comm.msg[0m
+[ 14%] [34m[1mGenerating Lisp code from robot_communication/encoder_comm.msg[0m
+[ 16%] [34m[1mGenerating Lisp code from robot_communication/velocity_comm.msg[0m
+[ 19%] [34m[1mGenerating Python from MSG robot_communication/velocity_comm[0m
+[ 21%] [34m[1mGenerating Javascript code from robot_communication/velocity_comm.msg[0m
+[ 23%] [34m[1mGenerating Lisp code from robot_communication/SchedulerCommand.msg[0m
+[ 26%] [34m[1mGenerating Python from MSG robot_communication/SchedulerCommand[0m
+[ 28%] [34m[1mGenerating Javascript code from robot_communication/SchedulerCommand.msg[0m
+[ 30%] [34m[1mGenerating Lisp code from robot_communication/SchedulerResponse.msg[0m
+[35m[1mScanning dependencies of target robot_communication_generate_messages_eus[0m
+[ 33%] [34m[1mGenerating EusLisp code from robot_communication/ultrasonic_comm.msg[0m
+[ 35%] [34m[1mGenerating Lisp code from robot_communication/AprilTagDetection.msg[0m
+[ 38%] [34m[1mGenerating Javascript code from robot_communication/SchedulerResponse.msg[0m
+[ 40%] [34m[1mGenerating Python from MSG robot_communication/SchedulerResponse[0m
+[ 42%] [34m[1mGenerating Lisp code from robot_communication/AprilTagDetectionArray.msg[0m
+[ 45%] [34m[1mGenerating EusLisp code from robot_communication/encoder_comm.msg[0m
+[ 47%] [34m[1mGenerating Javascript code from robot_communication/AprilTagDetection.msg[0m
+[ 50%] [34m[1mGenerating Lisp code from robot_communication/manipulation_comm.msg[0m
+[ 52%] [34m[1mGenerating EusLisp code from robot_communication/velocity_comm.msg[0m
+[ 54%] [34m[1mGenerating Python from MSG robot_communication/AprilTagDetection[0m
+[ 57%] [34m[1mGenerating Javascript code from robot_communication/AprilTagDetectionArray.msg[0m
+[ 57%] Built target robot_communication_generate_messages_lisp
+[35m[1mScanning dependencies of target robot_communication_generate_messages_cpp[0m
+[ 59%] [34m[1mGenerating C++ code from robot_communication/ultrasonic_comm.msg[0m
+[ 61%] [34m[1mGenerating Javascript code from robot_communication/manipulation_comm.msg[0m
+[ 64%] [34m[1mGenerating EusLisp code from robot_communication/SchedulerCommand.msg[0m
+[ 66%] [34m[1mGenerating Python from MSG robot_communication/AprilTagDetectionArray[0m
+[ 66%] Built target robot_communication_generate_messages_nodejs
+[ 69%] [34m[1mGenerating Python from MSG robot_communication/manipulation_comm[0m
+[ 71%] [34m[1mGenerating EusLisp code from robot_communication/SchedulerResponse.msg[0m
+[ 73%] [34m[1mGenerating C++ code from robot_communication/encoder_comm.msg[0m
+[ 76%] [34m[1mGenerating C++ code from robot_communication/velocity_comm.msg[0m
+[ 78%] [34m[1mGenerating EusLisp code from robot_communication/AprilTagDetection.msg[0m
+[ 80%] [34m[1mGenerating Python msg __init__.py for robot_communication[0m
+[ 83%] [34m[1mGenerating C++ code from robot_communication/SchedulerCommand.msg[0m
+[ 85%] [34m[1mGenerating EusLisp code from robot_communication/AprilTagDetectionArray.msg[0m
+[ 88%] [34m[1mGenerating C++ code from robot_communication/SchedulerResponse.msg[0m
+[ 88%] Built target robot_communication_generate_messages_py
+[ 90%] [34m[1mGenerating C++ code from robot_communication/AprilTagDetection.msg[0m
+[ 92%] [34m[1mGenerating EusLisp code from robot_communication/manipulation_comm.msg[0m
+[ 95%] [34m[1mGenerating C++ code from robot_communication/AprilTagDetectionArray.msg[0m
+[ 97%] [34m[1mGenerating C++ code from robot_communication/manipulation_comm.msg[0m
+[100%] [34m[1mGenerating EusLisp manifest code for robot_communication[0m
 [100%] Built target robot_communication_generate_messages_cpp
+[100%] Built target robot_communication_generate_messages_eus
+[35m[1mScanning dependencies of target robot_communication_generate_messages[0m
 [100%] Built target robot_communication_generate_messages

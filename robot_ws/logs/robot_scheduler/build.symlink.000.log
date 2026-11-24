@@ -1,4 +1,4 @@
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/robot_scheduler/scheduler.py
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/pkgconfig/robot_scheduler.pc
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/share/robot_scheduler/cmake/robot_schedulerConfig.cmake
-Symlinking /home/rosUsr/Shared/Work_2026/robot_ws/devel/share/robot_scheduler/cmake/robot_schedulerConfig-version.cmake
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/robot_scheduler/scheduler.py
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/pkgconfig/robot_scheduler.pc
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/robot_scheduler/cmake/robot_schedulerConfig.cmake
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/robot_scheduler/cmake/robot_schedulerConfig-version.cmake

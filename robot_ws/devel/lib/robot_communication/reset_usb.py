@@ -1,1 +1,1 @@
-/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_communication/lib/robot_communication/reset_usb.py
+/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_communication/lib/robot_communication/reset_usb.py

@@ -1,4 +1,4 @@
-prefix=/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_simulation
+prefix=/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_simulation
 
 Name: robot_simulation
 Description: Description of robot_simulation

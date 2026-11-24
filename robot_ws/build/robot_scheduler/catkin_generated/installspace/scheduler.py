@@ -45,9 +45,18 @@ class Scheduler:
             ("manipulation",     "arm,deposit_to_top",   False,  10.0),
             ("manipulation",     "rotatory_base,front",   False,  10.0),
             ("approach_table", "10,front", True, 15),      # front, right ou left
-            # ("search_block",      "4,direita", True, 30),
             # ("move", "parar", False, 1),
             # ("navigation",       "WS1",      True,  30)
+            
+            ("align_block",       "5",      True,  60)              # payload = ID do bloco
+            ("border_detect",       "esquerda",      True,  20)     # payload = pra qual lado fazer o alinhamento
+            ("move",                "frente",      True,  20)       # payload = direção do omvimento do robô (frente, para, tras, esquerda, direita, horario, antihorario)
+            ("search_block",      "4,direita", True, 30),           # payload = ID do bloco, direção do movimento
+            
+            # nova forma do search_block
+            ("search_item",      "block,4,direita", True, 30),            # payload = tipo de item, identificação do item (número pra bloco, cor pra container), direção
+            ("search_item",      "container,red,direita", True, 30),
+                                                            
         ]
 
     @staticmethod

@@ -1,9 +1,9 @@
-#!/usr/bin/python3
+#!/home/bruna/.pyenv/shims/python3
 # -*- coding: utf-8 -*-
 # generated from catkin/cmake/template/script.py.in
 # creates a relay to a python script source file, acting as that file.
 # The purpose is that of a symlink
-python_script = '/home/rosUsr/Shared/Work_2026/robot_ws/src/robot_utils/scripts/align_with_container.py'
+python_script = '/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_utils/scripts/align_with_container.py'
 with open(python_script, 'r') as fh:
     context = {
         '__builtins__': __builtins__,

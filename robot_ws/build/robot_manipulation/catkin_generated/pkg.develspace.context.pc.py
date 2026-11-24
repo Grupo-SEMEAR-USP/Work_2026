@@ -4,5 +4,5 @@ PROJECT_PKG_CONFIG_INCLUDE_DIRS = "".split(';') if "" != "" else []
 PROJECT_CATKIN_DEPENDS = "rospy;std_msgs;robot_communication".replace(';', ' ')
 PKG_CONFIG_LIBRARIES_WITH_PREFIX = "".split(';') if "" != "" else []
 PROJECT_NAME = "robot_manipulation"
-PROJECT_SPACE_DIR = "/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_manipulation"
+PROJECT_SPACE_DIR = "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_manipulation"
 PROJECT_VERSION = "0.0.0"

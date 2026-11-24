@@ -4,5 +4,5 @@ PROJECT_PKG_CONFIG_INCLUDE_DIRS = "".split(';') if "" != "" else []
 PROJECT_CATKIN_DEPENDS = "".replace(';', ' ')
 PKG_CONFIG_LIBRARIES_WITH_PREFIX = "".split(';') if "" != "" else []
 PROJECT_NAME = "robot_description"
-PROJECT_SPACE_DIR = "/home/rosUsr/Shared/Work_2026/robot_ws/install"
+PROJECT_SPACE_DIR = "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/install"
 PROJECT_VERSION = "1.0.0"

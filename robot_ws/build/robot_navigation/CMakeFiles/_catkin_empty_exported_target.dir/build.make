@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_navigation
+CMAKE_SOURCE_DIR = /home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_navigation
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_navigation
+CMAKE_BINARY_DIR = /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_navigation
 
 # Utility rule file for _catkin_empty_exported_target.
 
@@ -67,6 +67,6 @@ CMakeFiles/_catkin_empty_exported_target.dir/clean:
 .PHONY : CMakeFiles/_catkin_empty_exported_target.dir/clean
 
 CMakeFiles/_catkin_empty_exported_target.dir/depend:
-	cd /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_navigation && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_navigation /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_navigation /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_navigation /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_navigation /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_navigation/CMakeFiles/_catkin_empty_exported_target.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_navigation && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_navigation /home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_navigation /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_navigation /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_navigation /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_navigation/CMakeFiles/_catkin_empty_exported_target.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/_catkin_empty_exported_target.dir/depend
 

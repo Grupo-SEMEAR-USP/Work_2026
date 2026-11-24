@@ -48,10 +48,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_navigation
+CMAKE_SOURCE_DIR = /home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_navigation
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_navigation
+CMAKE_BINARY_DIR = /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_navigation
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -137,9 +137,9 @@ install/fast: preinstall/fast
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_navigation/CMakeFiles /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_navigation/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_navigation/CMakeFiles /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_navigation/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_navigation/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_navigation/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

@@ -1,4 +1,4 @@
-prefix=/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_vision
+prefix=/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_vision
 
 Name: robot_vision
 Description: Description of robot_vision

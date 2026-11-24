@@ -1,1 +1,0 @@
-/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_movement/lib/robot_movement/align_table.py

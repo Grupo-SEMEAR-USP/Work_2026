@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_manipulation
+CMAKE_SOURCE_DIR = /home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_manipulation
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_manipulation
+CMAKE_BINARY_DIR = /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_manipulation
 
 # Utility rule file for download_extra_data.
 
@@ -67,6 +67,6 @@ CMakeFiles/download_extra_data.dir/clean:
 .PHONY : CMakeFiles/download_extra_data.dir/clean
 
 CMakeFiles/download_extra_data.dir/depend:
-	cd /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_manipulation && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_manipulation /home/rosUsr/Shared/Work_2026/robot_ws/src/robot_manipulation /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_manipulation /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_manipulation /home/rosUsr/Shared/Work_2026/robot_ws/build/robot_manipulation/CMakeFiles/download_extra_data.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_manipulation && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_manipulation /home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_manipulation /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_manipulation /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_manipulation /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_manipulation/CMakeFiles/download_extra_data.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/download_extra_data.dir/depend
 

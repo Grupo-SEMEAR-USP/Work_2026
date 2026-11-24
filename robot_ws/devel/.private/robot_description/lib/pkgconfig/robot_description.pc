@@ -1,4 +1,4 @@
-prefix=/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_description
+prefix=/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_description
 
 Name: robot_description
 Description: Description of robot_description

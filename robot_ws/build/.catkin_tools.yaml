@@ -1,6 +1,6 @@
-devel_space: /home/rosUsr/Shared/Work_2026/robot_ws/devel
+devel_space: /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel
 install: false
-install_space: /home/rosUsr/Shared/Work_2026/robot_ws/install
+install_space: /home/bruna/worknaoaguentomais/Work_2026/robot_ws/install
 profile: default
-source_space: /home/rosUsr/Shared/Work_2026/robot_ws/src
-workspace: /home/rosUsr/Shared/Work_2026/robot_ws
+source_space: /home/bruna/worknaoaguentomais/Work_2026/robot_ws/src
+workspace: /home/bruna/worknaoaguentomais/Work_2026/robot_ws

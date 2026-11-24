@@ -1,4 +1,4 @@
 robot_description
-/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_description/lib/pkgconfig/robot_description.pc /home/rosUsr/Shared/Work_2026/robot_ws/devel/lib/pkgconfig/robot_description.pc
-/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_description/share/robot_description/cmake/robot_descriptionConfig.cmake /home/rosUsr/Shared/Work_2026/robot_ws/devel/share/robot_description/cmake/robot_descriptionConfig.cmake
-/home/rosUsr/Shared/Work_2026/robot_ws/devel/.private/robot_description/share/robot_description/cmake/robot_descriptionConfig-version.cmake /home/rosUsr/Shared/Work_2026/robot_ws/devel/share/robot_description/cmake/robot_descriptionConfig-version.cmake
+/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_description/lib/pkgconfig/robot_description.pc /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/pkgconfig/robot_description.pc
+/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_description/share/robot_description/cmake/robot_descriptionConfig-version.cmake /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/robot_description/cmake/robot_descriptionConfig-version.cmake
+/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_description/share/robot_description/cmake/robot_descriptionConfig.cmake /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/robot_description/cmake/robot_descriptionConfig.cmake
