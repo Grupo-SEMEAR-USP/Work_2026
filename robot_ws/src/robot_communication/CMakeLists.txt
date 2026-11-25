@@ -25,6 +25,7 @@ add_message_files(
   AprilTagDetection.msg
   AprilTagDetectionArray.msg
   manipulation_comm.msg
+  container_comm.msg
 )
 
 ## Generate added messages and services with any dependencies listed here

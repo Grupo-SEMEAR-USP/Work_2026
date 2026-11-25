@@ -3,7 +3,7 @@
 
 import rospy
 from sensor_msgs.msg import Image
-from std_msgs.msg import String, Float32MultiArray
+from robot_communication.msg import container_comm
 import cv2
 import numpy as np
 
@@ -17,6 +17,8 @@ class SearchForContainer:
         self.camera_image = None
         self.image_received = False
 
+        rospy.loginfo("Search container inicializado.")
+
         # Limites HSV
         self.blue_lower_hsv = np.array([90, 21, 0])
         self.blue_upper_hsv = np.array([122, 185, 123])
@@ -25,39 +27,18 @@ class SearchForContainer:
         self.red_upper_hsv1 = np.array([179, 255, 151])
 
         # Publishers
-        self.container_color_pub = rospy.Publisher(
-            '/container_color', String, queue_size=10
-        )
-
-        self.container_position_pub = rospy.Publisher(
-            '/container_position', Float32MultiArray, queue_size=10
-        )
-
-        # Subscriber da câmera
-        rospy.Subscriber(
-            '/usb_cam_logitech/image_raw',
-            Image,
-            self.camera_callback
-        )
+        self.container_inf = rospy.Publisher('/container_info', container_comm, queue_size=10)
+        #Subscriber da câmera
+        rospy.Subscriber('/usb_cam_logitech/image_raw',Image,self.camera_callback)
 
     # Criar máscara
     def create_mask(self, image, left_limit, right_limit):
 
         h, w = image.shape[:2]
 
-        left_mask_points = np.array([
-            (0, 0),
-            (left_limit, 0),
-            (left_limit, h),
-            (0, h)
-        ])
+        left_mask_points = np.array([(0, 0), (left_limit, 0), (left_limit, h), (0, h)])
 
-        right_mask_points = np.array([
-            (right_limit, 0),
-            (w, 0),
-            (w, h),
-            (right_limit, h)
-        ])
+        right_mask_points = np.array([(right_limit, 0), (w, 0), (w, h), (right_limit, h)])
 
         mask = np.ones_like(image) * 255
 
@@ -71,17 +52,9 @@ class SearchForContainer:
 
         hsv_image = cv2.cvtColor(roi, cv2.COLOR_BGR2HSV)
 
-        red_mask = cv2.inRange(
-            hsv_image,
-            self.red_lower_hsv1,
-            self.red_upper_hsv1
-        )
+        red_mask = cv2.inRange(hsv_image, self.red_lower_hsv1, self.red_upper_hsv1)
 
-        blue_mask = cv2.inRange(
-            hsv_image,
-            self.blue_lower_hsv,
-            self.blue_upper_hsv
-        )
+        blue_mask = cv2.inRange(hsv_image, self.blue_lower_hsv, self.blue_upper_hsv)
 
         red_pixels = cv2.countNonZero(red_mask)
         blue_pixels = cv2.countNonZero(blue_mask)
@@ -97,11 +70,7 @@ class SearchForContainer:
         else:
             return "unknown", None
 
-        contours, _ = cv2.findContours(
-            mask,
-            cv2.RETR_EXTERNAL,
-            cv2.CHAIN_APPROX_SIMPLE
-        )
+        contours, _ = cv2.findContours( mask, cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
 
         if not contours:
             return "unknown", None
@@ -122,22 +91,21 @@ class SearchForContainer:
         return color, (center_x, center_y)
 
     # Publicar informações
-    def publish_container(self, color, position):
+    def publish_container(self, color, erro_x, erro_y):
 
-        if color == "unknown" or position is None:
+        if color == "unknown" or erro_x is None or erro_y is None:
             return
 
-        self.container_color_pub.publish(
-            String(data=color)
-        )
+        msg = container_comm()
+        msg.color = color
+        msg.position_x = erro_x
+        msg.position_y = erro_y
 
-        self.container_position_pub.publish(
-            Float32MultiArray(data=[position[0], position[1]])
-        )
+        self.container_inf.publish(msg)
 
-        rospy.loginfo(
-            f"Container: {color} | Posição X: {position[0]}, Y: {position[1]}"
-        )
+        #rospy.loginfo(
+         #   f"Container: {color} | Posição_ajustada X: {erro_x}, Y: {erro_y}"
+        #)
 
     # Callback da câmera
     def camera_callback(self, img_msg):
@@ -176,9 +144,6 @@ class SearchForContainer:
             # Encontrar cor e posição
             color, position = self.find_container(roi)
 
-            # Publicar continuamente
-            self.publish_container(color, position)
-
             # Centro da imagem nos eixos X (horizontal) e Y (vertical)
             image_center_x = self.camera_image.shape[1] // 2
             image_center_y = self.camera_image.shape[0] // 2
@@ -203,9 +168,11 @@ class SearchForContainer:
                 error_x = position[0] - image_center_x
                 error_y = position[1] - image_center_y
 
-                rospy.loginfo(
-                    f"Erro de centralização: X={error_x}, Y={error_y}"
-                )
+                self.publish_container(color, error_x, error_y)
+
+                #rospy.loginfo(
+                #    f"Erro de centralização: X={error_x}, Y={error_y}"
+                #)
 
                 cv2.circle(
                     self.camera_image,

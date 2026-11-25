@@ -1,0 +1,1 @@
+/home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/.private/robot_communication/share/gennodejs/ros/robot_communication/msg/container_comm.js

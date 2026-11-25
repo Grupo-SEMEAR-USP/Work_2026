@@ -153,6 +153,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
     "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg"
     "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg"
     "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg"
+    "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/container_comm.msg"
     )
 endif()
 

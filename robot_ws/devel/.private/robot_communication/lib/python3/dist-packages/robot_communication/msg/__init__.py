@@ -2,6 +2,7 @@ from ._AprilTagDetection import *
 from ._AprilTagDetectionArray import *
 from ._SchedulerCommand import *
 from ._SchedulerResponse import *
+from ._container_comm import *
 from ._encoder_comm import *
 from ._manipulation_comm import *
 from ._ultrasonic_comm import *

@@ -20,6 +20,7 @@
 /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_communication/CMakeFiles/_robot_communication_generate_messages_check_deps_encoder_comm.dir
 /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_communication/CMakeFiles/std_msgs_generate_messages_lisp.dir
 /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_communication/CMakeFiles/run_tests.dir
+/home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_communication/CMakeFiles/_robot_communication_generate_messages_check_deps_container_comm.dir
 /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_communication/CMakeFiles/std_msgs_generate_messages_eus.dir
 /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_communication/CMakeFiles/robot_communication_generate_messages_py.dir
 /home/bruna/worknaoaguentomais/Work_2026/robot_ws/build/robot_communication/CMakeFiles/geometry_msgs_generate_messages_lisp.dir

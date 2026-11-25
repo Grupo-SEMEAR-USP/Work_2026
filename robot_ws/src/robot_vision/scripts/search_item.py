@@ -1,29 +1,29 @@
 import rospy
-from std_msgs.msg import String, Int32
-from apriltag_ros.msg import AprilTagDetectionArray
-from robot_communication.msg import ultrasonic_comm
-from robot_scheduler.msg import SchedulerCommand, SchedulerResponse
-
-# TEM QUE ADAPTAR PARA "ITEM" (BLOCO E CONTAINER)
+from std_msgs.msg import String, Int32, Float32
+from sensor_msgs.msg import Range
+from robot_communication.msg import AprilTagDetection, AprilTagDetectionArray
+from robot_communication.msg import ultrasonic_comm, container_comm
+from robot_communication.msg import SchedulerCommand, SchedulerResponse
 
 class ZigZagSearch:
     def __init__(self):
         rospy.init_node('search_item', anonymous=True)
         self.node_name = "search_item"
-        self.aruco_reference_id = []
+        self.aruco_reference_id = [] #referente as tags ex: 1-2-3
+        self.aruco_reference_color = None
         self.last_uid = None
-        self.distance_threshold = 10  # 10 cm
-        self.center_tolerance = 0.06  # Tolerância de 10% em relação ao centro da imagem
+        self.distance_threshold = 10  # 10 cm  PRECISA TESTAR ISSOOOO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        self.center_tolerance = 0.06  # Tolerância de 10% em relação ao centro da imagem  PRECISA TESTAR ISSOOOO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        self.distance_container_threshold = 0.15  #15cm PRECISA TESTAR ISSOOOO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
         self.pub_move_time = rospy.Publisher('move_time', String, queue_size=10)
         self.pub_feedback = rospy.Publisher('/scheduler/feedback', SchedulerResponse, queue_size=10)
-        #self.pub_found_block = rospy.Publisher('/found_block', Int32, queue_size=10)
         
         self.sub_search = rospy.Subscriber('/scheduler/commands', SchedulerCommand, self.sched_cb)
         self.sub_tag_detections = rospy.Subscriber('/tag_detections', AprilTagDetectionArray, self.tag_detection_callback)
-        self.sub_ultrasound_right = rospy.Subscriber('/ultrasonic_distances', ultrasonic_comm, self.ultrasound_callback)
+        self.sub_ultrasound = rospy.Subscriber('/ultrasonic_distances', ultrasonic_comm, self.ultrasound_callback)
+        self.sub_color_detections = rospy.Subscriber('/container_info', container_comm, self.color_detection_callback)
 
-        
         self.rate = rospy.Rate(50)
         self.movement_active = False
         self.target_found = False
@@ -33,27 +33,49 @@ class ZigZagSearch:
         self.timeout = None
         self.last_time = None
         self.fb = None
+        self.otarget = None
     
     def sched_cb(self, msg):
         if msg.target != 'search_item' or msg.uid == self.last_uid:
             return
+
+        self.target_found = False
+        self.fb = False
+        self.movement_active = True
         
         try:
-            # O payload é o nome do item, que pode não ser um ID numérico.
+            # O payload é o nome do bloco, que pode não ser um ID numérico.
             # A lógica de qual ID procurar precisaria ser mapeada aqui.
             # Por simplicidade, vamos assumir que o payload é o ID por enquanto.
             payload = msg.payload.split(',')
+            self.otarget = payload[0]
+            rospy.loginfo(f"Payload recebido: {payload}. Tipo de busca: {self.otarget}")
             if payload[0] == "block":
-                self.aruco_reference_id = [int(x) for x in payload[1].split('-')]
-            #self.aruco_reference_id = int(payload[0])
-            self.direction = payload[2]
-            if self.direction == "direita":
-                self.inverse_direction = "esquerda"
-            elif self.direction == "esquerda":
-                self.inverse_direction = "direita"
+                if len(payload) < 2:
+                    raise ValueError("Payload de bloco incompleto")
 
-            # self.target_block_id = int(block_id_str) # Mapear nome para ID se necessário
-            rospy.loginfo(f"Iniciando busca pelo item '{self.aruco_reference_id}' (uid={msg.uid})")
+                self.aruco_reference_id = [
+                    int(tag_id) for tag_id in payload[1].split('-')
+                ]
+
+            elif payload[0] == "container":
+                if len(payload) < 3:
+                    raise ValueError("Payload de container incompleto")
+
+                self.aruco_reference_color = payload[1]
+                self.direction = payload[2]
+
+                if self.direction == "direita":
+                    self.inverse_direction = "esquerda"
+                elif self.direction == "esquerda":
+                    self.inverse_direction = "direita"
+                else:
+                    raise ValueError("Direção inválida")
+
+            else:
+                raise ValueError("Tipo de busca inválido")
+                        # self.target_block_id = int(block_id_str) # Mapear nome para ID se necessário
+            rospy.loginfo(f"Iniciando busca (uid={msg.uid})")
             
             self.last_uid = msg.uid
             self.movement_active = True
@@ -128,26 +150,61 @@ class ZigZagSearch:
     
 
     def tag_detection_callback(self, msg):
-        if not self.movement_active or self.target_found:
+        if self.otarget != "block":
             return
-        
+
+        # Não processa se a busca não estiver ativa
+        if not self.movement_active:
+            return
+
+        # Não processa se já encontrou o alvo
+        if self.target_found:
+            return
+            
         for detection in msg.detections:
             tag_id = detection.id[0]
             rospy.loginfo(f"Achou id. ID: {tag_id}.")
-            if tag_id == self.aruco_reference_id:
+            if tag_id in self.aruco_reference_id:
                 self.movement_active = False
-                self.aruco_reference_id = 0
+                self.aruco_reference_id = []
                 # Calcula a posição do bloco em relação ao centro da imagem
                 center_x = detection.pose.pose.pose.position.x
                 center_y = detection.pose.pose.pose.position.y
                 if abs(center_x) < self.center_tolerance and abs(center_y) < self.center_tolerance:
                     # rospy.loginfo(f"Bloco detectado no centro com ID {tag_id}.")
                     rospy.loginfo(f"Bloco detectado com ID {tag_id}.")
-                    self.pub_found_block.publish(tag_id)
+                    # self.pub_found_block.publish(tag_id)
                     self.target_found = True
                 else:
                     # rospy.loginfo(f"Bloco detectado fora do centro com ID {tag_id}. Coordenadas: ({center_x}, {center_y})")
                     rospy.loginfo(f"Bloco detectado com ID {tag_id}.")
+
+    def color_detection_callback(self, msg):
+        if self.otarget != "container":
+                    return
+        
+        # Não processa se a busca não estiver ativa
+        if not self.movement_active:
+            return
+
+        # Não processa se já encontrou o alvo
+        if self.target_found:
+            return
+
+        rospy.loginfo(f"Container detectado com cor {self.aruco_reference_color}.")
+        if msg.color == self.aruco_reference_color:
+            self.movement_active = False
+            self.aruco_reference_color = None
+
+            deslocamento_x = msg.position_x
+            deslocamento_y = msg.position_y    
+
+            #if abs(deslocamento_x) < self.distance_container_threshold and abs(deslocamento_y) < self.distance_container_threshold:
+            #    rospy.loginfo(f"Container detectado com cor {msg.color}.")
+            #    self.target_found = True
+            #else:
+            rospy.loginfo(f"Container detectado com cor {msg.color}.")
+            self.target_found = True
 
     def perform_reverse_zigzag(self):
         try:
@@ -191,11 +248,11 @@ class ZigZagSearch:
 
             rospy.loginfo("Movimento de zigue-zague reverso completo.")
             if self.movement_active:
-                self.pub_feedback.publish(1)
+                self.pub_feedback.publish(self.last_uid, self.node_name, "OK")
 
         except Exception as e:
             rospy.logerr("Erro durante o movimento inverso: %s", str(e))
-            self.pub_feedback.publish(0)
+            self.pub_feedback.publish(self.last_uid, self.node_name, "FAIL")
             self.movement_active = False
             
     def run(self):

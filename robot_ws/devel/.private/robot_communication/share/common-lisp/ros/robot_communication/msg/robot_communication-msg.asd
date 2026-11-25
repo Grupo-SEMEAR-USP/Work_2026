@@ -14,6 +14,8 @@
     (:file "_package_SchedulerCommand" :depends-on ("_package"))
     (:file "SchedulerResponse" :depends-on ("_package_SchedulerResponse"))
     (:file "_package_SchedulerResponse" :depends-on ("_package"))
+    (:file "container_comm" :depends-on ("_package_container_comm"))
+    (:file "_package_container_comm" :depends-on ("_package"))
     (:file "encoder_comm" :depends-on ("_package_encoder_comm"))
     (:file "_package_encoder_comm" :depends-on ("_package"))
     (:file "manipulation_comm" :depends-on ("_package_manipulation_comm"))

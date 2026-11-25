@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.cmake.em
 
-message(STATUS "robot_communication: 8 messages, 0 services")
+message(STATUS "robot_communication: 9 messages, 0 services")
 
 set(MSG_I_FLAGS "-Irobot_communication:/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg;-Igeometry_msgs:/opt/ros/noetic/share/geometry_msgs/cmake/../msg;-Isensor_msgs:/opt/ros/noetic/share/sensor_msgs/cmake/../msg;-Istd_msgs:/opt/ros/noetic/share/std_msgs/cmake/../msg")
 
@@ -44,17 +44,22 @@ add_custom_target(_robot_communication_generate_messages_check_deps_${_filename}
 
 get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" NAME_WE)
 add_custom_target(_robot_communication_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" "std_msgs/Header:geometry_msgs/Point:geometry_msgs/Pose:geometry_msgs/PoseWithCovariance:geometry_msgs/PoseWithCovarianceStamped:geometry_msgs/Quaternion"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg" "geometry_msgs/Point:geometry_msgs/PoseWithCovarianceStamped:geometry_msgs/Pose:geometry_msgs/PoseWithCovariance:geometry_msgs/Quaternion:std_msgs/Header"
 )
 
 get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
 add_custom_target(_robot_communication_generate_messages_check_deps_${_filename}
-  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" "std_msgs/Header:geometry_msgs/Point:geometry_msgs/Pose:robot_communication/AprilTagDetection:geometry_msgs/PoseWithCovariance:geometry_msgs/PoseWithCovarianceStamped:geometry_msgs/Quaternion"
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" "geometry_msgs/Point:geometry_msgs/PoseWithCovarianceStamped:geometry_msgs/Pose:geometry_msgs/PoseWithCovariance:geometry_msgs/Quaternion:robot_communication/AprilTagDetection:std_msgs/Header"
 )
 
 get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg" NAME_WE)
 add_custom_target(_robot_communication_generate_messages_check_deps_${_filename}
   COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg" ""
+)
+
+get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/container_comm.msg" NAME_WE)
+add_custom_target(_robot_communication_generate_messages_check_deps_${_filename}
+  COMMAND ${CATKIN_ENV} ${PYTHON_EXECUTABLE} ${GENMSG_CHECK_DEPS_SCRIPT} "robot_communication" "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/container_comm.msg" ""
 )
 
 #
@@ -96,17 +101,23 @@ _generate_msg_cpp(robot_communication
 _generate_msg_cpp(robot_communication
   "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/robot_communication
 )
 _generate_msg_cpp(robot_communication
   "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/robot_communication
 )
 _generate_msg_cpp(robot_communication
   "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/robot_communication
+)
+_generate_msg_cpp(robot_communication
+  "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/container_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gencpp_INSTALL_DIR}/robot_communication
@@ -141,6 +152,8 @@ add_dependencies(robot_communication_generate_messages_cpp _robot_communication_
 get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_cpp _robot_communication_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg" NAME_WE)
+add_dependencies(robot_communication_generate_messages_cpp _robot_communication_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/container_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_cpp _robot_communication_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -185,17 +198,23 @@ _generate_msg_eus(robot_communication
 _generate_msg_eus(robot_communication
   "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/robot_communication
 )
 _generate_msg_eus(robot_communication
   "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/robot_communication
 )
 _generate_msg_eus(robot_communication
   "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/robot_communication
+)
+_generate_msg_eus(robot_communication
+  "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/container_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${geneus_INSTALL_DIR}/robot_communication
@@ -230,6 +249,8 @@ add_dependencies(robot_communication_generate_messages_eus _robot_communication_
 get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_eus _robot_communication_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg" NAME_WE)
+add_dependencies(robot_communication_generate_messages_eus _robot_communication_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/container_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_eus _robot_communication_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -274,17 +295,23 @@ _generate_msg_lisp(robot_communication
 _generate_msg_lisp(robot_communication
   "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/robot_communication
 )
 _generate_msg_lisp(robot_communication
   "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/robot_communication
 )
 _generate_msg_lisp(robot_communication
   "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/robot_communication
+)
+_generate_msg_lisp(robot_communication
+  "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/container_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genlisp_INSTALL_DIR}/robot_communication
@@ -319,6 +346,8 @@ add_dependencies(robot_communication_generate_messages_lisp _robot_communication
 get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_lisp _robot_communication_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg" NAME_WE)
+add_dependencies(robot_communication_generate_messages_lisp _robot_communication_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/container_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_lisp _robot_communication_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -363,17 +392,23 @@ _generate_msg_nodejs(robot_communication
 _generate_msg_nodejs(robot_communication
   "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/robot_communication
 )
 _generate_msg_nodejs(robot_communication
   "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/robot_communication
 )
 _generate_msg_nodejs(robot_communication
   "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/robot_communication
+)
+_generate_msg_nodejs(robot_communication
+  "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/container_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${gennodejs_INSTALL_DIR}/robot_communication
@@ -408,6 +443,8 @@ add_dependencies(robot_communication_generate_messages_nodejs _robot_communicati
 get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_nodejs _robot_communication_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg" NAME_WE)
+add_dependencies(robot_communication_generate_messages_nodejs _robot_communication_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/container_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_nodejs _robot_communication_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility
@@ -452,17 +489,23 @@ _generate_msg_py(robot_communication
 _generate_msg_py(robot_communication
   "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/robot_communication
 )
 _generate_msg_py(robot_communication
   "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg"
   "${MSG_I_FLAGS}"
-  "/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg"
+  "/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Point.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovarianceStamped.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Pose.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/PoseWithCovariance.msg;/opt/ros/noetic/share/geometry_msgs/cmake/../msg/Quaternion.msg;/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetection.msg;/opt/ros/noetic/share/std_msgs/cmake/../msg/Header.msg"
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/robot_communication
 )
 _generate_msg_py(robot_communication
   "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg"
+  "${MSG_I_FLAGS}"
+  ""
+  ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/robot_communication
+)
+_generate_msg_py(robot_communication
+  "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/container_comm.msg"
   "${MSG_I_FLAGS}"
   ""
   ${CATKIN_DEVEL_PREFIX}/${genpy_INSTALL_DIR}/robot_communication
@@ -497,6 +540,8 @@ add_dependencies(robot_communication_generate_messages_py _robot_communication_g
 get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/AprilTagDetectionArray.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_py _robot_communication_generate_messages_check_deps_${_filename})
 get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/manipulation_comm.msg" NAME_WE)
+add_dependencies(robot_communication_generate_messages_py _robot_communication_generate_messages_check_deps_${_filename})
+get_filename_component(_filename "/home/bruna/worknaoaguentomais/Work_2026/robot_ws/src/robot_communication/msg/container_comm.msg" NAME_WE)
 add_dependencies(robot_communication_generate_messages_py _robot_communication_generate_messages_check_deps_${_filename})
 
 # target for backward compatibility

@@ -10,6 +10,7 @@ Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/python3/d
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/python3/dist-packages/robot_communication/msg/_encoder_comm.py
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/python3/dist-packages/robot_communication/msg/_manipulation_comm.py
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/python3/dist-packages/robot_communication/msg/_SchedulerCommand.py
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/python3/dist-packages/robot_communication/msg/_container_comm.py
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/python3/dist-packages/robot_communication/msg/_velocity_comm.py
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/lib/python3/dist-packages/robot_communication/msg/_AprilTagDetection.py
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/robot_communication/cmake/robot_communication-msg-extras.cmake
@@ -23,8 +24,10 @@ Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/common-
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/common-lisp/ros/robot_communication/msg/ultrasonic_comm.lisp
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/common-lisp/ros/robot_communication/msg/SchedulerResponse.lisp
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/common-lisp/ros/robot_communication/msg/SchedulerCommand.lisp
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/common-lisp/ros/robot_communication/msg/_package_container_comm.lisp
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/common-lisp/ros/robot_communication/msg/robot_communication-msg.asd
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/common-lisp/ros/robot_communication/msg/_package_manipulation_comm.lisp
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/common-lisp/ros/robot_communication/msg/container_comm.lisp
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/common-lisp/ros/robot_communication/msg/_package_ultrasonic_comm.lisp
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/common-lisp/ros/robot_communication/msg/_package_encoder_comm.lisp
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/common-lisp/ros/robot_communication/msg/_package_velocity_comm.lisp
@@ -40,6 +43,7 @@ Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/roseus/
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/roseus/ros/robot_communication/msg/SchedulerResponse.l
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/roseus/ros/robot_communication/msg/ultrasonic_comm.l
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/roseus/ros/robot_communication/msg/SchedulerCommand.l
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/roseus/ros/robot_communication/msg/container_comm.l
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/roseus/ros/robot_communication/msg/encoder_comm.l
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/roseus/ros/robot_communication/msg/AprilTagDetection.l
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/roseus/ros/robot_communication/msg/AprilTagDetectionArray.l
@@ -53,9 +57,11 @@ Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/gennode
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/gennodejs/ros/robot_communication/msg/encoder_comm.js
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/gennodejs/ros/robot_communication/msg/SchedulerResponse.js
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/gennodejs/ros/robot_communication/msg/AprilTagDetectionArray.js
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/share/gennodejs/ros/robot_communication/msg/container_comm.js
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/include/robot_communication/encoder_comm.h
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/include/robot_communication/manipulation_comm.h
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/include/robot_communication/SchedulerResponse.h
+Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/include/robot_communication/container_comm.h
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/include/robot_communication/AprilTagDetectionArray.h
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/include/robot_communication/ultrasonic_comm.h
 Symlinking /home/bruna/worknaoaguentomais/Work_2026/robot_ws/devel/include/robot_communication/velocity_comm.h
