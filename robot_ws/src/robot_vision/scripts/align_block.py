@@ -34,6 +34,7 @@ class AlignBlock:
         self.has_converged = False          # Se o alinhamento terminou com sucesso
         self.target_block_id = None
         self.last_sched_uid = None
+        self.last_received_uid = None       # Não é limpo após o feedback (evita reexecutar comandos repetidos)
         self.command_start_time = None
         self.last_valid_position = Point()  # Última pose válida (x, y, z)
         
@@ -50,8 +51,9 @@ class AlignBlock:
         rospy.loginfo("[align_block] Inicializado e aguardando comandos...")
 
     def sched_callback(self, msg: SchedulerCommand):
-        if msg.target != TARGET_NAME or msg.uid == self.last_sched_uid:
+        if msg.target != TARGET_NAME or msg.uid == self.last_received_uid:
             return
+        self.last_received_uid = msg.uid
 
         # Parar a operação atual
         if self.is_active:
@@ -62,6 +64,7 @@ class AlignBlock:
             self.target_block_id = int(msg.payload)
         except ValueError:
             rospy.logerr(f"Payload inválido: '{msg.payload}'. Deve ser um ID de bloco inteiro.")
+            self.last_sched_uid = msg.uid
             self.send_feedback("FAIL")
             return
 

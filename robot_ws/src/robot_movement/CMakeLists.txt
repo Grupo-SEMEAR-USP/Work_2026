@@ -62,8 +62,7 @@ install(TARGETS hw_interface_node
 )
 
 catkin_install_python(PROGRAMS
-  scripts/align_block.py
-  scripts/align_table.py
+  scripts/approach_table.py
   scripts/border_detect.py
   scripts/imu_stable.py
   scripts/move_time.py
